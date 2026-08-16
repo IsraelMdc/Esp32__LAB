@@ -136,6 +136,9 @@ Esp32__LAB/
 │   ├── fundamentos.md           ← teoria: o que é um microcontrolador
 │   └── troubleshooting.md       ← quando der errado, comece por aqui
 │
+├── tools/
+│   └── gerar_intellisense.cmd   ← conserta o sublinhado vermelho do editor
+│
 ├── projects/                    ← UM PROJETO POR PASTA
 │   ├── _template/               ← copie esta pasta para criar um novo
 │   ├── 01-blink/
@@ -183,6 +186,8 @@ Depois:
    `[env:meu-projeto]`.
 2. Escreva o código em `src/main.cpp`.
 3. Adicione a pasta na lista `folders` do `Esp32__LAB.code-workspace`.
+4. Rode `..\..\tools\gerar_intellisense.cmd` para o editor reconhecer o
+   projeto novo, e recarregue a janela do VS Code.
 
 Precisa de uma biblioteca? Adicione no `platformio.ini` **daquele projeto**:
 

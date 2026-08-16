@@ -74,12 +74,27 @@ Configuração de placa, framework e isolamento fica só no `base.ini`. O
 suas `lib_deps` específicas.
 
 Ao criar um projeto novo: copie `projects/_template/`, **adicione a pasta na
-lista `folders` do `Esp32__LAB.code-workspace`** e gere o IntelliSense com
-`..\..\pio.cmd project init --ide vscode`.
+lista `folders` do `Esp32__LAB.code-workspace`** e rode
+`tools\gerar_intellisense.cmd`.
 
-O `.vscode/c_cpp_properties.json` é gitignored (tem caminhos absolutos). Se o
-editor reclamar de `#include errors detected` ou não achar `Arduino.h`, é só
-regerar com o comando acima e recarregar a janela — não é erro de compilação.
+## IntelliSense
+
+Se o editor reclamar de `#include errors detected` ou não achar `Arduino.h`,
+**não é erro de compilação** — é só o `.vscode/c_cpp_properties.json`, que é
+gitignored por conter caminhos absolutos. Regenere com:
+
+```powershell
+C:\Users\Public\esp32lab\tools\gerar_intellisense.cmd
+```
+
+O script existe porque o `pio project init --ide vscode` gera o config de um
+projeto por vez, e o VS Code procura o arquivo na raiz da pasta aberta. Como
+cada projeto vive em sua própria pasta, abrir a pasta-raiz do repositório
+deixava o editor sem config nenhum. O script gera o de cada projeto **e um na
+raiz**, unindo os `src/` de todos.
+
+> Ao mexer nesse script, use `Path.absolute()`, **nunca `.resolve()`** —
+> `.resolve()` desfaz a junction e grava os caminhos acentuados no config.
 
 ## 🚨 Regra: só a placa, sem hardware externo
 

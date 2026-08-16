@@ -175,22 +175,36 @@ cannot open source file "stdlib.h" (dependency of "Arduino.h")
 onde ficam os headers do ESP32. O código compila e grava normalmente — o que
 não funciona é o sublinhado, o autocompletar e o "ir para definição".
 
-O arquivo que ensina isso ao editor é o `.vscode/c_cpp_properties.json`, e quem
-o gera é o próprio PlatformIO. De dentro da pasta do projeto:
+A solução é um comando só, de qualquer lugar:
 
 ```powershell
-..\..\pio.cmd project init --ide vscode
+C:\Users\Public\esp32lab\tools\gerar_intellisense.cmd
 ```
 
 Depois **recarregue a janela do VS Code**: `Ctrl + Shift + P` →
 *Developer: Reload Window*.
 
-Precisa rodar isso quando:
+Rode isso quando: o projeto é novo (copiado do `_template`), você acabou de
+clonar o repositório, ou adicionou uma biblioteca em `lib_deps` e o editor não
+a reconhece.
 
-- o projeto é novo (copiado do `_template`);
-- você acabou de clonar o repositório (o arquivo é gitignored, porque contém
-  caminhos absolutos desta máquina);
-- você adicionou uma biblioteca em `lib_deps` e o editor não a reconhece.
+### Por que precisa de um script, e não só do PlatformIO
+
+O arquivo que ensina os caminhos ao editor é o `.vscode/c_cpp_properties.json`.
+O PlatformIO gera esse arquivo, mas **para um projeto de cada vez** — e o VS
+Code procura por ele na **raiz da pasta que você abriu**:
+
+| Você abriu | O VS Code procura em | Funciona? |
+|-----------|----------------------|-----------|
+| `Esp32__LAB.code-workspace` | `projects/01-blink/.vscode/` etc. | ✅ |
+| a pasta `Esp32__LAB` inteira | `Esp32__LAB/.vscode/` | ❌ sem o script |
+
+Como aqui cada projeto vive em sua própria pasta, abrir a pasta-raiz deixava o
+editor sem nenhum config. O `tools/gerar_intellisense.cmd` cobre os dois casos:
+gera o de cada projeto **e mais um na raiz**, unindo os `src/` de todos.
+
+> O arquivo é gitignored porque contém caminhos absolutos desta máquina. Por
+> isso ele precisa ser gerado localmente, e não vem pronto no clone.
 
 ## O VS Code não mostra os botões do PlatformIO
 
