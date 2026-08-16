@@ -1,0 +1,64 @@
+{
+  // ============================================================
+  //  WORKSPACE DO LABORATORIO
+  // ============================================================
+  //  Abra ESTE arquivo no VS Code (nao a pasta solta).
+  //
+  //  Motivo: cada projeto e um projeto PlatformIO independente,
+  //  com seu proprio platformio.ini. A extensao do PlatformIO
+  //  procura esse arquivo na RAIZ de cada pasta do workspace.
+  //  Listando as pastas aqui, a extensao enxerga todos e a barra
+  //  de status (Build / Upload / Monitor) passa a funcionar.
+  //
+  //  Ao criar um projeto novo, adicione uma linha nesta lista.
+  "folders": [
+    { "name": "00 · LAB (raiz, docs)", "path": "." },
+    { "name": "01 · blink", "path": "projects/01-blink" },
+    { "name": "02 · serial", "path": "projects/02-serial" },
+    { "name": "03 · botao", "path": "projects/03-botao" },
+    { "name": "04 · wifi-scan", "path": "projects/04-wifi-scan" }
+  ],
+
+  "settings": {
+    // --------------------------------------------------------
+    //  ISOLAMENTO: usar o PlatformIO do repo, nao um global
+    // --------------------------------------------------------
+    // false = nao instale/use o PlatformIO Core proprio da extensao.
+    "platformio-ide.useBuiltinPIOCore": false,
+
+    // Onde esta o nosso pio.exe isolado (dentro de .venv/).
+    //
+    // ATENCAO: este caminho usa a JUNCTION C:\Users\Public\esp32lab,
+    // e nao o caminho real do repositorio. Isso e proposital: o
+    // compilador do ESP32 nao abre arquivos em caminhos com acento,
+    // e o usuario do Windows aqui e "israe.MAGALHAES_NOTE".
+    // Veja a secao sobre isso no README.md.
+    "platformio-ide.customPATH": "C:\\Users\\Public\\esp32lab\\.venv\\Scripts",
+
+    // Nao abrir a aba de boas-vindas do PlatformIO toda vez.
+    "platformio-ide.disablePIOHomeStartup": true,
+
+    // --------------------------------------------------------
+    //  Conforto no editor
+    // --------------------------------------------------------
+    "files.associations": {
+      "*.ino": "cpp",
+      "platformio.ini": "ini",
+      "*.ini": "ini"
+    },
+
+    // Nao poluir a arvore de arquivos com pastas de build.
+    "files.exclude": {
+      "**/.pio": true,
+      "**/.pio-core": true,
+      "**/.venv": true
+    }
+  },
+
+  "extensions": {
+    "recommendations": [
+      "platformio.platformio-ide",
+      "ms-vscode.cpptools"
+    ]
+  }
+}

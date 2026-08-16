@@ -1,0 +1,29 @@
+# ============================================================
+#  O que NÃO vai para o Git
+# ============================================================
+# Estas pastas são pesadas (~1 GB) e podem ser recriadas a
+# qualquer momento com um comando. Por isso ficam de fora.
+
+# PlatformIO Core isolado (compilador, framework Arduino, bibliotecas)
+.pio-core/
+
+# Artefatos de build de cada projeto (.bin, .elf, objetos)
+.pio/
+
+# Ambiente Python local que contém o PlatformIO Core
+.venv/
+
+# ============================================================
+#  Credenciais — NUNCA versionar
+# ============================================================
+# Senha de Wi-Fi, tokens de API, etc. Cada projeto que precisar
+# disso usa um secrets.h local, criado a partir do .example.
+**/include/secrets.h
+
+# ============================================================
+#  Sistema operacional / editor
+# ============================================================
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
