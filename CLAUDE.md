@@ -4,8 +4,16 @@ Contexto para o Claude Code trabalhar neste repositório.
 
 ## O que é
 
-Laboratório de experimentos com **ESP32 DevKit v1** (ESP32-WROOM-32), usando
-**PlatformIO + framework Arduino**. O dono do repositório está **aprendendo
+Laboratório de experimentos com **ESP32 DevKit v1**, usando **PlatformIO +
+framework Arduino**.
+
+Hardware confirmado lendo o próprio chip (`esptool.py flash_id`): chip
+**ESP32-D0WD-V3 revisão v3.1**, módulo **ESP32-WROOM-32E**, dual core 240 MHz,
+4 MB de flash, 320 KB de RAM utilizável, Wi-Fi + Bluetooth dual-mode, cristal
+de 40 MHz. Confere com a board `esp32doit-devkit-v1` do `shared/base.ini`.
+
+> Não escrever "ESP32-WROOM-32" sem o `E`: aquele part number usa o chip
+> D0WDQ6, mais antigo. O silício V3 desta placa vem no WROOM-32E. O dono do repositório está **aprendendo
 microcontroladores do zero** — o código e a documentação devem ensinar, não só
 funcionar.
 

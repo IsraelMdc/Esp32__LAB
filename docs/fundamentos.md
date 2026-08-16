@@ -35,12 +35,13 @@ dentro do seu micro-ondas, do controle remoto e da fechadura eletrônica.
 O ESP32 é um microcontrolador da fabricante chinesa Espressif que ficou famoso
 por um motivo: **Wi-Fi e Bluetooth vêm dentro do chip**, sem custo extra.
 
-No seu ESP32-WROOM-32:
+No seu ESP32 (valores confirmados lendo o próprio chip, veja
+[Qual é exatamente o seu chip](#qual-é-exatamente-o-seu-chip)):
 
 | Recurso | Valor | Para comparar |
 |---------|-------|---------------|
 | Processador | 2 núcleos a 240 MHz | Arduino Uno: 1 núcleo, 16 MHz |
-| RAM | 320 KB | Arduino Uno: 2 KB |
+| RAM utilizável | 320 KB | Arduino Uno: 2 KB |
 | Flash (onde o programa mora) | 4 MB | Arduino Uno: 32 KB |
 | Wi-Fi | 802.11 b/g/n, 2,4 GHz | Uno: não tem |
 | Bluetooth | Clássico + BLE | Uno: não tem |
@@ -51,16 +52,64 @@ No seu ESP32-WROOM-32:
 Ele é, em resumo, dezenas de vezes mais poderoso que um Arduino Uno e custa
 menos.
 
-### A placa vs o chip
+> **Por que você vai ver "520 KB" na internet?** O ESP32 tem 520 KB de SRAM no
+> total, mas parte dela é reservada para instruções e para o próprio sistema.
+> O que sobra para as suas variáveis são os 320 KB — que é exatamente o número
+> que aparece ao fim de cada compilação (`from 327680 bytes`). Os dois valores
+> estão certos; um é o total do datasheet, o outro é o que você pode usar.
 
-Cuidado com os nomes, porque eles se misturam:
+### A placa vs o módulo vs o chip
 
-- **ESP32** — o chip processador em si.
-- **ESP32-WROOM-32** — o módulo: o chip + antena + memória flash, dentro
-  daquela latinha metálica prateada.
+Cuidado com os nomes, porque eles se misturam — são três coisas encaixadas uma
+dentro da outra:
+
+- **ESP32-D0WD-V3** — o **chip** processador em si, do tamanho de uma unha.
+- **ESP32-WROOM-32E** — o **módulo**: o chip + antena + memória flash de 4 MB,
+  tudo dentro daquela latinha metálica prateada.
 - **ESP32 DevKit v1** — a **placa** que você tem na mão: o módulo + conversor
   USB-Serial + regulador de tensão + botões + pinos. É o que permite ligar no
   USB e programar.
+
+### Qual é exatamente o seu chip
+
+Você não precisa adivinhar: o chip se identifica quando perguntado. Com a
+placa conectada, rode da raiz do laboratório:
+
+```powershell
+.\.venv\Scripts\python.exe .pio-core\packages\tool-esptoolpy\esptool.py --port COM4 flash_id
+```
+
+Nesta placa a resposta foi:
+
+```
+Chip is ESP32-D0WD-V3 (revision v3.1)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse
+Crystal is 40MHz
+Detected flash size: 4MB
+```
+
+Decifrando o código **D0WD**: `D` = *dual core*, `0` = **sem** flash dentro do
+encapsulamento do chip (ela é o CI separado ao lado, de 4 MB), `WD` = *Wi-Fi +
+Dual-mode Bluetooth*.
+
+O sufixo **V3** é a geração do silício, e é a melhor notícia: é a terceira
+revisão, com várias erratas do ESP32 original corrigidas. Placas mais antigas
+trazem V1, que tem limitações conhecidas em *deep sleep* e no conversor
+analógico.
+
+> **Por que o nome do módulo muda?** Cada geração de chip vai num módulo
+> diferente, e isso confunde bastante:
+>
+> | Chip | Módulo | Época |
+> |------|--------|-------|
+> | ESP32-D0WDQ6 | ESP32-WROOM-32 | o original, 2016 |
+> | ESP32-D0WD | ESP32-WROOM-32D | intermediário |
+> | **ESP32-D0WD-V3** | **ESP32-WROOM-32E** | o atual — este aqui |
+>
+> Para tudo o que fazemos neste laboratório, os três se comportam igual: mesmo
+> pinout, mesma flash, mesmo código. A diferença só aparece em detalhes finos
+> de consumo e de erratas. Se quiser confirmar com os próprios olhos, o nome do
+> módulo vem impresso na latinha metálica.
 
 Sem a placa de desenvolvimento, o módulo sozinho exigiria soldar fios e montar
 uma fonte de alimentação.
@@ -71,7 +120,7 @@ uma fonte de alimentação.
               ┌──── antena (a serpentina impressa)
               │
         ┌─────┴──────────────────┐
-   ┌────┤ ▓▓▓  ESP32-WROOM-32    ├────┐
+   ┌────┤ ▓▓▓  ESP32-WROOM-32E   ├────┐
    │    │ ▓▓▓  (latinha metálica)│    │
  pinos  └────────────────────────┘  pinos
    │      [EN]            [BOOT]      │

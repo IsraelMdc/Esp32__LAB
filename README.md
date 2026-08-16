@@ -1,7 +1,7 @@
 # Esp32\_\_LAB
 
 Laboratório pessoal para testar aplicações em um **ESP32 DevKit v1**
-(módulo ESP32-WROOM-32), usando **PlatformIO + VS Code**.
+(chip ESP32-D0WD-V3, módulo ESP32-WROOM-32E), usando **PlatformIO + VS Code**.
 
 Três regras organizam este repositório:
 
@@ -260,6 +260,17 @@ Testado de ponta a ponta em uma ESP32 DevKit v1 real:
 | Compilação dos 4 projetos | ✅ |
 | Gravação do 01-blink | ✅ `Hash of data verified` |
 | Execução na placa | ✅ serial imprimindo `LED aceso` / `LED apagado` |
+
+O chip foi consultado diretamente (`esptool.py flash_id`) e confere com a
+configuração de `esp32doit-devkit-v1` usada em [shared/base.ini](shared/base.ini):
+
+| | Lido do chip | Board no PlatformIO |
+|---|---|---|
+| Modelo | ESP32-D0WD-V3, revisão v3.1 | ESP32 |
+| Clock | 240 MHz, dual core | 240 MHz |
+| Flash | 4 MB | 4 MB |
+| RAM | 320 KB utilizáveis | 320 KB |
+| Rádio | Wi-Fi + Bluetooth dual-mode | — |
 
 Uso de memória do blink: RAM 6,6% (21.464 de 327.680 bytes), Flash 20,5%
 (269.193 de 1.310.720 bytes).

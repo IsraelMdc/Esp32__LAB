@@ -60,8 +60,8 @@ sobrepõem e se atrapalham — por isso só **1, 6 e 11** não interferem entre 
 Se o seu Wi-Fi vive travando, rode este scan: se houver cinco redes fortes no
 mesmo canal do seu roteador, achou o culpado.
 
-> Este scan só enxerga redes de **2,4 GHz**. O ESP32-WROOM-32 não tem rádio de
-> 5 GHz. Se uma rede sua não aparecer, é quase certo que ela está em 5 GHz.
+> Este scan só enxerga redes de **2,4 GHz**. O ESP32 não tem rádio de 5 GHz.
+> Se uma rede sua não aparecer, é quase certo que ela está em 5 GHz.
 
 ### Segurança
 
@@ -72,7 +72,7 @@ A coluna mostra como a rede protege o tráfego:
 - **WPA2** — o padrão atual, seguro para uso normal.
 - **WPA3** — o mais novo e o mais forte.
 
-> ⚠️ O ESP32-WROOM-32 com Arduino core 2.x conecta bem em redes **WPA2**. Em
+> ⚠️ O ESP32 com Arduino core 2.x conecta bem em redes **WPA2**. Em
 > roteadores configurados como **somente WPA3**, a conexão pode falhar. Se isso
 > acontecer, mude o roteador para o modo misto "WPA2/WPA3".
 
