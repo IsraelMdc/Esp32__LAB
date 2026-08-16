@@ -164,6 +164,34 @@ Se persistir, apague a pasta `.pio` do projeto e compile de novo.
 
 ---
 
+## Sublinhado vermelho no `#include <Arduino.h>`
+
+```
+#include errors detected. Please update your includePath.
+cannot open source file "stdlib.h" (dependency of "Arduino.h")
+```
+
+**Isso não é erro de compilação.** É só o IntelliSense do VS Code, que não sabe
+onde ficam os headers do ESP32. O código compila e grava normalmente — o que
+não funciona é o sublinhado, o autocompletar e o "ir para definição".
+
+O arquivo que ensina isso ao editor é o `.vscode/c_cpp_properties.json`, e quem
+o gera é o próprio PlatformIO. De dentro da pasta do projeto:
+
+```powershell
+..\..\pio.cmd project init --ide vscode
+```
+
+Depois **recarregue a janela do VS Code**: `Ctrl + Shift + P` →
+*Developer: Reload Window*.
+
+Precisa rodar isso quando:
+
+- o projeto é novo (copiado do `_template`);
+- você acabou de clonar o repositório (o arquivo é gitignored, porque contém
+  caminhos absolutos desta máquina);
+- você adicionou uma biblioteca em `lib_deps` e o editor não a reconhece.
+
 ## O VS Code não mostra os botões do PlatformIO
 
 Você abriu a pasta solta em vez do workspace. Cada projeto tem seu próprio

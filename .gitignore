@@ -14,6 +14,20 @@
 .venv/
 
 # ============================================================
+#  Config do IntelliSense, gerada pelo PlatformIO
+# ============================================================
+# Contém caminhos ABSOLUTOS desta máquina, então não faz sentido
+# versionar. Se o VS Code reclamar de "#include errors detected"
+# ou não achar Arduino.h, recrie de dentro do projeto com:
+#
+#     ..\..\pio.cmd project init --ide vscode
+#
+**/.vscode/c_cpp_properties.json
+**/.vscode/launch.json
+**/.vscode/.browse.c_cpp.db*
+**/.vscode/ipch/
+
+# ============================================================
 #  Credenciais — NUNCA versionar
 # ============================================================
 # Senha de Wi-Fi, tokens de API, etc. Cada projeto que precisar

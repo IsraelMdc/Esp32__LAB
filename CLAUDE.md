@@ -73,8 +73,13 @@ Configuração de placa, framework e isolamento fica só no `base.ini`. O
 `platformio.ini` de cada projeto normalmente tem apenas o nome do ambiente e
 suas `lib_deps` específicas.
 
-Ao criar um projeto novo: copie `projects/_template/` e **adicione a pasta na
-lista `folders` do `Esp32__LAB.code-workspace`**.
+Ao criar um projeto novo: copie `projects/_template/`, **adicione a pasta na
+lista `folders` do `Esp32__LAB.code-workspace`** e gere o IntelliSense com
+`..\..\pio.cmd project init --ide vscode`.
+
+O `.vscode/c_cpp_properties.json` é gitignored (tem caminhos absolutos). Se o
+editor reclamar de `#include errors detected` ou não achar `Arduino.h`, é só
+regerar com o comando acima e recarregar a janela — não é erro de compilação.
 
 ## 🚨 Regra: só a placa, sem hardware externo
 
