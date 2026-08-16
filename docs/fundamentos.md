@@ -87,10 +87,14 @@ uma fonte de alimentação.
 - **Botão BOOT** — força o modo de gravação. Você quase nunca precisa dele: a
   placa entra nesse modo sozinha. Só serve para socorro (veja o
   [troubleshooting](troubleshooting.md)).
-- **LED vermelho** — aceso direto, indica apenas que há energia. Não é
-  controlável.
-- **LED azul** — ligado ao **GPIO 2**, controlável pelo seu código. É o que
-  pisca no projeto 01.
+- **LED de energia** — fica aceso direto, sem piscar. Indica apenas que há
+  alimentação e não é controlável por software.
+- **LED do GPIO 2** — controlável pelo seu código. É o que pisca no projeto 01.
+
+> A **cor** desses LEDs varia conforme o fabricante da placa: o do GPIO 2 pode
+> ser azul, vermelho ou verde. Não use a cor para identificá-los — use o
+> comportamento. O que fica aceso direto é o de energia; o que pisca quando
+> você roda o blink é o do GPIO 2.
 
 > ⚠️ **Use um cabo USB de dados.** Muitos cabos de carregador de celular têm
 > só os fios de energia. A placa acende, mas o PC nunca a enxerga. É a causa

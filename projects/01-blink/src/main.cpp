@@ -7,7 +7,7 @@
  *  programa rodar, significa que TODA a cadeia funciona:
  *  compilador -> cabo USB -> gravação na flash -> chip executando.
  *
- *  O QUE ELE FAZ: acende e apaga o LED azul da placa, 1x por segundo.
+ *  O QUE ELE FAZ: acende e apaga o LED embutido da placa, 1x por segundo.
  *
  *  Leia o README.md desta pasta para entender a teoria.
  */
@@ -19,7 +19,9 @@
 // ------------------------------------------------------------
 //  CONFIGURAÇÃO
 // ------------------------------------------------------------
-// No ESP32 DevKit v1 o LED azul embutido está ligado ao GPIO 2.
+// No ESP32 DevKit v1 o LED embutido está ligado ao GPIO 2. A cor dele
+// varia conforme o fabricante da placa (azul, vermelho ou verde) —
+// o que importa é o número do pino, não a cor.
 // "GPIO" = General Purpose Input/Output = um pino que o programa
 // controla. Usamos const para deixar claro que nunca muda.
 const int PINO_LED = 2;
@@ -42,7 +44,7 @@ void setup() {
   // sensor ou botão. Todo pino precisa ser configurado antes do uso.
   pinMode(PINO_LED, OUTPUT);
 
-  Serial.println("Blink iniciado! O LED azul deve piscar.");
+  Serial.println("Blink iniciado! O LED embutido (GPIO 2) deve piscar.");
 }
 
 // ------------------------------------------------------------

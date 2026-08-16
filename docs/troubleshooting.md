@@ -44,8 +44,8 @@ C:\Users\Public\esp32lab\pio.cmd device list
 Não listou nada? Na ordem de probabilidade:
 
 **1. O cabo USB é só de carga.** Causa nº 1. Muitos cabos de carregador têm
-apenas os fios de energia. A placa acende (LED vermelho), mas o PC nunca a
-enxerga. Teste com outro cabo — de preferência um que você já usou para
+apenas os fios de energia. A placa acende (o LED de energia liga), mas o PC
+nunca a enxerga. Teste com outro cabo — de preferência um que você já usou para
 transferir arquivos de um celular.
 
 **2. Falta o driver do conversor USB-Serial.** A DevKit v1 usa um destes dois

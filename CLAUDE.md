@@ -107,7 +107,7 @@ Recursos disponíveis só com a placa:
 
 | Recurso | Como acessar |
 |---------|--------------|
-| LED azul | GPIO 2 (saída, PWM/fade) |
+| LED embutido | GPIO 2 (saída, PWM/fade) |
 | Botão BOOT | GPIO 0 (entrada; a placa já tem pull-up) |
 | Botão EN/RST | reset por hardware |
 | Toque capacitivo | `touchRead(T0..T9)` — basta encostar o dedo no pino |
@@ -119,6 +119,12 @@ Recursos disponíveis só com a placa:
 
 Cuidado com o GPIO 0: é *strapping pin*. Lê-lo em tempo de execução é seguro,
 mas se estiver em LOW no momento do reset a placa entra em modo de gravação.
+
+**Nunca identifique um LED pela cor.** A cor do LED do GPIO 2 varia conforme o
+fabricante da DevKit v1 — nesta placa ele é **vermelho**, não azul. Referir-se
+a ele como "LED azul" já gerou confusão real. Use "LED embutido" ou
+"LED do GPIO 2", e distinga os dois LEDs pelo comportamento: o de energia fica
+aceso direto, o do GPIO 2 é o que pisca.
 
 ## Convenções de código
 

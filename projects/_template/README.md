@@ -12,7 +12,7 @@ embutidos o projeto utiliza.
 
 | Recurso da placa | Pino | Modo |
 |------------------|------|------|
-| LED azul | GPIO 2 | OUTPUT |
+| LED embutido | GPIO 2 | OUTPUT |
 | Botão BOOT | GPIO 0 | INPUT_PULLUP |
 
 Outros recursos disponíveis sem nada externo: toque capacitivo

@@ -15,7 +15,7 @@
 
 #include <Arduino.h>
 
-const int PINO_LED = 2;   // LED azul embutido na DevKit v1
+const int PINO_LED = 2;   // LED embutido na DevKit v1 (a cor varia)
 
 // Controle de tempo sem travar o chip (veja o projeto 02).
 unsigned long ultimoTick = 0;

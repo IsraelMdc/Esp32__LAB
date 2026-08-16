@@ -21,18 +21,28 @@ Para sair do monitor serial: `Ctrl + C`.
 
 ## O que você deve ver
 
-O LED **azul** da placa piscando a cada 1 segundo, e no terminal:
+O LED embutido da placa piscando a cada 1 segundo, e no terminal:
 
 ```
-Blink iniciado! O LED azul deve piscar.
+Blink iniciado! O LED embutido (GPIO 2) deve piscar.
 LED aceso
 LED apagado
 LED aceso
 ...
 ```
 
-> Existem dois LEDs na placa. O **vermelho** fica aceso direto e só indica que
-> há energia — ele não é controlável. O que pisca é o **azul**, no GPIO 2.
+> **A cor não importa — e varia de placa para placa.** Existem dois LEDs na
+> DevKit v1, e o que distingue os dois é o comportamento, não a cor:
+>
+> | LED | Comportamento | Controlável? |
+> |-----|---------------|--------------|
+> | LED de energia | fica **aceso direto**, sem piscar | não, é ligado direto na alimentação |
+> | LED do **GPIO 2** | é o que **pisca** com este programa | sim, é o do seu código |
+>
+> Dependendo do fabricante da placa, o LED do GPIO 2 pode ser azul, vermelho ou
+> verde. Nesta placa aqui ele é **vermelho**. Se o seu piscar em outra cor, está
+> igualmente correto: o que prova que funcionou é ele piscar em sincronia com as
+> mensagens do monitor serial.
 
 ## Os conceitos
 

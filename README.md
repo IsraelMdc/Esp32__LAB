@@ -79,7 +79,8 @@ cd C:\Users\Public\esp32lab\projects\01-blink
 ..\..\pio.cmd run -t upload -t monitor
 ```
 
-O LED azul da placa deve começar a piscar. Para sair do monitor: `Ctrl + C`.
+O LED embutido da placa (GPIO 2) deve começar a piscar. Para sair do monitor:
+`Ctrl + C`.
 
 ---
 
@@ -110,7 +111,7 @@ Faça na ordem. Cada README explica a teoria por trás do código.
 
 | # | Projeto | O que você aprende | Usa da placa |
 |---|---------|--------------------|--------------|
-| 01 | [blink](projects/01-blink/README.md) | GPIO, `setup()`/`loop()`, HIGH/LOW, o perigo do `delay()` | LED azul |
+| 01 | [blink](projects/01-blink/README.md) | GPIO, `setup()`/`loop()`, HIGH/LOW, o perigo do `delay()` | LED do GPIO 2 |
 | 02 | [serial](projects/02-serial/README.md) | Depuração, `printf`, ler comandos, **`millis()`** | USB serial |
 | 03 | [botao](projects/03-botao/README.md) | Entrada digital, `INPUT_PULLUP`, debounce, borda | botão BOOT |
 | 04 | [wifi-scan](projects/04-wifi-scan/README.md) | Wi-Fi, RSSI, canais, segurança, MAC | rádio Wi-Fi |

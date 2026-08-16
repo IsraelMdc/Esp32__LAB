@@ -24,7 +24,7 @@
 // ao GND quando apertado.
 const int PINO_BOTAO = 0;
 
-// LED azul embutido.
+// LED embutido (a cor varia conforme o fabricante da placa).
 const int PINO_LED = 2;
 
 // ------------------------------------------------------------

@@ -18,8 +18,8 @@ Com o monitor aberto, digite um comando e aperte **Enter**:
 
 | Comando | Efeito |
 |---------|--------|
-| `on`    | acende o LED azul |
-| `off`   | apaga o LED azul |
+| `on`    | acende o LED do GPIO 2 |
+| `off`   | apaga o LED do GPIO 2 |
 | `info`  | mostra CPU, RAM livre, flash e tempo ligado |
 | `help`  | lista os comandos |
 
