@@ -11,7 +11,7 @@ Usamos o botão **BOOT** que já vem soldado na placa, ligado ao **GPIO 0**.
 ```
         ESP32 DevKit v1
         ┌───────────────────────┐
-        │  ▓▓▓ ESP32-WROOM-32E  │
+        │  ▓▓▓  ESP-WROOM-32    │
         └───────────────────────┘
            [EN]          [BOOT]
             ▲               ▲

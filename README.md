@@ -1,7 +1,7 @@
 # Esp32\_\_LAB
 
 Laboratório pessoal para testar aplicações em um **ESP32 DevKit v1**
-(chip ESP32-D0WD-V3, módulo ESP32-WROOM-32E), usando **PlatformIO + VS Code**.
+(módulo ESP-WROOM-32, chip ESP32-D0WD-V3), usando **PlatformIO + VS Code**.
 
 Três regras organizam este repositório:
 
@@ -267,6 +267,8 @@ configuração de `esp32doit-devkit-v1` usada em [shared/base.ini](shared/base.i
 | | Lido do chip | Board no PlatformIO |
 |---|---|---|
 | Modelo | ESP32-D0WD-V3, revisão v3.1 | ESP32 |
+| Módulo | `ESP-WROOM-32` (impresso na lata) | — |
+| Procedência | FCC ID `2AC7Z-ESP32WROOM32` → Espressif genuíno | — |
 | Clock | 240 MHz, dual core | 240 MHz |
 | Flash | 4 MB | 4 MB |
 | RAM | 320 KB utilizáveis | 320 KB |

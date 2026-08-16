@@ -64,8 +64,8 @@ Cuidado com os nomes, porque eles se misturam — são três coisas encaixadas u
 dentro da outra:
 
 - **ESP32-D0WD-V3** — o **chip** processador em si, do tamanho de uma unha.
-- **ESP32-WROOM-32E** — o **módulo**: o chip + antena + memória flash de 4 MB,
-  tudo dentro daquela latinha metálica prateada.
+- **ESP-WROOM-32** — o **módulo**: o chip + antena + memória flash de 4 MB,
+  tudo dentro daquela latinha metálica prateada. O nome vem impresso nela.
 - **ESP32 DevKit v1** — a **placa** que você tem na mão: o módulo + conversor
   USB-Serial + regulador de tensão + botões + pinos. É o que permite ligar no
   USB e programar.
@@ -97,19 +97,62 @@ revisão, com várias erratas do ESP32 original corrigidas. Placas mais antigas
 trazem V1, que tem limitações conhecidas em *deep sleep* e no conversor
 analógico.
 
-> **Por que o nome do módulo muda?** Cada geração de chip vai num módulo
-> diferente, e isso confunde bastante:
->
-> | Chip | Módulo | Época |
-> |------|--------|-------|
-> | ESP32-D0WDQ6 | ESP32-WROOM-32 | o original, 2016 |
-> | ESP32-D0WD | ESP32-WROOM-32D | intermediário |
-> | **ESP32-D0WD-V3** | **ESP32-WROOM-32E** | o atual — este aqui |
->
-> Para tudo o que fazemos neste laboratório, os três se comportam igual: mesmo
-> pinout, mesma flash, mesmo código. A diferença só aparece em detalhes finos
-> de consumo e de erratas. Se quiser confirmar com os próprios olhos, o nome do
-> módulo vem impresso na latinha metálica.
+### Como identificar o seu módulo: três fontes
+
+Há três jeitos de saber o que você tem em mãos, e vale conhecer os três porque
+eles respondem perguntas diferentes:
+
+| Fonte | Onde ver | O que ela prova |
+|-------|----------|-----------------|
+| Serigrafia | impressa na lata metálica | a **família** do módulo |
+| FCC ID | impresso na lata, abaixo do nome | o **fabricante** e o modelo certificado |
+| `esptool.py` | perguntando ao chip | a **geração exata** do silício |
+
+Nesta placa as três dizem:
+
+```
+Lata     : ESP-WROOM-32
+FCC ID   : 2AC7Z-ESP32WROOM32
+esptool  : ESP32-D0WD-V3 (revision v3.1)
+```
+
+O **FCC ID** é o dado mais confiável dos três. Ele tem duas partes: `2AC7Z` é o
+código de outorgado, atribuído pela FCC à **Espressif**, e `ESP32WROOM32` é o
+produto certificado. Você pode conferir qualquer FCC ID em
+[fcc.gov](https://www.fcc.gov/oet/ea/fccid) ou em fccid.io.
+
+Isso importa na prática: **é a prova de que o módulo é Espressif genuíno**, e
+não um clone. O mercado tem muitos módulos parecidos com marcação copiada, mas
+eles raramente carregam um FCC ID válido — certificação custa caro. Módulo
+genuíno significa antena projetada corretamente e alcance de Wi-Fi de verdade.
+
+### A lata diz uma coisa, o chip diz outra — e os dois estão certos
+
+Repare que a lata diz **`ESP-WROOM-32`** e o chip se identifica como
+**`ESP32-D0WD-V3`**. Isso parece contradição e não é.
+
+`ESP-WROOM-32` é a marcação **original** da Espressif, de 2016 (repare que não
+tem "32" depois de "ESP"). Ela pegou tão bem que virou praticamente sinônimo de
+"módulo ESP32", e continuou sendo estampada em módulos por anos — enquanto o
+silício lá dentro era atualizado silenciosamente:
+
+| Geração do chip | Quando | Marcação típica da lata |
+|-----------------|--------|-------------------------|
+| ESP32-D0WDQ6 | 2016 | `ESP-WROOM-32` |
+| ESP32-D0WD | intermediário | `ESP-WROOM-32` ou `ESP32-WROOM-32D` |
+| **ESP32-D0WD-V3** | atual — **este aqui** | `ESP-WROOM-32` ou `ESP32-WROOM-32E` |
+
+Ou seja: a lata identifica a **família do módulo**, e o `esptool` identifica a
+**geração exata do silício**. Um módulo carimbado `ESP-WROOM-32` com um chip V3
+dentro é comum e perfeitamente normal — significa que você tem a marcação
+clássica com o silício novo, que é o melhor dos dois mundos.
+
+Para tudo o que fazemos neste laboratório as gerações se comportam igual: mesmo
+pinout, mesma flash, mesmo código. A diferença aparece só em detalhes finos de
+consumo e de erratas corrigidas.
+
+> **Moral da história:** para saber o que você realmente tem, pergunte ao chip,
+> não à lata. A serigrafia diz de que família é; só o `esptool` diz a revisão.
 
 Sem a placa de desenvolvimento, o módulo sozinho exigiria soldar fios e montar
 uma fonte de alimentação.
@@ -120,7 +163,7 @@ uma fonte de alimentação.
               ┌──── antena (a serpentina impressa)
               │
         ┌─────┴──────────────────┐
-   ┌────┤ ▓▓▓  ESP32-WROOM-32E   ├────┐
+   ┌────┤ ▓▓▓   ESP-WROOM-32     ├────┐
    │    │ ▓▓▓  (latinha metálica)│    │
  pinos  └────────────────────────┘  pinos
    │      [EN]            [BOOT]      │

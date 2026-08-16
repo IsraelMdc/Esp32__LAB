@@ -7,13 +7,22 @@ Contexto para o Claude Code trabalhar neste repositório.
 Laboratório de experimentos com **ESP32 DevKit v1**, usando **PlatformIO +
 framework Arduino**.
 
-Hardware confirmado lendo o próprio chip (`esptool.py flash_id`): chip
-**ESP32-D0WD-V3 revisão v3.1**, módulo **ESP32-WROOM-32E**, dual core 240 MHz,
-4 MB de flash, 320 KB de RAM utilizável, Wi-Fi + Bluetooth dual-mode, cristal
-de 40 MHz. Confere com a board `esp32doit-devkit-v1` do `shared/base.ini`.
+Hardware, confirmado por três fontes independentes:
 
-> Não escrever "ESP32-WROOM-32" sem o `E`: aquele part number usa o chip
-> D0WDQ6, mais antigo. O silício V3 desta placa vem no WROOM-32E. O dono do repositório está **aprendendo
+- **Módulo**: `ESP-WROOM-32` — lido na serigrafia da lata metálica.
+- **FCC ID**: `2AC7Z-ESP32WROOM32` — grantee `2AC7Z` = Espressif. Confirma
+  módulo **genuíno**, não clone.
+- **Chip**: `ESP32-D0WD-V3` revisão v3.1 — lido com `esptool.py flash_id`.
+  Dual core 240 MHz, 4 MB de flash, 320 KB de RAM utilizável, Wi-Fi +
+  Bluetooth dual-mode, cristal de 40 MHz.
+
+Confere com a board `esp32doit-devkit-v1` do `shared/base.ini`.
+
+> **Não deduza o módulo a partir do chip.** A marcação `ESP-WROOM-32` foi
+> mantida por anos enquanto o silício interno evoluía, então um módulo assim
+> carimbado com um chip V3 dentro é normal — não é WROOM-32E, que viria
+> carimbado `ESP32-WROOM-32E`. A lata diz a família; o `esptool` diz a revisão.
+> Já erramos isso uma vez inferindo o módulo pelo chip. O dono do repositório está **aprendendo
 microcontroladores do zero** — o código e a documentação devem ensinar, não só
 funcionar.
 
