@@ -241,12 +241,21 @@ placa e o ambiente estão bons, e o problema está no seu código.
 
 ---
 
-## Sobre o OneDrive
+## Estado validado em hardware
 
-Este repositório está dentro da pasta do OneDrive, então o `.pio-core/` (mais
-de 1 GB de compilador) tende a ser sincronizado para a nuvem. Isso gasta banda
-e, ocasionalmente, o OneDrive trava um arquivo no meio de uma compilação.
+Testado de ponta a ponta em uma ESP32 DevKit v1 real:
 
-Se isso incomodar, a saída é mover o repositório para fora do OneDrive — por
-exemplo `C:\Dev\Esp32__LAB` — e recriar a junction apontando para o novo
-lugar. O Git continua sendo o backup real do que importa: o código.
+| Item | Resultado |
+|------|-----------|
+| Placa detectada | `COM4` — Silicon Labs CP210x |
+| Compilação dos 4 projetos | ✅ |
+| Gravação do 01-blink | ✅ `Hash of data verified` |
+| Execução na placa | ✅ serial imprimindo `LED aceso` / `LED apagado` |
+
+Uso de memória do blink: RAM 6,6% (21.464 de 327.680 bytes), Flash 20,5%
+(269.193 de 1.310.720 bytes).
+
+> O caminho deste repositório contém a pasta `OneDrive`, mas a sincronização
+> não está ativa (o `OneDrive.exe` não roda e a pasta não tem atributos de
+> sync). Não há, portanto, risco de o sincronizador interferir nas
+> compilações.

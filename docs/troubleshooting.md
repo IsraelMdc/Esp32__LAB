@@ -178,18 +178,28 @@ Criou um projeto novo? Adicione-o à lista `folders` desse arquivo.
 
 ---
 
-## Erros estranhos e intermitentes durante a compilação
+## `can't create .pio/build/.../arquivo.o: No such file or directory`
 
+Pastas de saída que deveriam existir somem no meio do build.
+
+A causa mais comum é ter apagado a pasta `.pio` **no mesmo comando** que
+dispara a compilação. O Windows conclui a remoção de diretórios de forma
+assíncrona, então a exclusão ainda em andamento apaga as pastas que o
+compilador acabou de criar.
+
+Separe as duas coisas em comandos distintos:
+
+```powershell
+Remove-Item -Recurse -Force .pio
+..\..\pio.cmd run
 ```
-Fatal error: can't create .pio/build/.../arquivo.o: No such file or directory
-```
 
-Pastas que existiam somem no meio do build. Isso costuma ser o **OneDrive**
-sincronizando a pasta `.pio` enquanto o compilador escreve nela.
+Ou simplesmente use `..\..\pio.cmd run -t clean`, que faz a limpeza de forma
+coordenada com o build.
 
-Rode de novo — geralmente passa. Se for frequente, mova o repositório para fora
-do OneDrive (por exemplo `C:\Dev\Esp32__LAB`) e refaça a junction apontando
-para o novo local.
+> Programas que vigiam a pasta em segundo plano — sincronizadores de nuvem,
+> antivírus com varredura em tempo real — podem causar o mesmo sintoma. Aqui a
+> sincronização do OneDrive está desativada, então não é o caso.
 
 ---
 

@@ -87,17 +87,23 @@ lista `folders` do `Esp32__LAB.code-workspace`**.
 
 ## Estado validado
 
-Os quatro projetos compilam (testado): 01-blink 20,5% de flash, 02-serial
-20,7%, 03-botao 20,6%, 04-wifi-scan 55,4%.
+Os quatro projetos compilam: 01-blink 20,5% de flash, 02-serial 20,7%,
+03-botao 20,6%, 04-wifi-scan 55,4%.
 
-**Nada foi testado em hardware real ainda** — nenhuma placa estava conectada
-durante o setup (`pio device list` não retornou portas).
+**Testado em hardware real**: placa em `COM4` (Silicon Labs CP210x), o
+01-blink foi gravado com sucesso e a serial confirmou a execução
+(`LED aceso` / `LED apagado`). A cadeia compilar → gravar → executar está
+verificada de ponta a ponta.
 
 ## Cuidados conhecidos
 
-- **OneDrive**: o repositório está dentro da pasta sincronizada. Já causou uma
-  falha de build (pastas de `.pio` sumindo durante a compilação). Se der erro
-  intermitente com `can't create ... .o`, é isso; rodar de novo resolve.
+- **OneDrive**: o caminho contém a pasta `OneDrive`, mas a sincronização
+  **não está ativa** (processo não roda, pasta sem atributos de sync). Não é
+  fonte de problemas; não sugerir mover o repositório por esse motivo.
+- **Apagar `.pio`**: não apague a pasta no mesmo comando que compila. A
+  remoção assíncrona do Windows apaga diretórios recém-criados pelo build e
+  gera `can't create ... .o: No such file or directory`. Use comandos
+  separados ou `-t clean`.
 - **3,3 V**: os GPIO do ESP32 não toleram 5 V. Ao sugerir circuitos, verificar
   a tensão do componente.
 - **Pinos**: 6–11 são da flash interna (nunca usar); 34–39 são só entrada;
