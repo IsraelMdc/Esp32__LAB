@@ -4,26 +4,32 @@ Até agora o ESP32 só falava. Agora ele escuta o mundo real — e o mundo real 
 sujo, impreciso e cheio de ruído. Este projeto ensina os dois conceitos que
 todo mundo erra na primeira vez: **pull-up** e **debounce**.
 
-## Ligação
+## Hardware: nenhum
+
+Usamos o botão **BOOT** que já vem soldado na placa, ligado ao **GPIO 0**.
 
 ```
         ESP32 DevKit v1
-        ┌─────────────┐
-        │             │
-        │      GPIO 4 ├────────┐
-        │             │      [botão]
-        │         GND ├────────┘
-        │             │
-        └─────────────┘
+        ┌───────────────────────┐
+        │  ▓▓▓ ESP32-WROOM-32   │
+        └───────────────────────┘
+           [EN]          [BOOT]
+            ▲               ▲
+       NÃO é este      é ESTE aqui
+       (reinicia)      (GPIO 0)
 ```
 
-Aperte o botão → os dois fios se conectam → o GPIO 4 encosta no GND.
+Cuidado para não apertar o **EN** por engano: ele reinicia a placa e o
+contador volta a zero.
 
-**Não precisa de resistor.** O motivo está explicado abaixo, em *pull-up*.
-
-> **Sem botão em mãos?** Encoste a ponta de um fio (jumper) ligado ao GPIO 4
-> no pino GND. Funciona igual — só vai contar vários apertos de uma vez,
-> porque o contato de um fio solto é bem mais ruidoso que o de um botão.
+> **Por que o botão BOOT existe?** Ele serve para forçar a placa a entrar em
+> modo de gravação. Se o GPIO 0 estiver em LOW **no momento do reset**, o
+> ESP32 sobe em modo bootloader em vez de rodar o seu programa. Lê-lo durante
+> a execução normal, como fazemos aqui, é perfeitamente seguro.
+>
+> Consequência prática: se você segurar o BOOT e apertar o EN, a placa fica
+> esperando um upload e o programa não roda. Solte tudo e aperte o EN sozinho
+> para voltar ao normal.
 
 ## Como rodar
 
@@ -35,7 +41,7 @@ Aperte o botão → os dois fios se conectam → o GPIO 4 encosta no GND.
 
 ```
 === PROJETO 03 — BOTAO ===
-Aperte o botao no GPIO 4 (ou encoste GPIO 4 no GND).
+Aperte o botao BOOT da placa (nao o EN).
    ...rodando ha 3 s (apertos: 0)
 Aperto #1  ->  LED ACESO
 Aperto #2  ->  LED apagado
@@ -58,11 +64,15 @@ A solução é um **resistor de pull-up**: um resistor ligando o pino ao 3,3 V.
 Ele "puxa" o pino para HIGH quando nada mais está acontecendo.
 
 O ESP32 já tem esses resistores embutidos. `INPUT_PULLUP` liga o de dentro do
-chip — por isso você não precisa de nenhum componente externo:
+chip — por isso você nunca precisa de um resistor externo para ler um botão:
 
 ```cpp
 pinMode(PINO_BOTAO, INPUT_PULLUP);
 ```
+
+> No caso específico do GPIO 0, a própria placa já traz um pull-up soldado,
+> então essa linha é redundante aqui. Deixamos ela mesmo assim porque é
+> exatamente o que você vai escrever em qualquer outro pino.
 
 A consequência é que **a lógica fica invertida**, e isso confunde todo mundo:
 
@@ -145,8 +155,16 @@ por isso `ledAceso` é declarada fora das funções, como variável global.
 
 1. Comente a linha do debounce (troque `DEBOUNCE_MS` para `0`) e veja o
    contador pular vários números por aperto. É o problema acontecendo ao vivo.
-2. Troque `INPUT_PULLUP` por `INPUT` e observe o LED trocando sozinho, do nada.
-   É o pino flutuando.
+2. Veja um pino **flutuando** ao vivo. Adicione no `setup()` um
+   `pinMode(4, INPUT);` e no `loop()` um `Serial.println(digitalRead(4));`.
+   O GPIO 4 não está ligado em nada, e você vai ver 0 e 1 alternando sozinhos.
+   Encoste o dedo perto do pino e a bagunça aumenta.
+
+   Depois troque para `pinMode(4, INPUT_PULLUP);` e veja a leitura travar em
+   `1`, estável. É exatamente esse o trabalho do resistor de pull-up.
+
+   > Fazer isso no próprio GPIO 0 não funcionaria: a placa tem um pull-up
+   > soldado nele, então ele nunca flutua.
 3. Adicione um `delay(2000)` no fim do `loop()` e tente apertar o botão. Você
    vai perder quase todos os apertos — a demonstração definitiva de por que
    `delay()` é ruim.

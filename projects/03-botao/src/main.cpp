@@ -5,25 +5,27 @@
  *
  *  Até agora o ESP32 só falava. Agora ele escuta.
  *
- *  O QUE ELE FAZ: a cada aperto do botão, o LED troca de estado
+ *  NÃO PRECISA DE NENHUM COMPONENTE. Usamos o botão BOOT que já
+ *  vem soldado na placa, ligado ao GPIO 0.
+ *
+ *  O QUE ELE FAZ: a cada aperto do BOOT, o LED troca de estado
  *  (aceso <-> apagado) e o total de apertos aparece no serial.
- *  Ao mesmo tempo, um "heartbeat" imprime a cada 3 s para provar
- *  que o programa nunca trava esperando o botão.
+ *  Um "heartbeat" imprime a cada 3 s para provar que o programa
+ *  nunca trava esperando o botão.
  *
- *  LIGAÇÃO (não precisa de resistor, veja o README):
- *
- *      GPIO 4  ──────┐
- *                  [botão]
- *      GND ──────────┘
- *
- *  Sem botão em mãos? Encoste um fio do GPIO 4 no GND — o efeito
- *  é o mesmo (mas vai contar vários apertos, por causa do ruído).
+ *      [EN]  <- este NÃO, reinicia a placa
+ *      [BOOT] <- este aqui
  */
 
 #include <Arduino.h>
 
-const int PINO_BOTAO = 4;
-const int PINO_LED   = 2;
+// O botão BOOT da DevKit v1 está ligado ao GPIO 0. A própria
+// placa já tem um resistor de pull-up nele, e o botão o conecta
+// ao GND quando apertado.
+const int PINO_BOTAO = 0;
+
+// LED azul embutido.
+const int PINO_LED = 2;
 
 // ------------------------------------------------------------
 //  Estado do programa
@@ -32,11 +34,10 @@ bool ledAceso = false;      // o LED está aceso agora?
 int  totalApertos = 0;
 
 // Qual era a leitura do botão na última passada do loop.
-// Começa em HIGH porque, com INPUT_PULLUP, solto = HIGH.
+// Começa em HIGH porque, com pull-up, solto = HIGH.
 int leituraAnterior = HIGH;
 
 // --- Debounce ---
-// Guarda quando a leitura mudou pela última vez.
 unsigned long ultimaMudanca = 0;
 const unsigned long DEBOUNCE_MS = 50;
 
@@ -50,15 +51,16 @@ void setup() {
 
   pinMode(PINO_LED, OUTPUT);
 
-  // INPUT_PULLUP é o detalhe importante. Ele liga um resistor que
-  // já existe DENTRO do ESP32, puxando o pino para 3,3 V.
-  // Resultado: solto = HIGH, apertado = LOW (o botão liga no GND).
-  // Sem isso, o pino "flutua" e lê valores aleatórios.
+  // INPUT_PULLUP liga um resistor que existe DENTRO do ESP32,
+  // puxando o pino para 3,3 V. No GPIO 0 a placa já tem um
+  // pull-up externo, então aqui é redundante — mas deixamos
+  // explícito porque é o que você vai usar em qualquer outro pino.
+  // Resultado: solto = HIGH, apertado = LOW.
   pinMode(PINO_BOTAO, INPUT_PULLUP);
 
   Serial.println();
   Serial.println("=== PROJETO 03 — BOTAO ===");
-  Serial.println("Aperte o botao no GPIO 4 (ou encoste GPIO 4 no GND).");
+  Serial.println("Aperte o botao BOOT da placa (nao o EN).");
 }
 
 void loop() {

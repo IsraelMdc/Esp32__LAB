@@ -5,19 +5,19 @@
 
 Uma frase dizendo o que o projeto faz e por quê.
 
-## Ligação
+## Hardware: nenhum
 
-```
-        ESP32 DevKit v1
-        ┌─────────────┐
-        │      GPIO ? ├──── ...
-        │         GND ├──── ...
-        └─────────────┘
-```
+Este laboratório usa **só a placa e o cabo USB**. Liste aqui quais recursos
+embutidos o projeto utiliza.
 
-| Pino | Ligado em | Modo |
-|------|-----------|------|
-| GPIO 2 | LED interno | OUTPUT |
+| Recurso da placa | Pino | Modo |
+|------------------|------|------|
+| LED azul | GPIO 2 | OUTPUT |
+| Botão BOOT | GPIO 0 | INPUT_PULLUP |
+
+Outros recursos disponíveis sem nada externo: toque capacitivo
+(`touchRead(T0..T9)`), sensor hall (`hallRead()`), temperatura interna
+(`temperatureRead()`), Wi-Fi, Bluetooth, deep sleep e os dois núcleos.
 
 ## Como rodar
 

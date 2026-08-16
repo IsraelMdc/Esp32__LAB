@@ -76,6 +76,30 @@ suas `lib_deps` específicas.
 Ao criar um projeto novo: copie `projects/_template/` e **adicione a pasta na
 lista `folders` do `Esp32__LAB.code-workspace`**.
 
+## 🚨 Regra: só a placa, sem hardware externo
+
+**Nenhum projeto pode exigir componente adicional.** Nada de botão, LED,
+resistor, protoboard, jumper, sensor ou módulo — só a DevKit v1 e o cabo USB.
+O dono do repositório não tem componentes à mão; um projeto que exige peça
+externa é um projeto que ele não consegue rodar.
+
+Recursos disponíveis só com a placa:
+
+| Recurso | Como acessar |
+|---------|--------------|
+| LED azul | GPIO 2 (saída, PWM/fade) |
+| Botão BOOT | GPIO 0 (entrada; a placa já tem pull-up) |
+| Botão EN/RST | reset por hardware |
+| Toque capacitivo | `touchRead(T0..T9)` — basta encostar o dedo no pino |
+| Sensor hall | `hallRead()` |
+| Temperatura interna | `temperatureRead()` |
+| Wi-Fi / Bluetooth / BLE | bibliotecas do framework |
+| Deep sleep, timers, NVS, SPIFFS | APIs do ESP32 |
+| Dois núcleos / FreeRTOS | `xTaskCreatePinnedToCore()` |
+
+Cuidado com o GPIO 0: é *strapping pin*. Lê-lo em tempo de execução é seguro,
+mas se estiver em LOW no momento do reset a placa entra em modo de gravação.
+
 ## Convenções de código
 
 - Comentários e documentação em **português**.

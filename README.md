@@ -3,11 +3,14 @@
 Laboratório pessoal para testar aplicações em um **ESP32 DevKit v1**
 (módulo ESP32-WROOM-32), usando **PlatformIO + VS Code**.
 
-Duas regras organizam este repositório:
+Três regras organizam este repositório:
 
-1. **Um projeto por pasta.** Cada experimento em `projects/` é independente,
+1. **Só a placa e o cabo USB.** Nenhum projeto exige botão, LED, resistor,
+   protoboard ou sensor externo. Tudo usa apenas os recursos que já vêm
+   soldados na DevKit v1.
+2. **Um projeto por pasta.** Cada experimento em `projects/` é independente,
    com seu próprio `platformio.ini` e seu próprio README explicando a teoria.
-2. **Ambiente 100% isolado.** Compilador, framework e bibliotecas ficam dentro
+3. **Ambiente 100% isolado.** Compilador, framework e bibliotecas ficam dentro
    do repositório, em `.pio-core/`. Nada é instalado no resto da máquina.
 
 > **Nunca mexeu com microcontrolador?** Comece por
@@ -105,12 +108,12 @@ inferior**: ✓ (build), → (upload), 🔌 (monitor).
 
 Faça na ordem. Cada README explica a teoria por trás do código.
 
-| # | Projeto | O que você aprende | Precisa de hardware extra? |
-|---|---------|--------------------|---------------------------|
-| 01 | [blink](projects/01-blink/README.md) | GPIO, `setup()`/`loop()`, HIGH/LOW, o perigo do `delay()` | não |
-| 02 | [serial](projects/02-serial/README.md) | Depuração, `printf`, ler comandos, **`millis()`** | não |
-| 03 | [botao](projects/03-botao/README.md) | Entrada digital, `INPUT_PULLUP`, debounce, borda | um botão (ou um fio) |
-| 04 | [wifi-scan](projects/04-wifi-scan/README.md) | Wi-Fi, RSSI, canais, segurança, MAC | não |
+| # | Projeto | O que você aprende | Usa da placa |
+|---|---------|--------------------|--------------|
+| 01 | [blink](projects/01-blink/README.md) | GPIO, `setup()`/`loop()`, HIGH/LOW, o perigo do `delay()` | LED azul |
+| 02 | [serial](projects/02-serial/README.md) | Depuração, `printf`, ler comandos, **`millis()`** | USB serial |
+| 03 | [botao](projects/03-botao/README.md) | Entrada digital, `INPUT_PULLUP`, debounce, borda | botão BOOT |
+| 04 | [wifi-scan](projects/04-wifi-scan/README.md) | Wi-Fi, RSSI, canais, segurança, MAC | rádio Wi-Fi |
 
 O conceito mais importante de todos é o **`millis()`**, no projeto 02. É o que
 separa um programa que trava de um que faz várias coisas ao mesmo tempo.
