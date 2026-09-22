@@ -1,0 +1,33 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+// ============================================================
+//  CONFIGURAÇÕES DE REDE — PROJETO 05 WEB SERVER
+// ============================================================
+//  Copie este arquivo para config.h e preencha com as credenciais
+//  da sua rede Wi-Fi residencial.
+//
+//  O arquivo config.h é ignorado pelo Git (veja .gitignore),
+//  garantindo que sua senha pessoal nunca suba para a internet.
+// ============================================================
+
+// --- Modo Estação (conectar ao seu roteador Wi-Fi) ---
+// Se deixar vazio (""), o ESP32 iniciará direto em Modo Ponto de Acesso.
+#define WIFI_SSID     "SEU_WIFI_AQUI"
+#define WIFI_PASS     "SUA_SENHA_AQUI"
+
+// --- Modo Ponto de Acesso (Access Point gerado pelo ESP32) ---
+// Caso o Wi-Fi residencial falhe ou esteja fora de alcance, o ESP32
+// cria esta rede própria para você se conectar diretamente por ela.
+#define AP_SSID       "ESP32-DrThiago"
+#define AP_PASS       "12345678"       // Mínimo 8 dígitos (ou deixe "" para rede aberta)
+
+// --- Nome mDNS na rede local ---
+// Permite acessar por http://drthiago.local sem precisar digitar o IP
+#define MDNS_HOST     "drthiago"
+
+// --- Hardware ---
+#define PINO_LED      2                // LED embutido da DevKit v1
+
+#endif // CONFIG_H
+

@@ -1,0 +1,721 @@
+﻿/* ============================================================
+   SITE THIAGO PEIXOTO — reprodução fiel do mockup
+   Tokens extraídos do SVG/PNG exportados do CorelDRAW
+   ============================================================ */
+
+:root {
+  --blue: #2464AB;
+  --orange: #FE5733;
+  --ink: #373435;
+  --grey: #ADADAD;
+  --light-blue: #E8EEF6;
+  --white: #FEFEFE;
+
+  --font: 'Mulish', 'Segoe UI', system-ui, sans-serif; /* fallback p/ JUST Sans */
+  --maxw: 1240px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--ink);
+  background: #fff;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+.c-black { color: #000; }
+.c-ink { color: var(--ink); }
+.c-blue { color: var(--blue); }
+.c-orange { color: var(--orange); }
+.c-white { color: #fff; }
+
+/* Evita "grid blowout" nas colunas com imagens grandes */
+.hero-inner > *,
+.campanha-inner > *,
+.quem-inner > *,
+.participe-inner > *,
+.news-grid > *,
+.stats-grid > * { min-width: 0; }
+
+/* ---------- Botões ---------- */
+.btn-orange {
+  display: inline-block;
+  background: var(--orange);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 16px 44px;
+  border: none;
+  cursor: pointer;
+  transition: background .2s;
+}
+.btn-orange:hover { background: #e8461f; }
+.btn-orange .arrow { margin-left: 10px; font-weight: 800; }
+
+.btn-outline {
+  display: inline-block;
+  background: #fff;
+  color: #000;
+  font-weight: 500;
+  font-size: .85rem;
+  padding: 11px 20px;
+  border: 1px solid #333;
+  transition: background .2s, color .2s;
+}
+.btn-outline:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--blue);
+  color: #fff;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 96px;
+}
+
+/* Logo (imagem branca sobre fundo transparente) */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.logo img {
+  height: 54px;
+  width: auto;
+}
+
+/* Nav */
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+}
+.main-nav a {
+  font-size: .95rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.main-nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
+.caret { font-size: .75em; vertical-align: 1px; }
+
+.search-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgba(255,255,255,.85);
+  padding: 9px 14px;
+  min-width: 210px;
+  color: #fff;
+}
+.search-box input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font: inherit;
+  font-size: .92rem;
+  width: 100%;
+}
+.search-box input::placeholder { color: rgba(255,255,255,.85); }
+
+/* Hamburger */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.nav-toggle span {
+  height: 3px;
+  width: 26px;
+  background: #fff;
+  transition: transform .3s, opacity .3s;
+}
+.nav-toggle.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position: relative;
+  background: #fff url('assets/img/banner1.jpg') no-repeat bottom center;
+  background-size: 100% auto;
+  /* imagem 1 é uma faixa full-width (2163×755); garante altura p/ não cortar a cabeça */
+  min-height: 35vw;
+  overflow: hidden;
+}
+/* arco decorativo azul-claro à direita */
+.hero-swirl {
+  position: absolute;
+  top: -12%;
+  right: -18%;
+  width: 58vw;
+  height: 58vw;
+  max-width: 900px;
+  max-height: 900px;
+  border: 5.5vw solid var(--light-blue);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  align-items: end;
+  gap: 20px;
+}
+.hero-copy {
+  padding: 56px 0 72px;
+}
+.hero-social {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 26px;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: #000;
+}
+.soc-ico {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #000;
+  color: #fff;
+}
+.hero-title {
+  margin: 0;
+  font-weight: 900;
+  font-size: clamp(2.6rem, 4.7vw, 4.15rem);
+  line-height: 1.06;
+  letter-spacing: -1px;
+}
+.hero-title span { display: block; }
+.hero-sub {
+  margin: 26px 0 34px;
+  font-size: 1.13rem;
+  max-width: 500px;
+  color: var(--ink);
+  text-align: justify;
+  white-space: pre-line; /* preserva as quebras de linha do mockup */
+}
+.hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+.hero-photo {
+  position: relative;
+  align-self: end;
+}
+.hero-photo img {
+  margin: 0 0 0 auto;
+  width: 100%;
+  max-width: 640px;
+}
+
+/* ============================================================
+   PAUTAS (faixa laranja)
+   ============================================================ */
+.pautas {
+  background: var(--orange);
+  color: #fff;
+  padding: 34px 16px;
+}
+.pautas-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 18px 22px;
+  font-size: clamp(1.05rem, 1.85vw, 1.55rem);
+  font-weight: 500;
+  text-align: center;
+}
+.pautas .dot {
+  width: .58em;
+  height: .58em;
+  border-radius: 50%;
+  background: #fff;
+  display: inline-block;
+}
+
+/* ============================================================
+   PRÉ-CAMPANHA (fundo branco)
+   ============================================================ */
+.campanha {
+  background: #fff;
+  overflow: hidden;
+}
+.campanha-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 30px;
+}
+/* Imagem 2 tem a pessoa na metade esquerda da faixa; o overflow
+   esconde a metade direita vazia */
+.campanha-photo {
+  align-self: end;
+  overflow: hidden;
+}
+.campanha-photo img {
+  width: 190%;
+  max-width: none;
+}
+.campanha-copy { padding: 60px 0; }
+.campanha-title {
+  margin: 0 0 18px;
+  font-weight: 900;
+  color: #000;
+  font-size: clamp(2.4rem, 4.6vw, 4rem);
+  line-height: 1.04;
+  letter-spacing: -1px;
+  max-width: 9em;
+  text-align: left;
+}
+.campanha-strong {
+  margin: 0;
+  font-weight: 800;
+  color: var(--blue);
+  font-size: clamp(1.4rem, 2.6vw, 2.25rem);
+  line-height: 1.25;
+  letter-spacing: -.5px;
+}
+
+/* ============================================================
+   CÂMARA LEGISLATIVA (fundo azul)
+   ============================================================ */
+.camara {
+  background: var(--blue);
+  color: #fff;
+  text-align: center;
+  padding: 88px 0 72px;
+}
+.camara-title {
+  margin: 0 0 26px;
+  font-weight: 900;
+  font-size: clamp(2rem, 4.4vw, 3.7rem);
+  line-height: 1.08;
+  letter-spacing: -1px;
+}
+.camara-desc {
+  max-width: 900px;
+  margin: 0 auto 44px;
+  font-size: 1.25rem;
+}
+
+/* ============================================================
+   STATS (faixa laranja)
+   ============================================================ */
+.stats {
+  background: var(--orange);
+  color: #fff;
+  padding: 62px 0;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  text-align: center;
+}
+.stat { display: flex; flex-direction: column; gap: 10px; }
+.stat-num {
+  font-weight: 900;
+  font-size: clamp(3rem, 5.5vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+.stat-label {
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: .92rem;
+  letter-spacing: .3px;
+}
+
+/* ============================================================
+   QUEM É (fundo branco)
+   ============================================================ */
+.quem {
+  background: #fff;
+  overflow: hidden;
+}
+.quem-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 30px;
+}
+.quem-copy { padding: 90px 0; }
+.quem-chip {
+  display: inline-block;
+  background: var(--blue);
+  color: #fff;
+  font-weight: 900;
+  font-size: clamp(1.6rem, 2.6vw, 2.3rem);
+  letter-spacing: -.5px;
+  padding: 8px 26px 10px;
+  margin-bottom: 10px;
+}
+.quem-title {
+  margin: 10px 0 24px;
+  font-weight: 900;
+  font-size: clamp(2.6rem, 4.6vw, 4rem);
+  line-height: 1.06;
+  letter-spacing: -1px;
+}
+.quem-desc {
+  font-size: 1.3rem;
+  max-width: 420px;
+  margin: 0;
+  white-space: pre-line; /* preserva as quebras de linha do mockup */
+}
+/* Imagem 3 tem a pessoa no lado direito da faixa; alinha à direita
+   e esconde a área vazia à esquerda */
+.quem-photo {
+  align-self: end;
+  overflow: hidden;
+}
+.quem-photo img {
+  width: 250%;
+  max-width: none;
+  margin-left: -115%; /* puxa a faixa p/ mostrar o lado direito (pessoa) */
+  margin-top: auto;
+}
+
+/* ============================================================
+   NOTÍCIAS (fundo azul)
+   ============================================================ */
+.noticias {
+  background: var(--blue);
+  color: #fff;
+  padding: 76px 0 80px;
+}
+.noticias-title {
+  margin: 0 0 54px;
+  font-weight: 900;
+  font-size: clamp(2.6rem, 4.6vw, 4rem);
+  letter-spacing: -1px;
+}
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 44px 40px;
+}
+.news-card { display: flex; flex-direction: column; }
+.news-thumb {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+.news-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.news-date {
+  margin-top: 16px;
+  color: rgba(255,255,255,.75);
+  font-size: .92rem;
+}
+.news-title {
+  margin: 6px 0 0;
+  font-size: 1.12rem;
+  font-weight: 600;
+  color: #fff;
+}
+.news-more { text-align: center; margin-top: 58px; }
+
+/* ============================================================
+   PARTICIPE DO MANDATO + CONTATO (fundo branco)
+   ============================================================ */
+.participe {
+  background: #fff;
+  padding: 90px 0;
+}
+.participe-inner {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 60px;
+  align-items: start;
+}
+.participe-title {
+  margin: 0 0 22px;
+  font-weight: 900;
+  color: #000;
+  font-size: clamp(2.6rem, 4.8vw, 4.2rem);
+  line-height: 1.04;
+  letter-spacing: -1.5px;
+}
+.participe-desc {
+  font-size: 1.1rem;
+  margin: 0 0 34px;
+  max-width: 640px;
+}
+.participe-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.participe-photo {
+  align-self: stretch;
+  min-height: 500px;
+}
+
+/* Caixa azul de contato */
+.contato-box {
+  background: var(--blue);
+  color: #fff;
+  padding: 44px 40px 36px;
+}
+.contato-title {
+  margin: 0 0 14px;
+  font-weight: 900;
+  font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+  line-height: 1.08;
+  letter-spacing: -.5px;
+}
+.contato-desc {
+  margin: 0 0 28px;
+  font-size: .95rem;
+  max-width: 420px;
+}
+.contato-form { display: flex; flex-direction: column; gap: 18px; }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field label {
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: .5px;
+}
+.field input,
+.field textarea {
+  font: inherit;
+  font-size: 1rem;
+  padding: 16px 18px;
+  border: 1px solid rgba(255,255,255,.95);
+  background: transparent;
+  color: #fff;
+  resize: vertical;
+}
+.field input::placeholder,
+.field textarea::placeholder { color: rgba(255,255,255,.9); }
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  background: rgba(255,255,255,.08);
+}
+.btn-enviar {
+  align-self: flex-start;
+  background: #fff;
+  color: #000;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+}
+.btn-enviar:hover { background: var(--orange); color: #fff; }
+.form-consent {
+  margin: 6px 0 0 46px;
+  font-size: .78rem;
+  text-align: justify;
+  max-width: 480px;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+  background: var(--blue);
+  color: #fff;
+  padding: 64px 0 90px;
+}
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 56px;
+}
+.logo-footer img { height: 68px; }
+.footer-tag {
+  margin: 0;
+  font-size: .98rem;
+  line-height: 1.45;
+}
+.footer-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+  padding-left: 12%;
+}
+.footer-col h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 0 0 22px;
+}
+.footer-col a {
+  display: block;
+  margin-bottom: 14px;
+  font-size: .98rem;
+}
+.footer-col a:hover { text-decoration: underline; }
+.footer-col p { margin: 0 0 18px; font-size: .98rem; }
+.footer-sub { font-weight: 800; }
+.footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  max-width: 240px;
+}
+.footer-social a {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--blue);
+}
+.footer-social a:hover { background: var(--orange); color: #fff; }
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media (max-width: 1080px) {
+  .main-nav { gap: 20px; }
+  .search-box { min-width: 150px; }
+}
+
+@media (max-width: 980px) {
+  .nav-toggle { display: flex; }
+  .header-inner { min-height: 76px; }
+  .logo img { height: 46px; }
+  .main-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--blue);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .3s ease;
+    box-shadow: 0 14px 24px rgba(0,0,0,.18);
+  }
+  .main-nav.open { max-height: 460px; }
+  .main-nav a { padding: 15px 28px; border-top: 1px solid rgba(255,255,255,.14); }
+  .search-box { margin: 14px 28px 20px; }
+
+  .hero-inner,
+  .campanha-inner,
+  .quem-inner,
+  .participe-inner { grid-template-columns: 1fr; }
+
+  .hero-copy { padding: 40px 0 30px; }
+  .hero-sub { white-space: normal; } /* quebras fixas estouram telas estreitas */
+  /* no mobile, mostra só o lado direito da faixa (onde está a pessoa),
+     abaixo do texto */
+  .hero {
+    background-size: 150% auto;
+    background-position: bottom right;
+    padding-bottom: 54vw;
+  }
+
+  .campanha-copy { padding: 10px 0 50px; text-align: center; }
+  .campanha-title { margin-left: auto; margin-right: auto; }
+
+  .quem-copy { padding: 60px 0 20px; }
+
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 40px 20px; }
+  .news-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .participe-photo { min-height: 0; }
+  .participe-photo img { max-height: 520px; }
+
+  .footer-cols { grid-template-columns: 1fr 1fr; padding-left: 0; }
+}
+
+@media (max-width: 560px) {
+  .container { padding: 0 20px; }
+
+  .logo img { height: 40px; }
+
+  /* Hero: títulos menores e foto maior abaixo do texto */
+  .hero-copy { padding: 28px 0 12px; }
+  .hero-title { font-size: 2.15rem; }
+  .hero-social { font-size: .9rem; margin-bottom: 18px; }
+  .hero-sub { font-size: 1rem; margin: 18px 0 24px; }
+  .hero {
+    background-size: 175% auto;
+    background-position: bottom right;
+    padding-bottom: 64vw;
+  }
+
+  .pautas { padding: 24px 14px; }
+  .pautas-line { font-size: 1rem; gap: 12px 14px; }
+
+  .campanha-copy { padding: 4px 0 44px; }
+  .campanha-title { font-size: 2rem; }
+  .campanha-strong { font-size: 1.35rem; }
+
+  .camara { padding: 56px 0 48px; }
+  .camara-title { font-size: 1.8rem; }
+  .camara-desc { font-size: 1.05rem; margin-bottom: 32px; }
+
+  .stats { padding: 44px 0; }
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 30px 16px; }
+  .stat-num { font-size: 2.7rem; }
+  .stat-label { font-size: .78rem; }
+
+  .quem-copy { padding: 48px 0 10px; }
+  .quem-chip { font-size: 1.3rem; padding: 6px 18px 8px; }
+  .quem-title { font-size: 2.2rem; }
+  .quem-desc { font-size: 1.1rem; }
+
+  .noticias { padding: 52px 0 56px; }
+  .noticias-title { font-size: 2.2rem; margin-bottom: 34px; }
+  .news-grid { grid-template-columns: 1fr; gap: 32px; }
+  .news-more { margin-top: 40px; }
+
+  .participe { padding: 56px 0; }
+  .participe-title { font-size: 2.4rem; }
+  .participe-inner { gap: 36px; }
+
+  .footer-cols { grid-template-columns: 1fr; }
+  .contato-box { padding: 32px 24px; }
+  .form-consent { margin-left: 0; }
+
+  .site-footer { padding: 48px 0 60px; }
+  .footer-brand { margin-bottom: 36px; }
+  .logo-footer img { height: 54px; }
+}

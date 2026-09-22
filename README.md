@@ -115,6 +115,7 @@ Faça na ordem. Cada README explica a teoria por trás do código.
 | 02 | [serial](projects/02-serial/README.md) | Depuração, `printf`, ler comandos, **`millis()`** | USB serial |
 | 03 | [botao](projects/03-botao/README.md) | Entrada digital, `INPUT_PULLUP`, debounce, borda | botão BOOT |
 | 04 | [wifi-scan](projects/04-wifi-scan/README.md) | Wi-Fi, RSSI, canais, segurança, MAC | rádio Wi-Fi |
+| 05 | [web-server](projects/05-web-server/README.md) | LittleFS, servidor HTTP, API REST, Cloudflare Tunnel | Wi-Fi + Flash + LED |
 
 O conceito mais importante de todos é o **`millis()`**, no projeto 02. É o que
 separa um programa que trava de um que faz várias coisas ao mesmo tempo.
@@ -149,6 +150,8 @@ Esp32__LAB/
 │   ├── 02-serial/
 │   ├── 03-botao/
 │   └── 04-wifi-scan/
+│   ├── 04-wifi-scan/
+│   └── 05-web-server/
 │
 ├── .venv/                       ← PlatformIO Core  (não versionado)
 └── .pio-core/                   ← compilador e bibliotecas  (não versionado)

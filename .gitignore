@@ -32,7 +32,10 @@
 # ============================================================
 # Senha de Wi-Fi, tokens de API, etc. Cada projeto que precisar
 # disso usa um secrets.h local, criado a partir do .example.
+# disso usa um config.h ou secrets.h local, criado a partir do .example.
 **/include/secrets.h
+**/src/config.h
+**/src/secrets.h
 
 # ============================================================
 #  Sistema operacional / editor

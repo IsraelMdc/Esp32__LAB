@@ -1,13 +1,9 @@
 @echo off
 REM ============================================================
-REM  Atalho para o PlatformIO ISOLADO deste repositorio.
+REM  Atalho inteligente para o PlatformIO deste repositorio.
 REM ============================================================
-REM  Sem isto voce teria que digitar o caminho completo do .venv
-REM  toda vez. Com isto, de dentro de qualquer projeto:
-REM
-REM      ..\..\pio.cmd run -t upload -t monitor
-REM
-REM  %~dp0 = a pasta onde ESTE arquivo esta (a raiz do repo).
-REM  %*    = repassa todos os argumentos que voce digitou.
+REM  Redireciona automaticamente caminhos acentuados para a
+REM  junction C:\Users\Public\esp32lab para que a compilacao
+REM  nunca falhe com erro de caracteres no caminho.
 REM ============================================================
-"%~dp0.venv\Scripts\pio.exe" %*
+"C:\Users\Public\esp32lab\.venv\Scripts\python.exe" "C:\Users\Public\esp32lab\tools\pio_wrapper.py" %*
