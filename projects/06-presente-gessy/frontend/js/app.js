@@ -51,7 +51,7 @@ export async function iniciarAplicacao() {
   cena.background = new THREE.Color(0x0d1117);
 
   const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(0, 1.7, -5.5); // Entrada da Rotunda, olhando para o canteiro central (0, 0, 0)
+  camera.position.set(0, 1.7, -3.6); // Em frente ao painel de Feliz Aniversário, olhando diretamente para ele (-Z)
 
   const renderizador = new THREE.WebGLRenderer({
     canvas: canvas,

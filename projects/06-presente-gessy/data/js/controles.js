@@ -26,9 +26,9 @@ export class ControladorGaleria {
     this.aoTocar = null;        // callback(x, y) definido pela interação (tap no quadro)
     this.soltarJoystick = null; // definido em configurarMobile()
 
-    // Rotação da câmera
-    this.pitch = 0; // Olhar para cima / baixo (eixo X)
-    this.yaw = Math.PI; // Olhar para frente (rumo ao centro da rotunda)
+    // Rotação da câmera (spawn olhando para o painel de Feliz Aniversário em -Z)
+    this.pitch = 0.06; // Leve inclinação para cima para enquadrar o painel
+    this.yaw = 0; // Olhar diretamente para frente rumo ao painel de Feliz Aniversário (-Z)
 
     // Estado do teclado
     this.teclas = { w: false, a: false, s: false, d: false };
@@ -43,6 +43,10 @@ export class ControladorGaleria {
 
     // Flag de bloqueio (ativada quando o modal de história estiver aberto)
     this.bloqueado = false;
+
+    // Aplica orientação inicial imediatamente na câmera
+    const eulerInit = new THREE.Euler(this.pitch, this.yaw, 0, "YXZ");
+    this.camera.quaternion.setFromEuler(eulerInit);
 
     this.configurarTeclado();
     this.configurarPointerLock();
