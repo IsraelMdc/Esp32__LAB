@@ -2,7 +2,8 @@
  * ============================================================
  *  GRANDE ROTUNDA NEOCLÁSSICA & JARDIM FLORAL CENTRAL — PROJETO 06 (GESSY)
  *  Salão Circular de Museu (360°) com Canteiro Central Cercado,
- *  Flores Botânicas Eretas, Cúpula Noturna e 9 Quadros de Memórias em Anel
+ *  Simetria Perfeita em 12 Estações, Terra e Grama Reais,
+ *  Bancos no Canteiro Central e Vasos Florais 3D por Quadro
  * ============================================================
  */
 
@@ -69,7 +70,6 @@ function criarTexturaParede() {
     ctx.fillRect(x, y, 2, 2);
   }
 
-  // Boiserie clássica sutil
   ctx.strokeStyle = "rgba(180, 150, 120, 0.25)";
   ctx.lineWidth = 4;
   ctx.strokeRect(32, 32, 448, 448);
@@ -80,41 +80,6 @@ function criarTexturaParede() {
   tex.wrapS = THREE.RepeatWrapping;
   tex.wrapT = THREE.RepeatWrapping;
   tex.repeat.set(12, 2);
-  return tex;
-}
-
-function criarTexturaTapete() {
-  const canvas = document.createElement("canvas");
-  canvas.width = 512;
-  canvas.height = 512;
-  const ctx = canvas.getContext("2d");
-
-  ctx.fillStyle = "#780016";
-  ctx.fillRect(0, 0, 512, 512);
-
-  ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
-  for (let i = 0; i < 4000; i++) {
-    const x = Math.random() * 512;
-    const y = Math.random() * 512;
-    ctx.fillRect(x, y, 2, 2);
-  }
-
-  const bordaL = 36;
-  ctx.fillStyle = "#ffd166";
-  ctx.fillRect(0, 0, bordaL, 512);
-  ctx.fillRect(512 - bordaL, 0, bordaL, 512);
-
-  ctx.strokeStyle = "#cca01d";
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.moveTo(bordaL + 8, 0); ctx.lineTo(bordaL + 8, 512);
-  ctx.moveTo(512 - bordaL - 8, 0); ctx.lineTo(512 - bordaL - 8, 512);
-  ctx.stroke();
-
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.wrapS = THREE.RepeatWrapping;
-  tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(1, 8);
   return tex;
 }
 
@@ -131,7 +96,6 @@ function criarTexturaJanelaNoturna() {
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 512, 512);
 
-  // Estrelas
   ctx.fillStyle = "#ffffff";
   for (let i = 0; i < 140; i++) {
     const sx = Math.random() * 512;
@@ -142,7 +106,6 @@ function criarTexturaJanelaNoturna() {
     ctx.fill();
   }
 
-  // Lua Cheia Brilhante no Centro
   const lx = 256, ly = 210, lRaio = 48;
   const halo = ctx.createRadialGradient(lx, ly, lRaio * 0.7, lx, ly, lRaio * 2.8);
   halo.addColorStop(0, "rgba(255, 248, 225, 0.95)");
@@ -241,7 +204,7 @@ function criarTexturaLetreiroFinal(nome) {
   canvas.height = 512;
   const ctx = canvas.getContext("2d");
 
-  ctx.fillStyle = "#1e1e2f";
+  ctx.fillStyle = "#161824";
   ctx.fillRect(0, 0, 1024, 512);
 
   ctx.strokeStyle = "#ffd166";
@@ -249,21 +212,21 @@ function criarTexturaLetreiroFinal(nome) {
   ctx.strokeRect(16, 16, 992, 480);
 
   ctx.fillStyle = "#ff4d6d";
-  ctx.font = "60px Arial, sans-serif";
+  ctx.font = "52px Arial, sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText("♥  ♥  ♥", 512, 130);
+  ctx.fillText("♥  ♥  ♥", 512, 110);
 
   ctx.fillStyle = "#fff8f0";
-  ctx.font = "bold 56px Georgia, serif";
-  ctx.fillText(`Feliz Aniversário, ${nome || "Gessy"}!`, 512, 230);
+  ctx.font = "bold 52px Georgia, serif";
+  ctx.fillText(`Feliz Aniversário, ${nome || "Gessy"}!`, 512, 215);
 
   ctx.fillStyle = "#ffd166";
-  ctx.font = "italic 32px Georgia, serif";
-  ctx.fillText("Cada dia ao seu lado é uma memória inesquecível.", 512, 310);
+  ctx.font = "italic 30px Georgia, serif";
+  ctx.fillText("Cada dia ao seu lado é uma memória inesquecível.", 512, 305);
 
   ctx.fillStyle = "#c9d1d9";
-  ctx.font = "26px Arial, sans-serif";
-  ctx.fillText("Com todo meu amor, para sempre. ✨", 512, 390);
+  ctx.font = "24px Arial, sans-serif";
+  ctx.fillText("Com todo meu amor, para sempre. ✨", 512, 385);
 
   return new THREE.CanvasTexture(canvas);
 }
@@ -274,29 +237,32 @@ function criarTexturaTerraMusgo() {
   canvas.height = 512;
   const ctx = canvas.getContext("2d");
 
-  ctx.fillStyle = "#22150c";
+  // Base de terra fértil escura e úmida
+  ctx.fillStyle = "#1b110a";
   ctx.fillRect(0, 0, 512, 512);
 
-  for (let i = 0; i < 5000; i++) {
+  // Granulação orgânica e micro-textura de solo
+  for (let i = 0; i < 6000; i++) {
     const x = Math.random() * 512;
     const y = Math.random() * 512;
-    const r = Math.random() * 2.2 + 0.6;
-    ctx.fillStyle = Math.random() > 0.5 ? "#322013" : "#170e08";
+    const r = Math.random() * 2.4 + 0.5;
+    ctx.fillStyle = Math.random() > 0.5 ? "#2a1b10" : "#120a06";
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
   }
 
+  // Manchas ricas de musgo silvestre esmeralda e oliva
   const coresMusgo = [
-    "rgba(34, 76, 32, 0.55)",
-    "rgba(45, 90, 39, 0.65)",
-    "rgba(64, 108, 53, 0.45)",
-    "rgba(82, 121, 64, 0.40)"
+    "rgba(34, 82, 32, 0.70)",
+    "rgba(45, 105, 39, 0.75)",
+    "rgba(64, 128, 53, 0.55)",
+    "rgba(82, 145, 64, 0.50)"
   ];
-  for (let m = 0; m < 70; m++) {
+  for (let m = 0; m < 90; m++) {
     const mx = Math.random() * 512;
     const my = Math.random() * 512;
-    const mRad = 18 + Math.random() * 36;
+    const mRad = 16 + Math.random() * 38;
     const grad = ctx.createRadialGradient(mx, my, 2, mx, my, mRad);
     const cor = coresMusgo[Math.floor(Math.random() * coresMusgo.length)];
     grad.addColorStop(0, cor);
@@ -310,7 +276,7 @@ function criarTexturaTerraMusgo() {
   const tex = new THREE.CanvasTexture(canvas);
   tex.wrapS = THREE.RepeatWrapping;
   tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(3, 3);
+  tex.repeat.set(4, 4);
   return tex;
 }
 
@@ -398,11 +364,10 @@ export function construirGaleria(cena, memorias, config) {
   });
   const piso = new THREE.Mesh(geoPiso, matPiso);
   piso.rotation.x = -Math.PI / 2;
-  piso.position.set(0, 0, 0);
   cena.add(piso);
 
-  // 1.2 Tapete Anelar Aveludado circundando a área de contemplação
-  const geoTapeteAnel = new THREE.RingGeometry(2.7, 4.5, 64);
+  // 1.2 Tapete Anelar Aveludado circundando a área central
+  const geoTapeteAnel = new THREE.RingGeometry(2.65, 4.4, 64);
   const matTapeteAnel = new THREE.MeshStandardMaterial({
     color: 0x780016,
     roughness: 0.85,
@@ -414,22 +379,22 @@ export function construirGaleria(cena, memorias, config) {
   tapeteAnel.position.set(0, 0.008, 0);
   cena.add(tapeteAnel);
 
-  // Filetes Dourados nos aros do tapete anelar
-  const bordaTapeteInt = new THREE.Mesh(new THREE.TorusGeometry(2.7, 0.02, 8, 64), matOuro);
+  // Bordas Douradas no tapete anelar
+  const bordaTapeteInt = new THREE.Mesh(new THREE.TorusGeometry(2.65, 0.02, 8, 64), matOuro);
   bordaTapeteInt.rotation.x = Math.PI / 2;
   bordaTapeteInt.position.y = 0.012;
   cena.add(bordaTapeteInt);
 
-  const bordaTapeteExt = new THREE.Mesh(new THREE.TorusGeometry(4.5, 0.02, 8, 64), matOuro);
+  const bordaTapeteExt = new THREE.Mesh(new THREE.TorusGeometry(4.4, 0.02, 8, 64), matOuro);
   bordaTapeteExt.rotation.x = Math.PI / 2;
   bordaTapeteExt.position.y = 0.012;
   cena.add(bordaTapeteExt);
 
-  // Passadeira Vermelha da Entrada conectando a porta (-Z) ao anel central
-  const geoPassadeira = new THREE.PlaneGeometry(1.8, 3.0);
+  // Passadeira Vermelha da Entrada (-Z)
+  const geoPassadeira = new THREE.PlaneGeometry(1.8, 3.2);
   const passadeira = new THREE.Mesh(geoPassadeira, matTapeteAnel);
   passadeira.rotation.x = -Math.PI / 2;
-  passadeira.position.set(0, 0.009, -5.9);
+  passadeira.position.set(0, 0.009, -5.8);
   cena.add(passadeira);
 
   // 1.3 Parede Cilíndrica Curva da Rotunda
@@ -455,7 +420,7 @@ export function construirGaleria(cena, memorias, config) {
   sanca.position.y = altura - 0.07;
   cena.add(sanca);
 
-  // 1.4 Teto Abobadado com Óculo Noturno e Claraboia de Estrelas
+  // 1.4 Teto Abobadado com Óculo Noturno
   const matTeto = new THREE.MeshStandardMaterial({
     color: 0x16181e,
     roughness: 0.9,
@@ -468,7 +433,6 @@ export function construirGaleria(cena, memorias, config) {
   teto.position.y = altura;
   cena.add(teto);
 
-  // Óculo Noturno no Teto
   const matOculo = new THREE.MeshBasicMaterial({ map: criarTexturaJanelaNoturna(), side: THREE.DoubleSide });
   const oculo = new THREE.Mesh(new THREE.CircleGeometry(2.6, 32), matOculo);
   oculo.rotation.x = Math.PI / 2;
@@ -481,185 +445,74 @@ export function construirGaleria(cena, memorias, config) {
   cena.add(aroOculo);
 
   // ============================================================
-  //  2. PORTAL DE ENTRADA DE GALA (Z = -7.4m)
-  // ============================================================
-
-  // Cortinas Imperiais de Veludo no Portal
-  const grupoCortinaEsq = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.52, 4.0, 12), matVeludoVermelho);
-  grupoCortinaEsq.position.set(-1.8, 2.0, -7.0);
-  grupoCortinaEsq.scale.set(0.6, 1.0, 0.35);
-  cena.add(grupoCortinaEsq);
-
-  const grupoCortinaDir = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.52, 4.0, 12), matVeludoVermelho);
-  grupoCortinaDir.position.set(1.8, 2.0, -7.0);
-  grupoCortinaDir.scale.set(0.6, 1.0, 0.35);
-  cena.add(grupoCortinaDir);
-
-  const bracadeiraEsq = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.03, 8, 20), matOuro);
-  bracadeiraEsq.position.set(-1.8, 1.8, -6.9);
-  cena.add(bracadeiraEsq);
-
-  const bracadeiraDir = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.03, 8, 20), matOuro);
-  bracadeiraDir.position.set(1.8, 1.8, -6.9);
-  cena.add(bracadeiraDir);
-
-  // Aparador Rebaixado com Vaso de Lírios (ao lado da entrada, à esquerda)
-  const grupoAparadorLirios = new THREE.Group();
-  grupoAparadorLirios.position.set(-3.6, 0, -6.1);
-  grupoAparadorLirios.rotation.y = Math.PI * 0.2;
-
-  const aparador = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.58, 0.60), matMarmore);
-  aparador.position.y = 0.29;
-  grupoAparadorLirios.add(aparador);
-
-  const fileteAparador = new THREE.Mesh(new THREE.BoxGeometry(0.87, 0.025, 0.62), matOuro);
-  fileteAparador.position.y = 0.58;
-  grupoAparadorLirios.add(fileteAparador);
-
-  const vasoLirios = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.15, 0.34, 20), matMarmore);
-  vasoLirios.position.y = 0.75;
-  grupoAparadorLirios.add(vasoLirios);
-
-  const anelBocalVaso = new THREE.Mesh(new THREE.TorusGeometry(0.23, 0.015, 8, 24), matOuro);
-  anelBocalVaso.rotation.x = Math.PI / 2;
-  anelBocalVaso.position.y = 0.92;
-  grupoAparadorLirios.add(anelBocalVaso);
-
-  const folhagemLirios = new THREE.Mesh(new THREE.SphereGeometry(0.28, 10, 8), matFolha);
-  folhagemLirios.position.y = 0.96;
-  folhagemLirios.scale.set(0.95, 0.5, 0.95);
-  grupoAparadorLirios.add(folhagemLirios);
-
-  const posLiriosEntrada = [
-    [0.0, 1.15, 0.04, 0.35, 0.0],
-    [0.15, 1.08, 0.10, 0.45, 0.25],
-    [-0.15, 1.08, 0.10, 0.45, -0.25],
-    [0.18, 1.10, -0.06, 0.20, 0.38],
-    [-0.18, 1.10, -0.06, 0.20, -0.38],
-    [0.22, 1.00, 0.06, 0.42, 0.42],
-    [-0.22, 1.00, 0.06, 0.42, -0.42]
-  ];
-  posLiriosEntrada.forEach(([lx, ly, lz, rx, rz]) => {
-    const flor = criarLirioRealista(0.48);
-    flor.position.set(lx, ly, lz);
-    flor.rotation.set(rx, Math.random() * Math.PI, rz);
-    grupoAparadorLirios.add(flor);
-  });
-
-  const luzAparador = new THREE.PointLight(0xfff1dc, 0.95, 3.5);
-  luzAparador.position.set(0.1, 1.5, 0.25);
-  grupoAparadorLirios.add(luzAparador);
-  cena.add(grupoAparadorLirios);
-
-  // Espelho Veneziano Mágico ladeado por Gérberas (à direita da entrada)
-  const grupoEspelho = new THREE.Group();
-  grupoEspelho.position.set(3.6, 2.05, -6.1);
-  grupoEspelho.rotation.y = -Math.PI * 0.2;
-
-  const meshMolduraEspelho = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.3, 0.08), matOuro);
-  grupoEspelho.add(meshMolduraEspelho);
-
-  const matVidroEspelho = new THREE.MeshBasicMaterial({ map: criarTexturaEspelho() });
-  const meshVidroEspelho = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 2.1), matVidroEspelho);
-  meshVidroEspelho.position.z = 0.05;
-  meshVidroEspelho.userData = {
-    ehEspelho: true,
-    ehQuadro: true,
-    memoria: {
-      id: "espelho",
-      titulo: "Espelho Mais Sincero ✨",
-      data: "Reflexo do Coração",
-      foto: "",
-      texto: "Se este espelho pudesse refletir o que eu vejo em você todos os dias, você saberia que é a mulher mais doce, radiante e encantadora do mundo. Te amo! 💛"
-    }
-  };
-  grupoEspelho.add(meshVidroEspelho);
-  quadrosInterativos.push(meshVidroEspelho);
-
-  // Floreira de Gérberas embaixo do espelho
-  const floreiraEspelho = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.32, 0.4), matMarmore);
-  floreiraEspelho.position.set(0, -1.35, 0.15);
-  grupoEspelho.add(floreiraEspelho);
-
-  const coresGerberas = [0xff758f, 0xff9f43, 0xfeca57, 0xff5252, 0xff9ff3];
-  for (let fg = -0.65; fg <= 0.65; fg += 0.28) {
-    const cor = coresGerberas[Math.floor(Math.random() * coresGerberas.length)];
-    const gFlor = criarGerberaRealista(cor, 0.38);
-    gFlor.position.set(fg, -1.18, 0.2);
-    gFlor.rotation.x = 0.2;
-    grupoEspelho.add(gFlor);
-  }
-  cena.add(grupoEspelho);
-
-  // ============================================================
-  //  3. O CANTEIRO CENTRAL CERCADO COM AS FLORES (Centro 0, 0, 0)
+  //  2. O CANTEIRO CENTRAL CERCADO COM TERRA, GRAMA E FLORES (0, 0, 0)
   // ============================================================
   const grupoPresente = new THREE.Group();
   grupoPresente.position.set(0, 0, 0);
 
   const raioCanteiro = 2.4;
+  const alturaMureta = 0.40;
 
-  // 3.1 Mureta de Mármore Branca Perfeita 360°
-  const geoMureta = new THREE.CylinderGeometry(raioCanteiro, raioCanteiro + 0.08, 0.40, 48);
+  // 2.1 Mureta de Mármore 360° ABERTA NO TOPO (sem tampa que cubra o solo!)
+  const geoMureta = new THREE.CylinderGeometry(raioCanteiro, raioCanteiro + 0.08, alturaMureta, 48, 1, true);
   const muretaJardim = new THREE.Mesh(geoMureta, matMarmore);
-  muretaJardim.position.y = 0.20;
+  muretaJardim.position.y = alturaMureta / 2;
   grupoPresente.add(muretaJardim);
 
-  // Borda saliente superior de mármore
+  // Anel saliente superior em mármore esculpido
   const anelMuretaTopo = new THREE.Mesh(new THREE.TorusGeometry(raioCanteiro + 0.04, 0.045, 8, 48), matMarmore);
   anelMuretaTopo.rotation.x = Math.PI / 2;
-  anelMuretaTopo.position.y = 0.40;
+  anelMuretaTopo.position.y = alturaMureta;
   grupoPresente.add(anelMuretaTopo);
 
-  // 3.2 Solo Orgânico e Rico em Húmus e Musgo
+  // 2.2 Solo Orgânico de Terra Fértil e Musgo (Nível elevado em y = 0.41m para visualização total)
   const texTerraMusgo = criarTexturaTerraMusgo();
-  const matTerraMusgo = new THREE.MeshStandardMaterial({ map: texTerraMusgo, roughness: 0.90, metalness: 0.05 });
-  const canteiroVerde = new THREE.Mesh(new THREE.CylinderGeometry(raioCanteiro - 0.04, raioCanteiro - 0.04, 0.38, 48), matTerraMusgo);
-  canteiroVerde.position.y = 0.19;
+  const matTerraMusgo = new THREE.MeshStandardMaterial({
+    map: texTerraMusgo,
+    roughness: 0.92,
+    metalness: 0.04
+  });
+  const geoCanteiro = new THREE.CylinderGeometry(raioCanteiro - 0.02, raioCanteiro - 0.02, 0.41, 48);
+  const canteiroVerde = new THREE.Mesh(geoCanteiro, matTerraMusgo);
+  canteiroVerde.position.y = 0.205; // Superfície superior exatamente em 0.41m!
   grupoPresente.add(canteiroVerde);
 
-  // 3.3 CERQUINHA ORNAMENTAL EM VOLTA DO CANTEIRO COM FLORES E HERAS
+  // 2.3 Cerquinha Ornamental em Ouro e Mármore
   const alturaCerca = 0.42;
-  const yTopoCerquinha = 0.40 + alturaCerca; // 0.82m
+  const yTopoCerquinha = alturaMureta + alturaCerca; // 0.82m
 
-  // Corrimão Superior em Ouro
   const corrimaoSuperior = new THREE.Mesh(new THREE.TorusGeometry(raioCanteiro + 0.02, 0.025, 8, 48), matOuro);
   corrimaoSuperior.rotation.x = Math.PI / 2;
   corrimaoSuperior.position.y = yTopoCerquinha;
   grupoPresente.add(corrimaoSuperior);
 
-  // Barra Intermediária Ornamental em Ouro
   const barraIntermediaria = new THREE.Mesh(new THREE.TorusGeometry(raioCanteiro + 0.02, 0.016, 8, 48), matOuro);
   barraIntermediaria.rotation.x = Math.PI / 2;
   barraIntermediaria.position.y = 0.60;
   grupoPresente.add(barraIntermediaria);
 
-  // Barra Inferior em Ouro
   const barraInferior = new THREE.Mesh(new THREE.TorusGeometry(raioCanteiro + 0.02, 0.018, 8, 48), matOuro);
   barraInferior.rotation.x = Math.PI / 2;
   barraInferior.position.y = 0.42;
   grupoPresente.add(barraInferior);
 
-  // 32 Balaústres Torneados em Ouro e Mármore
   const qtdBalaustres = 32;
   for (let b = 0; b < qtdBalaustres; b++) {
     const angB = (b / qtdBalaustres) * Math.PI * 2;
-    // Pequeno vão frontal para acolher quem entra pelo portal (-Z)
+    // Vão frontal acolhedor para a entrada (-Z)
     if (Math.abs(angB - (-Math.PI / 2)) < 0.12) continue;
 
     const bx = Math.cos(angB) * (raioCanteiro + 0.02);
     const bz = Math.sin(angB) * (raioCanteiro + 0.02);
 
     const balaustre = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.022, alturaCerca, 8), matOuro);
-    balaustre.position.set(bx, 0.40 + alturaCerca / 2, bz);
+    balaustre.position.set(bx, alturaMureta + alturaCerca / 2, bz);
     grupoPresente.add(balaustre);
 
-    // Esfera dourada no topo de cada balaústre
     const esferaBalaustre = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), matOuro);
     esferaBalaustre.position.set(bx, yTopoCerquinha + 0.025, bz);
     grupoPresente.add(esferaBalaustre);
 
-    // Heras e folhinhas entrelaçadas nos balaústres
     if (b % 2 === 0) {
       const folhaCerca = new THREE.Mesh(new THREE.ConeGeometry(0.028, 0.05, 3), matFolha);
       folhaCerca.position.set(bx * 0.98, 0.50 + (b % 3) * 0.08, bz * 0.98);
@@ -668,12 +521,11 @@ export function construirGaleria(cena, memorias, config) {
     }
   }
 
-  // 2 Postes Nobres do Portãozinho Frontal de Entrada (-Z)
-  const posPortoes = [-0.35, 0.35];
-  posPortoes.forEach(px => {
+  // 2 Postes Nobres do Portão Frontal (-Z)
+  [-0.35, 0.35].forEach(px => {
     const pz = -(raioCanteiro + 0.02);
     const posteNobre = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.045, alturaCerca + 0.08, 12), matOuro);
-    posteNobre.position.set(px, 0.40 + (alturaCerca + 0.08) / 2, pz);
+    posteNobre.position.set(px, alturaMureta + (alturaCerca + 0.08) / 2, pz);
     grupoPresente.add(posteNobre);
 
     const pinha = new THREE.Mesh(new THREE.SphereGeometry(0.065, 12, 12), matOuro);
@@ -681,7 +533,7 @@ export function construirGaleria(cena, memorias, config) {
     grupoPresente.add(pinha);
   });
 
-  // 3.4 Grama Silvestre Baixa (InstancedMesh: 280 tufos em 1 único draw call GPU)
+  // 2.4 Grama Silvestre Baixa e Densa (380 tufos no solo preto)
   const matGrama = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     roughness: 0.70,
@@ -689,7 +541,7 @@ export function construirGaleria(cena, memorias, config) {
     side: THREE.DoubleSide
   });
   const tuftGeo = criarGeometriaTufoGrama();
-  const qtdTufos = 280;
+  const qtdTufos = 380;
   const instancedGrama = new THREE.InstancedMesh(tuftGeo, matGrama, qtdTufos);
 
   const dummyGrama = new THREE.Object3D();
@@ -703,17 +555,17 @@ export function construirGaleria(cena, memorias, config) {
 
   for (let tg = 0; tg < qtdTufos; tg++) {
     const angTG = Math.random() * Math.PI * 2;
-    const raioTG = 0.85 + Math.random() * 1.45;
+    const raioTG = 0.82 + Math.random() * 1.48;
     const tgX = Math.cos(angTG) * raioTG;
     const tgZ = Math.sin(angTG) * raioTG;
-    const tgY = 0.38;
+    const tgY = 0.41; // Exatamente no topo da terra!
 
     dummyGrama.position.set(tgX, tgY, tgZ);
     dummyGrama.rotation.y = Math.random() * Math.PI * 2;
     dummyGrama.rotation.x = (Math.random() - 0.5) * 0.12;
     dummyGrama.rotation.z = (Math.random() - 0.5) * 0.12;
 
-    const escTG = 0.75 + Math.random() * 0.45;
+    const escTG = 0.80 + Math.random() * 0.45;
     dummyGrama.scale.set(escTG * (0.9 + Math.random() * 0.2), escTG, escTG * (0.9 + Math.random() * 0.2));
     dummyGrama.updateMatrix();
 
@@ -724,47 +576,46 @@ export function construirGaleria(cena, memorias, config) {
   if (instancedGrama.instanceColor) instancedGrama.instanceColor.needsUpdate = true;
   grupoPresente.add(instancedGrama);
 
-  // 3.5 Ramos Lenhosos Naturais Arqueados
+  // 2.5 Ramos de Madeira Nobre Arqueados
   const matRamo = new THREE.MeshStandardMaterial({ color: 0x3d271d, roughness: 0.88, metalness: 0.05 });
-  const qtdRamos = 8;
-  for (let rm = 0; rm < qtdRamos; rm++) {
-    const a1 = (rm / qtdRamos) * Math.PI * 2;
+  for (let rm = 0; rm < 8; rm++) {
+    const a1 = (rm / 8) * Math.PI * 2;
     const a2 = a1 + 0.35;
     const a3 = a1 + 0.65;
     const r1 = 1.1 + Math.random() * 0.3;
-    const r2 = 1.4 + Math.random() * 0.4;
-    const r3 = 1.8 + Math.random() * 0.3;
+    const r2 = 1.45 + Math.random() * 0.35;
+    const r3 = 1.85 + Math.random() * 0.25;
 
     const curva = new THREE.QuadraticBezierCurve3(
-      new THREE.Vector3(Math.cos(a1) * r1, 0.38, Math.sin(a1) * r1),
-      new THREE.Vector3(Math.cos(a2) * r2, 0.48, Math.sin(a2) * r2),
-      new THREE.Vector3(Math.cos(a3) * r3, 0.39, Math.sin(a3) * r3)
+      new THREE.Vector3(Math.cos(a1) * r1, 0.41, Math.sin(a1) * r1),
+      new THREE.Vector3(Math.cos(a2) * r2, 0.52, Math.sin(a2) * r2),
+      new THREE.Vector3(Math.cos(a3) * r3, 0.42, Math.sin(a3) * r3)
     );
     const geoRamo = new THREE.TubeGeometry(curva, 10, 0.02, 6, false);
     const meshRamo = new THREE.Mesh(geoRamo, matRamo);
     grupoPresente.add(meshRamo);
 
     const broto = new THREE.Mesh(new THREE.ConeGeometry(0.022, 0.05, 4), matFolha);
-    broto.position.set(Math.cos(a2) * r2, 0.50, Math.sin(a2) * r2);
+    broto.position.set(Math.cos(a2) * r2, 0.54, Math.sin(a2) * r2);
     broto.rotation.z = Math.PI / 4;
     grupoPresente.add(broto);
   }
 
-  // 3.6 Distribuição Botânica das 3 Flores em 360°
-  // A. 24 Rosas Vermelhas Aveludadas no anel interno
+  // 2.6 Flores Botânicas no Canteiro Central (Firmemente plantadas na terra y = 0.41m)
+  // A. 24 Rosas Vermelhas Aveludadas Eretas
   const qtdRosasAltar = 24;
   for (let r = 0; r < qtdRosasAltar; r++) {
     const angR = (r / qtdRosasAltar) * Math.PI * 2 + (Math.random() - 0.5) * 0.15;
     const raioR = 1.35 + (Math.random() - 0.5) * 0.25;
     const rosa = criarRosaRealista(0xbf0603, 0.46);
-    rosa.position.set(Math.cos(angR) * raioR, 0.38, Math.sin(angR) * raioR);
+    rosa.position.set(Math.cos(angR) * raioR, 0.41, Math.sin(angR) * raioR);
     rosa.rotation.y = Math.random() * Math.PI * 2;
     rosa.rotation.x = (Math.random() - 0.5) * 0.08;
     rosa.rotation.z = (Math.random() - 0.5) * 0.08;
     grupoPresente.add(rosa);
   }
 
-  // B. 20 Gérberas Radiantes Multicoloridas no anel intermediário
+  // B. 20 Gérberas Radiantes Multicoloridas
   const qtdGerberasAltar = 20;
   const coresGerberasAltar = [0xff9f43, 0xfeca57, 0xff5252, 0xff758f, 0xff9ff3];
   for (let g = 0; g < qtdGerberasAltar; g++) {
@@ -772,37 +623,37 @@ export function construirGaleria(cena, memorias, config) {
     const raioG = 1.78 + (Math.random() - 0.5) * 0.22;
     const corG = coresGerberasAltar[g % coresGerberasAltar.length];
     const gerbera = criarGerberaRealista(corG, 0.52);
-    gerbera.position.set(Math.cos(angG) * raioG, 0.38, Math.sin(angG) * raioG);
+    gerbera.position.set(Math.cos(angG) * raioG, 0.41, Math.sin(angG) * raioG);
     gerbera.rotation.y = Math.random() * Math.PI * 2;
     gerbera.rotation.x = (Math.random() - 0.5) * 0.08;
     gerbera.rotation.z = (Math.random() - 0.5) * 0.08;
     grupoPresente.add(gerbera);
   }
 
-  // C. 12 Lírios Rosas Majestosos no anel externo próximo à cerquinha
+  // C. 12 Lírios Rosas Majestosos
   const qtdLiriosAltar = 12;
   for (let l = 0; l < qtdLiriosAltar; l++) {
     const angL = (l / qtdLiriosAltar) * Math.PI * 2;
     const raioL = 2.05;
     const lirio = criarLirioRealista(0.56);
-    lirio.position.set(Math.cos(angL) * raioL, 0.38, Math.sin(angL) * raioL);
+    lirio.position.set(Math.cos(angL) * raioL, 0.41, Math.sin(angL) * raioL);
     lirio.rotation.set(0.12, angL, 0);
     grupoPresente.add(lirio);
   }
 
-  // 3.7 Pedestal Central de Mármore e Ouro
+  // 2.7 Pedestal Central de Mármore e Ouro
   const geoPedestal = new THREE.CylinderGeometry(0.65, 0.75, 0.9, 32);
   const matPedestal = new THREE.MeshStandardMaterial({ color: 0x1c1e24, roughness: 0.3, metalness: 0.6 });
   const pedestal = new THREE.Mesh(geoPedestal, matPedestal);
-  pedestal.position.y = 0.45;
+  pedestal.position.y = 0.48;
   grupoPresente.add(pedestal);
 
   const anelOuro = new THREE.Mesh(new THREE.TorusGeometry(0.68, 0.04, 12, 32), matOuro);
   anelOuro.rotation.x = Math.PI / 2;
-  anelOuro.position.y = 0.88;
+  anelOuro.position.y = 0.91;
   grupoPresente.add(anelOuro);
 
-  // Placa Especial Dourada voltada para quem entra (-Z)
+  // Placa Dourada da Cartinha voltada para a entrada (-Z)
   const canvasPlacaPresente = document.createElement("canvas");
   canvasPlacaPresente.width = 512;
   canvasPlacaPresente.height = 128;
@@ -824,13 +675,13 @@ export function construirGaleria(cena, memorias, config) {
     new THREE.PlaneGeometry(1.0, 0.25),
     new THREE.MeshBasicMaterial({ map: texPlacaPresente })
   );
-  meshPlacaPresente.position.set(0, 0.52, -0.76);
+  meshPlacaPresente.position.set(0, 0.54, -0.76);
   meshPlacaPresente.rotation.y = Math.PI;
   grupoPresente.add(meshPlacaPresente);
 
   // Caixa de Presente Flutuante Iluminada
   const grupoCaixaFlutuante = new THREE.Group();
-  grupoCaixaFlutuante.position.set(0, 1.45, 0);
+  grupoCaixaFlutuante.position.set(0, 1.48, 0);
 
   const geoCaixa = new THREE.BoxGeometry(0.65, 0.65, 0.65);
   const matCaixa = new THREE.MeshStandardMaterial({ color: 0xc1121f, roughness: 0.35, metalness: 0.15 });
@@ -851,10 +702,8 @@ export function construirGaleria(cena, memorias, config) {
 
   const geoFita1 = new THREE.BoxGeometry(0.67, 0.67, 0.12);
   const geoFita2 = new THREE.BoxGeometry(0.12, 0.67, 0.67);
-  const meshFita1 = new THREE.Mesh(geoFita1, matOuro);
-  const meshFita2 = new THREE.Mesh(geoFita2, matOuro);
-  grupoCaixaFlutuante.add(meshFita1);
-  grupoCaixaFlutuante.add(meshFita2);
+  grupoCaixaFlutuante.add(new THREE.Mesh(geoFita1, matOuro));
+  grupoCaixaFlutuante.add(new THREE.Mesh(geoFita2, matOuro));
 
   const meshLacoCentro = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 16), matOuro);
   meshLacoCentro.position.y = 0.38;
@@ -864,7 +713,7 @@ export function construirGaleria(cena, memorias, config) {
   luzPresente.position.y = 0.3;
   grupoCaixaFlutuante.add(luzPresente);
 
-  // Partículas Douradas orbitando o altar
+  // Partículas Douradas orbitando
   const qtdSparks = 32;
   const geoSparks = new THREE.BufferGeometry();
   const posSparks = new Float32Array(qtdSparks * 3);
@@ -877,115 +726,18 @@ export function construirGaleria(cena, memorias, config) {
   }
   geoSparks.setAttribute("position", new THREE.BufferAttribute(posSparks, 3));
   const matSparks = new THREE.PointsMaterial({ color: 0xffd166, size: 0.08, transparent: true, opacity: 0.85 });
-  const pointsSparks = new THREE.Points(geoSparks, matSparks);
-  grupoCaixaFlutuante.add(pointsSparks);
+  grupoCaixaFlutuante.add(new THREE.Points(geoSparks, matSparks));
 
   grupoPresente.add(grupoCaixaFlutuante);
   cena.add(grupoPresente);
 
   // ============================================================
-  //  4. OS 9 QUADROS DE MEMÓRIAS EM ANEL CIRCULAR 360°
+  //  3. BANCOS DE VELUDO AO REDOR DO CANTEIRO CENTRAL
   // ============================================================
-  const raioParedesQuadros = raioRotunda - 0.12; // 7.38m
-  const larguraMoldura = 2.2;
-  const alturaMoldura = 1.7;
-  const geoMoldura = new THREE.BoxGeometry(larguraMoldura, alturaMoldura, 0.08);
-  const matMoldura = new THREE.MeshStandardMaterial({ color: 0x2b1d0c, roughness: 0.3, metalness: 0.4 });
-  const geoFoto = new THREE.PlaneGeometry(larguraMoldura - 0.2, alturaMoldura - 0.2);
-  const geoPlaca = new THREE.PlaneGeometry(1.6, 0.38);
-
-  // Ângulos distribuídos harmoniosamente em 360°, deixando o portal em -Z aberto
-  const angulosQuadros = [
-    -0.30 * Math.PI, // Memória 1 (Lado direito-frente)
-    -0.10 * Math.PI, // Memória 2
-     0.10 * Math.PI, // Memória 3
-     0.30 * Math.PI, // Memória 4
-     0.70 * Math.PI, // Memória 5
-     0.90 * Math.PI, // Memória 6
-     1.10 * Math.PI, // Memória 7
-     1.30 * Math.PI, // Memória 8
-     1.45 * Math.PI  // Memória 9 (Lado esquerdo-frente)
-  ];
-
-  memorias.forEach((memoria, index) => {
-    const ang = angulosQuadros[index % angulosQuadros.length];
-    const qx = Math.cos(ang) * raioParedesQuadros;
-    const qz = Math.sin(ang) * raioParedesQuadros;
-    const rotY = -ang - Math.PI / 2; // Voltado exatamente para o centro (0, 0, 0)
-
-    const grupoQuadro = new THREE.Group();
-    grupoQuadro.position.set(qx, 2.05, qz);
-    grupoQuadro.rotation.y = rotY;
-
-    const meshMoldura = new THREE.Mesh(geoMoldura, matMoldura);
-    grupoQuadro.add(meshMoldura);
-
-    const texFoto = loader.load(memoria.foto);
-    const matFoto = new THREE.MeshStandardMaterial({ map: texFoto, roughness: 0.5 });
-    const meshFoto = new THREE.Mesh(geoFoto, matFoto);
-    meshFoto.position.z = 0.05;
-    meshFoto.userData = { memoria: memoria, ehQuadro: true };
-    grupoQuadro.add(meshFoto);
-    quadrosInterativos.push(meshFoto);
-
-    const texPlaca = criarTexturaPlaca(memoria.titulo, memoria.data);
-    const meshPlaca = new THREE.Mesh(geoPlaca, new THREE.MeshBasicMaterial({ map: texPlaca }));
-    meshPlaca.position.set(0, -alturaMoldura / 2 - 0.28, 0.05);
-    grupoQuadro.add(meshPlaca);
-
-    // Arandela Dourada Neoclássica
-    const arandelaHaste = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.35), matOuro);
-    arandelaHaste.position.set(0, alturaMoldura / 2 + 0.25, 0.15);
-    arandelaHaste.rotation.x = Math.PI / 4;
-    grupoQuadro.add(arandelaHaste);
-
-    const arandelaCupula = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.14, 12, 1, true), matOuro);
-    arandelaCupula.position.set(0, alturaMoldura / 2 + 0.38, 0.28);
-    grupoQuadro.add(arandelaCupula);
-
-    const luzArandela = new THREE.PointLight(0xffeedb, 0.45, 4.5);
-    luzArandela.position.set(0, alturaMoldura / 2 + 0.35, 0.32);
-    grupoQuadro.add(luzArandela);
-
-    cena.add(grupoQuadro);
-  });
-
-  // ============================================================
-  //  5. LETREIRO COMEMORATIVO NO ÁPICE DA ROTUNDA (+Z)
-  // ============================================================
-  const angLetreiro = 0.50 * Math.PI; // Ápice oposto à entrada (+Z)
-  const lx = Math.cos(angLetreiro) * raioParedesQuadros;
-  const lz = Math.sin(angLetreiro) * raioParedesQuadros;
-
-  const grupoLetreiro = new THREE.Group();
-  grupoLetreiro.position.set(lx, 2.1, lz);
-  grupoLetreiro.rotation.y = -angLetreiro - Math.PI / 2;
-
-  const geoLetreiro = new THREE.PlaneGeometry(4.8, 2.5);
-  const matLetreiro = new THREE.MeshStandardMaterial({
-    map: criarTexturaLetreiroFinal(config.nome_homenageada),
-    roughness: 0.4
-  });
-  const letreiro = new THREE.Mesh(geoLetreiro, matLetreiro);
-  grupoLetreiro.add(letreiro);
-
-  const colunaEsq = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.20, 3.8, 16), matMarmore);
-  colunaEsq.position.set(-2.6, 0, 0.1);
-  grupoLetreiro.add(colunaEsq);
-
-  const colunaDir = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.20, 3.8, 16), matMarmore);
-  colunaDir.position.set(2.6, 0, 0.1);
-  grupoLetreiro.add(colunaDir);
-
-  cena.add(grupoLetreiro);
-
-  // Bancos Aveludados de Museu nas Curvas
-  function criarBancoRotunda(angB) {
-    const bx = Math.cos(angB) * (raioRotunda - 0.7);
-    const bz = Math.sin(angB) * (raioRotunda - 0.7);
+  function criarBancoCanteiro(bx, bz, rotY) {
     const grupoBanco = new THREE.Group();
     grupoBanco.position.set(bx, 0, bz);
-    grupoBanco.rotation.y = -angB;
+    grupoBanco.rotation.y = rotY;
 
     const assento = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.22, 0.65), matVeludoVermelho);
     assento.position.y = 0.45;
@@ -1000,11 +752,257 @@ export function construirGaleria(cena, memorias, config) {
 
     cena.add(grupoBanco);
   }
-  criarBancoRotunda(-0.52 * Math.PI); // À esquerda da entrada
-  criarBancoRotunda(0.0);             // Na lateral direita
+
+  // 3 bancos posicionados elegantemente nos lados e fundo do canteiro (R = 3.35m)
+  criarBancoCanteiro(3.35, 0.0, -Math.PI / 2); // Leste (+X), voltado para os quadros da direita
+  criarBancoCanteiro(-3.35, 0.0, Math.PI / 2);  // Oeste (-X), voltado para os quadros da esquerda
+  criarBancoCanteiro(0.0, 3.35, 0.0);           // Norte (+Z), voltado para o Grande Painel
 
   // ============================================================
-  //  6. ILUMINAÇÃO GERAL E LUSTRES DE CRISTAL
+  //  4. PEDESTAIS COM VASOS FLORAIS AO LADO DE CADA QUADRO
+  // ============================================================
+  function criarPedestalFloral(px, pz, rotY, tipoFlor) {
+    const grupoVaso = new THREE.Group();
+    grupoVaso.position.set(px, 0, pz);
+    grupoVaso.rotation.y = rotY;
+
+    // Pedestal clássico de mármore
+    const ped = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.22, 0.60, 16), matMarmore);
+    ped.position.y = 0.30;
+    grupoVaso.add(ped);
+
+    const anelTopo = new THREE.Mesh(new THREE.TorusGeometry(0.20, 0.02, 8, 20), matOuro);
+    anelTopo.rotation.x = Math.PI / 2;
+    anelTopo.position.y = 0.59;
+    grupoVaso.add(anelTopo);
+
+    // Vaso clássico
+    const vaso = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.10, 0.28, 16), matMarmore);
+    vaso.position.y = 0.74;
+    grupoVaso.add(vaso);
+
+    const anelBocal = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.015, 8, 20), matOuro);
+    anelBocal.rotation.x = Math.PI / 2;
+    anelBocal.position.y = 0.88;
+    grupoVaso.add(anelBocal);
+
+    // Folhagem interna
+    const folhaBase = new THREE.Mesh(new THREE.SphereGeometry(0.18, 8, 6), matFolha);
+    folhaBase.position.y = 0.90;
+    folhaBase.scale.set(1.0, 0.5, 1.0);
+    grupoVaso.add(folhaBase);
+
+    // Arranjo botânico 3D de acordo com a variação
+    if (tipoFlor === "lirio") {
+      const posL = [[0, 1.05, 0], [0.08, 0.98, 0.06], [-0.08, 0.98, -0.06]];
+      posL.forEach(([lx, ly, lz]) => {
+        const lir = criarLirioRealista(0.36);
+        lir.position.set(lx, ly, lz);
+        lir.rotation.set(0.25, Math.random() * Math.PI, 0);
+        grupoVaso.add(lir);
+      });
+    } else if (tipoFlor === "rosa") {
+      const posR = [[0, 1.02, 0], [0.07, 0.96, 0.05], [-0.07, 0.96, 0.05], [0, 0.95, -0.07]];
+      posR.forEach(([rx, ry, rz]) => {
+        const ros = criarRosaRealista(0xbf0603, 0.32);
+        ros.position.set(rx, ry, rz);
+        ros.rotation.y = Math.random() * Math.PI * 2;
+        grupoVaso.add(ros);
+      });
+    } else {
+      const cores = [0xff9f43, 0xfeca57, 0xff5252, 0xff758f];
+      const posG = [[0, 1.02, 0], [0.07, 0.96, 0.05], [-0.07, 0.96, -0.05]];
+      posG.forEach(([gx, gy, gz], idx) => {
+        const ger = criarGerberaRealista(cores[idx % cores.length], 0.35);
+        ger.position.set(gx, gy, gz);
+        ger.rotation.set(0.15, Math.random() * Math.PI * 2, 0);
+        grupoVaso.add(ger);
+      });
+    }
+
+    // Luz pontual sutil no vaso
+    const luzVaso = new THREE.PointLight(0xfff3e6, 0.45, 2.8);
+    luzVaso.position.set(0, 1.3, 0.1);
+    grupoVaso.add(luzVaso);
+
+    cena.add(grupoVaso);
+  }
+
+  // ============================================================
+  //  5. SIMETRIA NEOCLÁSSICA PERFEITA: 12 ESTAÇÕES EQUIDISTANTES
+  // ============================================================
+  const raioParedesQuadros = raioRotunda - 0.14; // 7.36m
+  const larguraMoldura = 2.2;
+  const alturaMoldura = 1.7;
+  const geoMoldura = new THREE.BoxGeometry(larguraMoldura, alturaMoldura, 0.08);
+  const matMoldura = new THREE.MeshStandardMaterial({ color: 0x2b1d0c, roughness: 0.3, metalness: 0.4 });
+  const geoFoto = new THREE.PlaneGeometry(larguraMoldura - 0.2, alturaMoldura - 0.2);
+  const geoPlaca = new THREE.PlaneGeometry(1.6, 0.38);
+
+  // 10 estações ao longo de 360°, rigorosamente simétricas e sem sobreposição
+  // Ângulos em coordenadas Three.js onde x = R * sin(t), z = R * cos(t)
+  const estacoes = [
+    // Lado Direito (+X)
+    { id: 0, tipo: "quadro", t: Math.PI * (5/6), flor: "lirio" },   // Quadro 1
+    { id: 1, tipo: "quadro", t: Math.PI * (4/6), flor: "rosa" },    // Quadro 2
+    { id: 2, tipo: "quadro", t: Math.PI * (3/6), flor: "gerbera" }, // Quadro 3
+    { id: 3, tipo: "quadro", t: Math.PI * (2/6), flor: "lirio" },   // Quadro 4
+    { id: -1, tipo: "espelho", t: Math.PI * (1/6) },                // Espelho Mágico
+    // Lado Esquerdo (-X)
+    { id: 4, tipo: "quadro", t: -Math.PI * (1/6), flor: "rosa" },   // Quadro 5
+    { id: 5, tipo: "quadro", t: -Math.PI * (2/6), flor: "gerbera" },// Quadro 6
+    { id: 6, tipo: "quadro", t: -Math.PI * (3/6), flor: "lirio" },  // Quadro 7
+    { id: 7, tipo: "quadro", t: -Math.PI * (4/6), flor: "rosa" },   // Quadro 8
+    { id: 8, tipo: "quadro", t: -Math.PI * (5/6), flor: "gerbera" } // Quadro 9
+  ];
+
+  estacoes.forEach(est => {
+    const qx = raioParedesQuadros * Math.sin(est.t);
+    const qz = raioParedesQuadros * Math.cos(est.t);
+    const rotY = Math.PI - est.t; // Orientado de frente para o centro (0, 0, 0)
+
+    if (est.tipo === "espelho") {
+      // Estação do Espelho Veneziano Mágico
+      const grupoEspelho = new THREE.Group();
+      grupoEspelho.position.set(qx, 2.05, qz);
+      grupoEspelho.rotation.y = rotY;
+
+      const meshMolduraEspelho = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.3, 0.08), matOuro);
+      grupoEspelho.add(meshMolduraEspelho);
+
+      const matVidroEspelho = new THREE.MeshBasicMaterial({ map: criarTexturaEspelho() });
+      const meshVidroEspelho = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 2.1), matVidroEspelho);
+      meshVidroEspelho.position.z = 0.05;
+      meshVidroEspelho.userData = {
+        ehEspelho: true,
+        ehQuadro: true,
+        memoria: {
+          id: "espelho",
+          titulo: "Espelho Mais Sincero ✨",
+          data: "Reflexo do Coração",
+          foto: "",
+          texto: "Se este espelho pudesse refletir o que eu vejo em você todos os dias, você saberia que é a mulher mais doce, radiante e encantadora do mundo. Te amo! 💛"
+        }
+      };
+      grupoEspelho.add(meshVidroEspelho);
+      quadrosInterativos.push(meshVidroEspelho);
+
+      // Floreira clássica embaixo do espelho
+      const floreiraEspelho = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.30, 0.35), matMarmore);
+      floreiraEspelho.position.set(0, -1.35, 0.15);
+      grupoEspelho.add(floreiraEspelho);
+
+      const coresGerb = [0xff758f, 0xff9f43, 0xfeca57, 0xff5252, 0xff9ff3];
+      for (let fg = -0.62; fg <= 0.62; fg += 0.31) {
+        const cor = coresGerb[Math.floor(Math.random() * coresGerb.length)];
+        const gFlor = criarGerberaRealista(cor, 0.38);
+        gFlor.position.set(fg, -1.18, 0.2);
+        gFlor.rotation.x = 0.2;
+        grupoEspelho.add(gFlor);
+      }
+
+      cena.add(grupoEspelho);
+    } else {
+      // Estação de Quadro de Memória
+      const memoria = memorias[est.id];
+      if (!memoria) return;
+
+      const grupoQuadro = new THREE.Group();
+      grupoQuadro.position.set(qx, 2.05, qz);
+      grupoQuadro.rotation.y = rotY;
+
+      const meshMoldura = new THREE.Mesh(geoMoldura, matMoldura);
+      grupoQuadro.add(meshMoldura);
+
+      const texFoto = loader.load(memoria.foto);
+      const matFoto = new THREE.MeshStandardMaterial({ map: texFoto, roughness: 0.5 });
+      const meshFoto = new THREE.Mesh(geoFoto, matFoto);
+      meshFoto.position.z = 0.05;
+      meshFoto.userData = { memoria: memoria, ehQuadro: true };
+      grupoQuadro.add(meshFoto);
+      quadrosInterativos.push(meshFoto);
+
+      const texPlaca = criarTexturaPlaca(memoria.titulo, memoria.data);
+      const meshPlaca = new THREE.Mesh(geoPlaca, new THREE.MeshBasicMaterial({ map: texPlaca }));
+      meshPlaca.position.set(0, -alturaMoldura / 2 - 0.28, 0.05);
+      grupoQuadro.add(meshPlaca);
+
+      // Arandela Dourada Neoclássica
+      const arandelaHaste = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.35), matOuro);
+      arandelaHaste.position.set(0, alturaMoldura / 2 + 0.25, 0.15);
+      arandelaHaste.rotation.x = Math.PI / 4;
+      grupoQuadro.add(arandelaHaste);
+
+      const arandelaCupula = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.14, 12, 1, true), matOuro);
+      arandelaCupula.position.set(0, alturaMoldura / 2 + 0.38, 0.28);
+      grupoQuadro.add(arandelaCupula);
+
+      const luzArandela = new THREE.PointLight(0xffeedb, 0.45, 4.5);
+      luzArandela.position.set(0, alturaMoldura / 2 + 0.35, 0.32);
+      grupoQuadro.add(luzArandela);
+
+      cena.add(grupoQuadro);
+
+      // Pedestal com vaso floral ao lado do quadro (deslocado 1.35m na tangente)
+      const angTangente = rotY;
+      const vOffsetX = Math.cos(angTangente) * 1.35;
+      const vOffsetZ = -Math.sin(angTangente) * 1.35;
+      criarPedestalFloral(qx + vOffsetX, qz + vOffsetZ, rotY, est.flor);
+    }
+  });
+
+  // ============================================================
+  //  6. GRANDE PAINEL COMEMORATIVO CURVO NO ÁPICE (+Z)
+  // ============================================================
+  // Criado com CylinderGeometry para acompanhar a curvatura exata da parede, sem cortes!
+  const spanLetreiro = 0.24 * Math.PI; // ~5.5m ao longo da curvatura
+  const geoLetreiroCurvo = new THREE.CylinderGeometry(
+    raioParedesQuadros,
+    raioParedesQuadros,
+    2.5,
+    32,
+    1,
+    true,
+    -spanLetreiro / 2,
+    spanLetreiro
+  );
+  const matLetreiroCurvo = new THREE.MeshStandardMaterial({
+    map: criarTexturaLetreiroFinal(config.nome_homenageada),
+    roughness: 0.4,
+    side: THREE.BackSide
+  });
+  const letreiroCurvo = new THREE.Mesh(geoLetreiroCurvo, matLetreiroCurvo);
+  letreiroCurvo.position.y = 2.15;
+  cena.add(letreiroCurvo);
+
+  // Moldura Dourada Curva no Topo e Base do Letreiro
+  const anelTopoLetreiro = new THREE.Mesh(
+    new THREE.CylinderGeometry(raioParedesQuadros - 0.01, raioParedesQuadros - 0.01, 0.06, 32, 1, true, -spanLetreiro / 2, spanLetreiro),
+    matOuro
+  );
+  anelTopoLetreiro.position.y = 2.15 + 1.25;
+  anelTopoLetreiro.material.side = THREE.BackSide;
+  cena.add(anelTopoLetreiro);
+
+  const anelBaseLetreiro = new THREE.Mesh(
+    new THREE.CylinderGeometry(raioParedesQuadros - 0.01, raioParedesQuadros - 0.01, 0.06, 32, 1, true, -spanLetreiro / 2, spanLetreiro),
+    matOuro
+  );
+  anelBaseLetreiro.position.y = 2.15 - 1.25;
+  anelBaseLetreiro.material.side = THREE.BackSide;
+  cena.add(anelBaseLetreiro);
+
+  // Pilastras de Mármore nas Extremidades do Letreiro
+  [-spanLetreiro / 2, spanLetreiro / 2].forEach(angP => {
+    const px = raioParedesQuadros * Math.sin(angP);
+    const pz = raioParedesQuadros * Math.cos(angP);
+    const pilastra = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.15, 3.8, 16), matMarmore);
+    pilastra.position.set(px, 1.9, pz);
+    cena.add(pilastra);
+  });
+
+  // ============================================================
+  //  7. ILUMINAÇÃO GERAL E LUSTRES DE CRISTAL
   // ============================================================
   const listaLustres = [];
   const luzesPontuais = [];
@@ -1016,7 +1014,6 @@ export function construirGaleria(cena, memorias, config) {
     opacity: 0.88
   });
 
-  // Grande Lustre Central Imperial sobre o Canteiro e o Presente
   function criarLustre(px, py, pz, escalaL = 1.0) {
     const grupoLustre = new THREE.Group();
     grupoLustre.position.set(px, py, pz);
@@ -1058,12 +1055,11 @@ export function construirGaleria(cena, memorias, config) {
     listaLustres.push(grupoLustre);
   }
 
-  // 1 Lustre Imperial no Centro (0, 0)
+  // Lustre Central Imperial sobre o Canteiro e Presente
   criarLustre(0, altura, 0, 1.25);
 
-  // 4 Lustres Satélites a meia distância nos quadrantes
-  const angulosLustres = [Math.PI * 0.25, Math.PI * 0.75, Math.PI * 1.25, Math.PI * 1.75];
-  angulosLustres.forEach(al => {
+  // 4 Lustres Satélites a meia distância
+  [Math.PI * 0.25, Math.PI * 0.75, Math.PI * 1.25, Math.PI * 1.75].forEach(al => {
     criarLustre(Math.cos(al) * 4.6, altura, Math.sin(al) * 4.6, 0.85);
   });
 
@@ -1075,7 +1071,7 @@ export function construirGaleria(cena, memorias, config) {
   cena.add(luzPrincipal);
 
   // ============================================================
-  //  7. CÉU ESTRELADO & VAGA-LUMES (MODO NOITE)
+  //  8. CÉU ESTRELADO & VAGA-LUMES (MODO NOITE)
   // ============================================================
   const qtdEstrelas = 320;
   const geoEstrelas = new THREE.BufferGeometry();
@@ -1088,12 +1084,7 @@ export function construirGaleria(cena, memorias, config) {
     posEstrelas[e * 3 + 2] = Math.sin(angE) * raioE;
   }
   geoEstrelas.setAttribute("position", new THREE.BufferAttribute(posEstrelas, 3));
-  const matEstrelas = new THREE.PointsMaterial({
-    color: 0xfff3d6,
-    size: 0.12,
-    transparent: true,
-    opacity: 0.0
-  });
+  const matEstrelas = new THREE.PointsMaterial({ color: 0xfff3d6, size: 0.12, transparent: true, opacity: 0.0 });
   const pointsEstrelas = new THREE.Points(geoEstrelas, matEstrelas);
   cena.add(pointsEstrelas);
 
@@ -1118,17 +1109,12 @@ export function construirGaleria(cena, memorias, config) {
     });
   }
   geoVagalumes.setAttribute("position", new THREE.BufferAttribute(posVagalumes, 3));
-  const matVagalumes = new THREE.PointsMaterial({
-    color: 0xffe066,
-    size: 0.15,
-    transparent: true,
-    opacity: 0.0
-  });
+  const matVagalumes = new THREE.PointsMaterial({ color: 0xffe066, size: 0.15, transparent: true, opacity: 0.0 });
   const pointsVagalumes = new THREE.Points(geoVagalumes, matVagalumes);
   cena.add(pointsVagalumes);
 
   // ============================================================
-  //  8. CORAÇÕES & CHUVA DE PÉTALAS FLUTUANTES
+  //  9. CORAÇÕES & CHUVA DE PÉTALAS FLUTUANTES
   // ============================================================
   const shapeCoracao = new THREE.Shape();
   const x0 = 0, y0 = 0;
@@ -1216,7 +1202,7 @@ export function construirGaleria(cena, memorias, config) {
   cena.add(instPetalas);
 
   // ============================================================
-  //  9. RETORNO DO AMBIENTE (Limites Circulares & Animações)
+  //  10. RETORNO DO AMBIENTE (Limites Circulares & Animações)
   // ============================================================
   const limitesSala = {
     tipo: "circular",
@@ -1271,8 +1257,8 @@ export function construirGaleria(cena, memorias, config) {
 
       // 2. Animação da Caixinha de Presente no Centro
       grupoCaixaFlutuante.rotation.y += delta * 0.5;
-      grupoCaixaFlutuante.position.y = 1.45 + Math.sin(tempoGeral * 2.0) * 0.06;
-      pointsSparks.rotation.y -= delta * 1.2;
+      grupoCaixaFlutuante.position.y = 1.48 + Math.sin(tempoGeral * 2.0) * 0.06;
+      posSparks && (grupoCaixaFlutuante.children[grupoCaixaFlutuante.children.length - 1].rotation.y -= delta * 1.2);
 
       // 3. Animação dos Corações
       for (let i = 0; i < qtdCoracoes; i++) {
