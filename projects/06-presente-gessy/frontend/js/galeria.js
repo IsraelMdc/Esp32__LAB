@@ -679,12 +679,12 @@ export function construirGaleria(cena, memorias, config) {
   meshPlacaPresente.rotation.y = Math.PI;
   grupoPresente.add(meshPlacaPresente);
 
-  // Caixa de Presente Flutuante Iluminada
+  // Caixa de Presente Flutuante Iluminada com Laço Dourado 3D de Luxo
   const grupoCaixaFlutuante = new THREE.Group();
   grupoCaixaFlutuante.position.set(0, 1.48, 0);
 
   const geoCaixa = new THREE.BoxGeometry(0.65, 0.65, 0.65);
-  const matCaixa = new THREE.MeshStandardMaterial({ color: 0xc1121f, roughness: 0.35, metalness: 0.15 });
+  const matCaixa = new THREE.MeshStandardMaterial({ color: 0xb5172a, roughness: 0.35, metalness: 0.15 });
   const meshCaixa = new THREE.Mesh(geoCaixa, matCaixa);
   meshCaixa.userData = {
     ehPresente: true,
@@ -700,17 +700,53 @@ export function construirGaleria(cena, memorias, config) {
   grupoCaixaFlutuante.add(meshCaixa);
   quadrosInterativos.push(meshCaixa);
 
-  const geoFita1 = new THREE.BoxGeometry(0.67, 0.67, 0.12);
-  const geoFita2 = new THREE.BoxGeometry(0.12, 0.67, 0.67);
+  // Tampa saliente da caixa com friso dourado clássico
+  const tampaCaixa = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.09, 0.68), matCaixa);
+  tampaCaixa.position.y = 0.31;
+  grupoCaixaFlutuante.add(tampaCaixa);
+
+  const frisoTampa = new THREE.Mesh(new THREE.BoxGeometry(0.685, 0.02, 0.685), matOuro);
+  frisoTampa.position.y = 0.27;
+  grupoCaixaFlutuante.add(frisoTampa);
+
+  // Fitas douradas em relevo volumétrico nítido (eliminando Z-fighting e oclusão)
+  const geoFita1 = new THREE.BoxGeometry(0.69, 0.69, 0.13);
+  const geoFita2 = new THREE.BoxGeometry(0.13, 0.69, 0.69);
   grupoCaixaFlutuante.add(new THREE.Mesh(geoFita1, matOuro));
   grupoCaixaFlutuante.add(new THREE.Mesh(geoFita2, matOuro));
 
-  const meshLacoCentro = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 16), matOuro);
-  meshLacoCentro.position.y = 0.38;
-  grupoCaixaFlutuante.add(meshLacoCentro);
+  // Autêntico Laço Dourado 3D de Presente
+  const grupoLaco = new THREE.Group();
+  grupoLaco.position.y = 0.35;
 
-  const luzPresente = new THREE.PointLight(0xffd166, 1.35, 5.0);
-  luzPresente.position.y = 0.3;
+  // Nó central dourado
+  const noCentro = new THREE.Mesh(new THREE.SphereGeometry(0.065, 16, 12), matOuro);
+  noCentro.scale.set(1.1, 0.8, 1.1);
+  grupoLaco.add(noCentro);
+
+  // 4 Alças de fita toroidais abertas em 3D
+  const geoAlca = new THREE.TorusGeometry(0.09, 0.026, 12, 24);
+  [Math.PI / 4, (3 * Math.PI) / 4, (5 * Math.PI) / 4, (7 * Math.PI) / 4].forEach(angL => {
+    const alca = new THREE.Mesh(geoAlca, matOuro);
+    alca.position.set(Math.cos(angL) * 0.07, 0.06, Math.sin(angL) * 0.07);
+    alca.rotation.y = angL;
+    alca.rotation.x = Math.PI / 3;
+    grupoLaco.add(alca);
+  });
+
+  // 2 Caudas de fita caindo elegantemente pela tampa
+  [-0.05, 0.05].forEach((offset, idx) => {
+    const cauda = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.012, 0.22), matOuro);
+    cauda.position.set(offset * 2, 0.01, 0.14);
+    cauda.rotation.set(-0.35, idx === 0 ? 0.3 : -0.3, 0);
+    grupoLaco.add(cauda);
+  });
+
+  grupoCaixaFlutuante.add(grupoLaco);
+
+  // Ponto de luz de realce suave sobre o laço dourado
+  const luzPresente = new THREE.PointLight(0xffe29a, 0.95, 4.0);
+  luzPresente.position.y = 0.55;
   grupoCaixaFlutuante.add(luzPresente);
 
   // Partículas Douradas orbitando
@@ -1070,46 +1106,182 @@ export function construirGaleria(cena, memorias, config) {
   // ============================================================
   const matCristal = new THREE.MeshStandardMaterial({
     color: 0xffffff,
-    roughness: 0.1,
-    metalness: 0.9,
+    roughness: 0.08,
+    metalness: 0.92,
     transparent: true,
     opacity: 0.88
   });
+  const matVela = new THREE.MeshStandardMaterial({
+    color: 0xfffff5,
+    roughness: 0.35,
+    metalness: 0.05
+  });
+  const matChamaLustre = new THREE.MeshBasicMaterial({ color: 0xfff3cc });
 
-  function criarLustre(px, py, pz, escalaL = 1.0) {
+  // 7.1 Grande Lustre Central Imperial Neoclássico (3 Níveis de Ouro, Cascata de Cristais & 20 Velas Acesas)
+  function criarLustreCentralImperial(px, py, pz) {
     const grupoLustre = new THREE.Group();
     grupoLustre.position.set(px, py, pz);
 
-    const cabo = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.8 * escalaL, 8), matOuro);
-    cabo.position.y = -0.4 * escalaL;
-    grupoLustre.add(cabo);
+    // Coroa superior no óculo com cabos dourados
+    const coroaTopo = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.035, 8, 24), matOuro);
+    coroaTopo.rotation.x = Math.PI / 2;
+    coroaTopo.position.y = -0.06;
+    grupoLustre.add(coroaTopo);
 
-    const aroMaior = new THREE.Mesh(new THREE.TorusGeometry(0.65 * escalaL, 0.035, 8, 24), matOuro);
-    aroMaior.rotation.x = Math.PI / 2;
-    aroMaior.position.y = -0.8 * escalaL;
-    grupoLustre.add(aroMaior);
+    // 4 Cabos dourados descendo da coroa para o aro superior
+    [0, Math.PI / 2, Math.PI, 3 * Math.PI / 2].forEach(angC => {
+      const cabo = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.90, 8), matOuro);
+      cabo.position.set(Math.cos(angC) * 0.45, -0.42, Math.sin(angC) * 0.45);
+      cabo.rotation.z = Math.sin(angC) * 0.35;
+      cabo.rotation.x = -Math.cos(angC) * 0.35;
+      grupoLustre.add(cabo);
+    });
 
-    const aroMenor = new THREE.Mesh(new THREE.TorusGeometry(0.38 * escalaL, 0.028, 8, 20), matOuro);
-    aroMenor.rotation.x = Math.PI / 2;
-    aroMenor.position.y = -1.1 * escalaL;
-    grupoLustre.add(aroMenor);
+    // --- NÍVEL 1: Aro Superior Monumental (R = 0.85m) com 12 Velas Acesas ---
+    const aro1 = new THREE.Mesh(new THREE.TorusGeometry(0.85, 0.04, 8, 32), matOuro);
+    aro1.rotation.x = Math.PI / 2;
+    aro1.position.y = -0.80;
+    grupoLustre.add(aro1);
 
-    const qtdPingentes = 16;
-    for (let p = 0; p < qtdPingentes; p++) {
-      const ang = (p / qtdPingentes) * Math.PI * 2;
-      const cpx = Math.cos(ang) * (0.65 * escalaL);
-      const cpz = Math.sin(ang) * (0.65 * escalaL);
-      const cristal = new THREE.Mesh(new THREE.OctahedronGeometry(0.075 * escalaL, 0), matCristal);
-      cristal.position.set(cpx, -0.9 * escalaL, cpz);
-      grupoLustre.add(cristal);
+    const qtdVelas1 = 12;
+    for (let v = 0; v < qtdVelas1; v++) {
+      const a = (v / qtdVelas1) * Math.PI * 2;
+      const vx = Math.cos(a) * 0.85;
+      const vz = Math.sin(a) * 0.85;
+
+      const vela = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.12, 8), matVela);
+      vela.position.set(vx, -0.72, vz);
+      grupoLustre.add(vela);
+
+      const chama = new THREE.Mesh(new THREE.ConeGeometry(0.015, 0.045, 8), matChamaLustre);
+      chama.position.set(vx, -0.63, vz);
+      grupoLustre.add(chama);
     }
 
-    const gotaCentral = new THREE.Mesh(new THREE.OctahedronGeometry(0.14 * escalaL, 0), matCristal);
-    gotaCentral.position.y = -1.25 * escalaL;
+    // Cascata 1 de 24 cristais prismáticos
+    for (let c = 0; c < 24; c++) {
+      const a = (c / 24) * Math.PI * 2;
+      const cx = Math.cos(a) * 0.85;
+      const cz = Math.sin(a) * 0.85;
+      const crist = new THREE.Mesh(new THREE.OctahedronGeometry(0.09, 0), matCristal);
+      crist.position.set(cx, -0.92, cz);
+      grupoLustre.add(crist);
+    }
+
+    // --- NÍVEL 2: Aro Intermediário (R = 0.55m) com 8 Velas Acesas ---
+    const aro2 = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.035, 8, 28), matOuro);
+    aro2.rotation.x = Math.PI / 2;
+    aro2.position.y = -1.15;
+    grupoLustre.add(aro2);
+
+    for (let v = 0; v < 8; v++) {
+      const a = (v / 8) * Math.PI * 2 + Math.PI / 8;
+      const vx = Math.cos(a) * 0.55;
+      const vz = Math.sin(a) * 0.55;
+
+      const vela = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.10, 8), matVela);
+      vela.position.set(vx, -1.08, vz);
+      grupoLustre.add(vela);
+
+      const chama = new THREE.Mesh(new THREE.ConeGeometry(0.014, 0.04, 8), matChamaLustre);
+      chama.position.set(vx, -1.00, vz);
+      grupoLustre.add(chama);
+    }
+
+    // Cascata 2 de 16 cristais
+    for (let c = 0; c < 16; c++) {
+      const a = (c / 16) * Math.PI * 2;
+      const cx = Math.cos(a) * 0.55;
+      const cz = Math.sin(a) * 0.55;
+      const crist = new THREE.Mesh(new THREE.OctahedronGeometry(0.08, 0), matCristal);
+      crist.position.set(cx, -1.25, cz);
+      grupoLustre.add(crist);
+    }
+
+    // --- NÍVEL 3: Aro Inferior (R = 0.30m) & Gota Monumental ---
+    const aro3 = new THREE.Mesh(new THREE.TorusGeometry(0.30, 0.028, 8, 20), matOuro);
+    aro3.rotation.x = Math.PI / 2;
+    aro3.position.y = -1.42;
+    grupoLustre.add(aro3);
+
+    for (let c = 0; c < 8; c++) {
+      const a = (c / 8) * Math.PI * 2;
+      const crist = new THREE.Mesh(new THREE.OctahedronGeometry(0.07, 0), matCristal);
+      crist.position.set(Math.cos(a) * 0.30, -1.50, Math.sin(a) * 0.30);
+      grupoLustre.add(crist);
+    }
+
+    const gotaMonumental = new THREE.Mesh(new THREE.OctahedronGeometry(0.18, 0), matCristal);
+    gotaMonumental.position.y = -1.65;
+    grupoLustre.add(gotaMonumental);
+
+    // Luz pontual central dourada rica sobre o canteiro
+    const spot = new THREE.PointLight(0xffe29a, 1.45, 14.0);
+    spot.position.y = -1.05;
+    grupoLustre.add(spot);
+    luzesPontuais.push(spot);
+
+    cena.add(grupoLustre);
+    listaLustres.push(grupoLustre);
+  }
+
+  // 7.2 Lustre Satélite Neoclássico (2 Níveis em Ouro, 8 Velas Acesas & Cristais)
+  function criarLustreSatelite(px, py, pz) {
+    const grupoLustre = new THREE.Group();
+    grupoLustre.position.set(px, py, pz);
+
+    const cabo = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.70, 8), matOuro);
+    cabo.position.y = -0.35;
+    grupoLustre.add(cabo);
+
+    // Aro Principal (R = 0.50m) com 8 Velas Acesas
+    const aro1 = new THREE.Mesh(new THREE.TorusGeometry(0.50, 0.03, 8, 24), matOuro);
+    aro1.rotation.x = Math.PI / 2;
+    aro1.position.y = -0.72;
+    grupoLustre.add(aro1);
+
+    for (let v = 0; v < 8; v++) {
+      const a = (v / 8) * Math.PI * 2;
+      const vx = Math.cos(a) * 0.50;
+      const vz = Math.sin(a) * 0.50;
+
+      const vela = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.09, 8), matVela);
+      vela.position.set(vx, -0.66, vz);
+      grupoLustre.add(vela);
+
+      const chama = new THREE.Mesh(new THREE.ConeGeometry(0.012, 0.035, 8), matChamaLustre);
+      chama.position.set(vx, -0.59, vz);
+      grupoLustre.add(chama);
+    }
+
+    // Pingentes de Cristal do Aro 1
+    for (let c = 0; c < 12; c++) {
+      const a = (c / 12) * Math.PI * 2;
+      const crist = new THREE.Mesh(new THREE.OctahedronGeometry(0.065, 0), matCristal);
+      crist.position.set(Math.cos(a) * 0.50, -0.82, Math.sin(a) * 0.50);
+      grupoLustre.add(crist);
+    }
+
+    // Aro Inferior (R = 0.28m)
+    const aro2 = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.024, 8, 20), matOuro);
+    aro2.rotation.x = Math.PI / 2;
+    aro2.position.y = -0.98;
+    grupoLustre.add(aro2);
+
+    for (let c = 0; c < 8; c++) {
+      const a = (c / 8) * Math.PI * 2;
+      const crist = new THREE.Mesh(new THREE.OctahedronGeometry(0.055, 0), matCristal);
+      crist.position.set(Math.cos(a) * 0.28, -1.06, Math.sin(a) * 0.28);
+      grupoLustre.add(crist);
+    }
+
+    const gotaCentral = new THREE.Mesh(new THREE.OctahedronGeometry(0.12, 0), matCristal);
+    gotaCentral.position.y = -1.18;
     grupoLustre.add(gotaCentral);
 
-    const spot = new THREE.PointLight(0xffe29a, 1.1 * escalaL, 12.0);
-    spot.position.y = -0.95 * escalaL;
+    const spot = new THREE.PointLight(0xffe29a, 0.90, 8.5);
+    spot.position.y = -0.85;
     grupoLustre.add(spot);
     luzesPontuais.push(spot);
 
@@ -1118,21 +1290,21 @@ export function construirGaleria(cena, memorias, config) {
   }
 
   // 1. Lustre Central Imperial sobre o Canteiro e Presente (sob o óculo celestial)
-  criarLustre(0, altura, 0, 1.25);
+  criarLustreCentralImperial(0, altura, 0);
 
   // 2. Anel Concêntrico de 6 Lustres Neoclássicos Satélites (simetria perfeita a cada 60°)
   // Centralizados no raio 4.2m (sobre a faixa do tapete anelar vermelho)
   const angulosLustres = [
-    0,                  // Alinhado ao Grande Painel (+Z)
+    0,                  // Alinhado ao Espelho Mágico (+Z)
     Math.PI / 3,        // 60°
     (2 * Math.PI) / 3,  // 120°
-    Math.PI,            // 180° Alinhado ao Portal de Entrada (-Z)
+    Math.PI,            // 180° Alinhado ao Quadro de Aniversário e Entrada (-Z)
     -(2 * Math.PI) / 3, // 240° (-120°)
     -Math.PI / 3        // 300° (-60°)
   ];
 
   angulosLustres.forEach(al => {
-    criarLustre(4.2 * Math.sin(al), altura, 4.2 * Math.cos(al), 0.85);
+    criarLustreSatelite(4.2 * Math.sin(al), altura, 4.2 * Math.cos(al));
   });
 
   const luzAmbiente = new THREE.AmbientLight(0xfff3e6, 0.70);
@@ -1279,7 +1451,12 @@ export function construirGaleria(cena, memorias, config) {
   const limitesSala = {
     tipo: "circular",
     raioMax: 6.45,
-    raioMinCentro: 2.65
+    raioMinCentro: 2.65,
+    bancos: [
+      { x: 3.35, z: 0.0, rotY: -Math.PI / 2, larg: 1.5, prof: 0.65 },
+      { x: -3.35, z: 0.0, rotY: Math.PI / 2, larg: 1.5, prof: 0.65 },
+      { x: 0.0, z: 3.35, rotY: 0.0, larg: 1.5, prof: 0.65 }
+    ]
   };
 
   let modoNoiteAtivo = false;

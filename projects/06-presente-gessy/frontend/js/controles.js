@@ -257,6 +257,46 @@ export class ControladorGaleria {
             this.camera.position.x *= fatorC;
             this.camera.position.z *= fatorC;
           }
+
+          // Colisão com os bancos de veludo (Oriented Bounding Boxes com deslizamento suave)
+          if (this.limites.bancos && this.limites.bancos.length > 0) {
+            const raioCorpo = 0.35; // Raio físico de colisão do visitante
+            for (let b = 0; b < this.limites.bancos.length; b++) {
+              const banco = this.limites.bancos[b];
+              const dx = this.camera.position.x - banco.x;
+              const dz = this.camera.position.z - banco.z;
+
+              // Transforma vetor para o sistema de coordenadas local do banco
+              const cosR = Math.cos(-banco.rotY);
+              const sinR = Math.sin(-banco.rotY);
+              const lx = dx * cosR - dz * sinR;
+              const lz = dx * sinR + dz * cosR;
+
+              const meiaLarg = banco.larg / 2 + raioCorpo;
+              const meiaProf = banco.prof / 2 + raioCorpo;
+
+              if (Math.abs(lx) < meiaLarg && Math.abs(lz) < meiaProf) {
+                const penX = meiaLarg - Math.abs(lx);
+                const penZ = meiaProf - Math.abs(lz);
+
+                let novoLx = lx;
+                let novoLz = lz;
+
+                // Desliza pelo eixo de menor penetração
+                if (penX < penZ) {
+                  novoLx = Math.sign(lx) * meiaLarg;
+                } else {
+                  novoLz = Math.sign(lz) * meiaProf;
+                }
+
+                // Reconverte para coordenadas mundiais
+                const worldCos = Math.cos(banco.rotY);
+                const worldSin = Math.sin(banco.rotY);
+                this.camera.position.x = banco.x + (novoLx * worldCos - novoLz * worldSin);
+                this.camera.position.z = banco.z + (novoLx * worldSin + novoLz * worldCos);
+              }
+            }
+          }
         } else {
           this.camera.position.x = Math.max(this.limites.minX, Math.min(this.limites.maxX, this.camera.position.x));
           this.camera.position.z = Math.max(this.limites.minZ, Math.min(this.limites.maxZ, this.camera.position.z));
