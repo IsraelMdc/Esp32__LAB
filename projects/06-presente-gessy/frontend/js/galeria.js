@@ -106,7 +106,7 @@ function criarTexturaJanelaNoturna() {
     ctx.fill();
   }
 
-  const lx = 256, ly = 210, lRaio = 48;
+  const lx = 256, ly = 256, lRaio = 48;
   const halo = ctx.createRadialGradient(lx, ly, lRaio * 0.7, lx, ly, lRaio * 2.8);
   halo.addColorStop(0, "rgba(255, 248, 225, 0.95)");
   halo.addColorStop(0.4, "rgba(255, 235, 180, 0.35)");
