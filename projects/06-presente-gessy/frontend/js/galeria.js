@@ -950,11 +950,38 @@ export function construirGaleria(cena, memorias, config) {
   grupoEspelho.add(luzEspelho);
   luzesPontuais.push(luzEspelho);
 
-  // Pilastras nobres de mármore ladeando o espelho no ápice
-  [-1.25, 1.25].forEach(px => {
-    const pil = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.15, 3.8, 16), matMarmore);
-    pil.position.set(px, 1.9, 0);
-    grupoEspelho.add(pil);
+  // Colunas neoclássicas completas do chão ao teto (h = 4.15m) ladeando o espelho
+  [-1.18, 1.18].forEach(px => {
+    const grupoCol = new THREE.Group();
+    // Centro da coluna ajustado para que fique de y=0.01m até y=4.12m
+    grupoCol.position.set(px, -0.075, -0.05);
+
+    // 1. Plinto / Base de mármore apoiada no piso
+    const baseMarmore = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.22, 0.22, 16), matMarmore);
+    baseMarmore.position.y = -1.95;
+    grupoCol.add(baseMarmore);
+
+    const anelBase = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.02, 8, 20), matOuro);
+    anelBase.rotation.x = Math.PI / 2;
+    anelBase.position.y = -1.84;
+    grupoCol.add(anelBase);
+
+    // 2. Fuste da coluna em mármore clássico
+    const fuste = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 3.65, 16), matMarmore);
+    fuste.position.y = 0.0;
+    grupoCol.add(fuste);
+
+    // 3. Capitelo clássico tocando a sanca do teto
+    const anelCapitelo = new THREE.Mesh(new THREE.TorusGeometry(0.15, 0.02, 8, 20), matOuro);
+    anelCapitelo.rotation.x = Math.PI / 2;
+    anelCapitelo.position.y = 1.83;
+    grupoCol.add(anelCapitelo);
+
+    const topoCapitelo = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.15, 0.20, 16), matMarmore);
+    topoCapitelo.position.y = 1.94;
+    grupoCol.add(topoCapitelo);
+
+    grupoEspelho.add(grupoCol);
   });
 
   cena.add(grupoEspelho);
@@ -1010,11 +1037,34 @@ export function construirGaleria(cena, memorias, config) {
     luzesPontuais.push(luzAniv);
   });
 
-  // Pilastras clássicas ladeando o painel na entrada
+  // Colunas neoclássicas completas do chão ao teto ladeando o painel na entrada
   [-largAniv / 2 - 0.2, largAniv / 2 + 0.2].forEach(px => {
-    const pil = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.15, 3.8, 16), matMarmore);
-    pil.position.set(px, 1.9, 0);
-    grupoAniversario.add(pil);
+    const grupoColAniv = new THREE.Group();
+    grupoColAniv.position.set(px, -0.175, -0.05);
+
+    const baseMarmore = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.22, 0.22, 16), matMarmore);
+    baseMarmore.position.y = -1.95;
+    grupoColAniv.add(baseMarmore);
+
+    const anelBase = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.02, 8, 20), matOuro);
+    anelBase.rotation.x = Math.PI / 2;
+    anelBase.position.y = -1.84;
+    grupoColAniv.add(anelBase);
+
+    const fuste = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 3.65, 16), matMarmore);
+    fuste.position.y = 0.0;
+    grupoColAniv.add(fuste);
+
+    const anelCapitelo = new THREE.Mesh(new THREE.TorusGeometry(0.15, 0.02, 8, 20), matOuro);
+    anelCapitelo.rotation.x = Math.PI / 2;
+    anelCapitelo.position.y = 1.83;
+    grupoColAniv.add(anelCapitelo);
+
+    const topoCapitelo = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.15, 0.20, 16), matMarmore);
+    topoCapitelo.position.y = 1.94;
+    grupoColAniv.add(topoCapitelo);
+
+    grupoAniversario.add(grupoColAniv);
   });
 
   cena.add(grupoAniversario);
