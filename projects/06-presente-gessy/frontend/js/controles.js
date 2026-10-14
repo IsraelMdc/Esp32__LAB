@@ -28,7 +28,7 @@ export class ControladorGaleria {
 
     // Rotação da câmera
     this.pitch = 0; // Olhar para cima / baixo (eixo X)
-    this.yaw = Math.PI; // Olhar para frente (inicia virado para o salão)
+    this.yaw = 0; // Olhar para frente (rumo ao centro da rotunda)
 
     // Estado do teclado
     this.teclas = { w: false, a: false, s: false, d: false };
@@ -241,10 +241,26 @@ export class ControladorGaleria {
       this.camera.position.x += direcao.x * passo;
       this.camera.position.z += direcao.z * passo;
 
-      // 3. Colisão com os limites da sala
+      // 3. Colisão com os limites da sala (Circular ou Retangular)
       if (this.limites) {
-        this.camera.position.x = Math.max(this.limites.minX, Math.min(this.limites.maxX, this.camera.position.x));
-        this.camera.position.z = Math.max(this.limites.minZ, Math.min(this.limites.maxZ, this.camera.position.z));
+        if (this.limites.tipo === "circular") {
+          const distXZ = Math.hypot(this.camera.position.x, this.camera.position.z);
+          // Limite externo (paredes circulares da rotunda)
+          if (distXZ > this.limites.raioMax) {
+            const fator = this.limites.raioMax / distXZ;
+            this.camera.position.x *= fator;
+            this.camera.position.z *= fator;
+          }
+          // Limite interno (cerquinha do canteiro central)
+          if (this.limites.raioMinCentro && distXZ < this.limites.raioMinCentro) {
+            const fatorC = this.limites.raioMinCentro / distXZ;
+            this.camera.position.x *= fatorC;
+            this.camera.position.z *= fatorC;
+          }
+        } else {
+          this.camera.position.x = Math.max(this.limites.minX, Math.min(this.limites.maxX, this.camera.position.x));
+          this.camera.position.z = Math.max(this.limites.minZ, Math.min(this.limites.maxZ, this.camera.position.z));
+        }
       }
     }
   }

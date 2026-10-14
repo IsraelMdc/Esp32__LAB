@@ -1,8 +1,8 @@
 /*
  * ============================================================
- *  CENA 3D DA GALERIA NEOCLÁSSICA & JARDIM FLORAL — PROJETO 06 (GESSY)
- *  Ambiente com 4 Zonas: Hall de Gala, Galeria com Arandelas,
- *  Altar Floral de Presente (Lírios, Gérberas e Rosas) e Painel Final.
+ *  GRANDE ROTUNDA NEOCLÁSSICA & JARDIM FLORAL CENTRAL — PROJETO 06 (GESSY)
+ *  Salão Circular de Museu (360°) com Canteiro Central Cercado,
+ *  Flores Botânicas Eretas, Cúpula Noturna e 9 Quadros de Memórias em Anel
  * ============================================================
  */
 
@@ -49,30 +49,37 @@ function criarTexturaMadeira() {
   const tex = new THREE.CanvasTexture(canvas);
   tex.wrapS = THREE.RepeatWrapping;
   tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(4, 16);
+  tex.repeat.set(6, 6);
   return tex;
 }
 
 function criarTexturaParede() {
   const canvas = document.createElement("canvas");
-  canvas.width = 256;
-  canvas.height = 256;
+  canvas.width = 512;
+  canvas.height = 512;
   const ctx = canvas.getContext("2d");
 
-  ctx.fillStyle = "#ede0d4";
-  ctx.fillRect(0, 0, 256, 256);
+  ctx.fillStyle = "#f3ebe3";
+  ctx.fillRect(0, 0, 512, 512);
 
-  ctx.fillStyle = "rgba(0, 0, 0, 0.03)";
-  for (let i = 0; i < 3000; i++) {
-    const x = Math.random() * 256;
-    const y = Math.random() * 256;
+  ctx.fillStyle = "rgba(0, 0, 0, 0.025)";
+  for (let i = 0; i < 5000; i++) {
+    const x = Math.random() * 512;
+    const y = Math.random() * 512;
     ctx.fillRect(x, y, 2, 2);
   }
+
+  // Boiserie clássica sutil
+  ctx.strokeStyle = "rgba(180, 150, 120, 0.25)";
+  ctx.lineWidth = 4;
+  ctx.strokeRect(32, 32, 448, 448);
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(48, 48, 416, 416);
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.wrapS = THREE.RepeatWrapping;
   tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(6, 6);
+  tex.repeat.set(12, 2);
   return tex;
 }
 
@@ -85,7 +92,7 @@ function criarTexturaTapete() {
   ctx.fillStyle = "#780016";
   ctx.fillRect(0, 0, 512, 512);
 
-  ctx.fillStyle = "rgba(0, 0, 0, 0.07)";
+  ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
   for (let i = 0; i < 4000; i++) {
     const x = Math.random() * 512;
     const y = Math.random() * 512;
@@ -114,70 +121,42 @@ function criarTexturaTapete() {
 function criarTexturaJanelaNoturna() {
   const canvas = document.createElement("canvas");
   canvas.width = 512;
-  canvas.height = 768;
+  canvas.height = 512;
   const ctx = canvas.getContext("2d");
 
-  const grad = ctx.createLinearGradient(0, 0, 0, 768);
-  grad.addColorStop(0, "#080c1a");
-  grad.addColorStop(0.55, "#141c38");
-  grad.addColorStop(0.85, "#251b3d");
-  grad.addColorStop(1.0, "#3f2b4c");
+  const grad = ctx.createRadialGradient(256, 256, 30, 256, 256, 256);
+  grad.addColorStop(0, "#19223e");
+  grad.addColorStop(0.55, "#0e1529");
+  grad.addColorStop(1.0, "#050811");
   ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 512, 768);
+  ctx.fillRect(0, 0, 512, 512);
 
+  // Estrelas
   ctx.fillStyle = "#ffffff";
-  for (let i = 0; i < 110; i++) {
+  for (let i = 0; i < 140; i++) {
     const sx = Math.random() * 512;
-    const sy = Math.random() * 450;
-    const sRaio = Math.random() * 1.6;
+    const sy = Math.random() * 512;
+    const sRaio = Math.random() * 1.5;
     ctx.beginPath();
     ctx.arc(sx, sy, sRaio, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  const lx = 370, ly = 190, lRaio = 55;
-  const halo = ctx.createRadialGradient(lx, ly, lRaio * 0.8, lx, ly, lRaio * 3.0);
+  // Lua Cheia Brilhante no Centro
+  const lx = 256, ly = 210, lRaio = 48;
+  const halo = ctx.createRadialGradient(lx, ly, lRaio * 0.7, lx, ly, lRaio * 2.8);
   halo.addColorStop(0, "rgba(255, 248, 225, 0.95)");
-  halo.addColorStop(0.4, "rgba(255, 235, 180, 0.38)");
+  halo.addColorStop(0.4, "rgba(255, 235, 180, 0.35)");
   halo.addColorStop(1, "rgba(255, 220, 150, 0)");
   ctx.fillStyle = halo;
   ctx.beginPath();
-  ctx.arc(lx, ly, lRaio * 3.0, 0, Math.PI * 2);
+  ctx.arc(lx, ly, lRaio * 2.8, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = "#fffdf7";
   ctx.beginPath();
   ctx.arc(lx, ly, lRaio, 0, Math.PI * 2);
   ctx.fill();
-
-  ctx.fillStyle = "#111422";
-  ctx.beginPath();
-  ctx.moveTo(0, 600);
-  ctx.quadraticCurveTo(120, 520, 260, 570);
-  ctx.quadraticCurveTo(390, 530, 512, 590);
-  ctx.lineTo(512, 768);
-  ctx.lineTo(0, 768);
-  ctx.fill();
-
-  ctx.fillStyle = "#090b12";
-  const arvores = [45, 110, 180, 430, 480];
-  arvores.forEach(ax => {
-    ctx.beginPath();
-    ctx.moveTo(ax, 768);
-    ctx.lineTo(ax - 20, 620);
-    ctx.quadraticCurveTo(ax, 480, ax + 20, 620);
-    ctx.lineTo(ax, 768);
-    ctx.fill();
-  });
-
-  ctx.strokeStyle = "#ffd166";
-  ctx.lineWidth = 6;
-  ctx.strokeRect(10, 10, 492, 748);
-  ctx.beginPath();
-  ctx.moveTo(256, 10); ctx.lineTo(256, 758);
-  ctx.moveTo(10, 260); ctx.lineTo(502, 260);
-  ctx.moveTo(10, 510); ctx.lineTo(502, 510);
-  ctx.stroke();
 
   return new THREE.CanvasTexture(canvas);
 }
@@ -295,11 +274,9 @@ function criarTexturaTerraMusgo() {
   canvas.height = 512;
   const ctx = canvas.getContext("2d");
 
-  // Base de terra fértil escura e úmida
   ctx.fillStyle = "#22150c";
   ctx.fillRect(0, 0, 512, 512);
 
-  // Granulação orgânica e micro-textura de solo
   for (let i = 0; i < 5000; i++) {
     const x = Math.random() * 512;
     const y = Math.random() * 512;
@@ -310,7 +287,6 @@ function criarTexturaTerraMusgo() {
     ctx.fill();
   }
 
-  // Manchas aveludadas de musgo silvestre verde-oliva e esmeralda
   const coresMusgo = [
     "rgba(34, 76, 32, 0.55)",
     "rgba(45, 90, 39, 0.65)",
@@ -343,7 +319,6 @@ function criarGeometriaTufoGrama() {
   const uvs = [];
   const indices = [];
 
-  // 5 lâminas curvas entrelaçadas em leque natural, altura 8 a 12cm
   const blades = [
     { ang: 0.15, arc: 0.035, h: 0.095, w: 0.018 },
     { ang: 1.35, arc: 0.045, h: 0.115, w: 0.016 },
@@ -395,20 +370,27 @@ function criarGeometriaTufoGrama() {
 }
 
 // ------------------------------------------------------------
-//  Construção Completa da Galeria 3D (4 Zonas Temáticas)
+//  Construção da Grande Rotunda Neoclássica Circular (360°)
 // ------------------------------------------------------------
 export function construirGaleria(cena, memorias, config) {
   const loader = new THREE.TextureLoader();
   const quadrosInterativos = [];
 
-  const largura = 9.0;
-  const altura = 4.0;
-  const espacamentoZ = 4.2;
-  const qtdMemorias = memorias.length;
-  const comprimento = Math.max(16.0, (qtdMemorias / 2) * espacamentoZ + 10.0);
+  const raioRotunda = 7.5;
+  const altura = 4.2;
 
-  // 1. Piso de madeira nobre
-  const geoPiso = new THREE.PlaneGeometry(largura, comprimento);
+  // Materiais Globais Reutilizáveis
+  const matOuro = new THREE.MeshStandardMaterial({ color: 0xffd166, roughness: 0.22, metalness: 0.88 });
+  const matMarmore = new THREE.MeshStandardMaterial({ color: 0xfbfbfb, roughness: 0.25, metalness: 0.15 });
+  const matFolha = new THREE.MeshStandardMaterial({ color: 0x2d6a4f, roughness: 0.65 });
+  const matVeludoVermelho = new THREE.MeshStandardMaterial({ color: 0x780016, roughness: 0.85 });
+
+  // ============================================================
+  //  1. ESTRUTURA ARQUITETÔNICA DA ROTUNDA (Círculo 360°)
+  // ============================================================
+
+  // 1.1 Piso Circular de Madeira Nobre
+  const geoPiso = new THREE.CircleGeometry(raioRotunda, 64);
   const matPiso = new THREE.MeshStandardMaterial({
     map: criarTexturaMadeira(),
     roughness: 0.35,
@@ -416,135 +398,138 @@ export function construirGaleria(cena, memorias, config) {
   });
   const piso = new THREE.Mesh(geoPiso, matPiso);
   piso.rotation.x = -Math.PI / 2;
-  piso.position.set(0, 0, comprimento / 2);
+  piso.position.set(0, 0, 0);
   cena.add(piso);
 
-  // 2. Tapete Vermelho Real com Bordas Douradas
-  const geoTapete = new THREE.PlaneGeometry(2.5, comprimento - 1.2);
-  const matTapete = new THREE.MeshStandardMaterial({
-    map: criarTexturaTapete(),
+  // 1.2 Tapete Anelar Aveludado circundando a área de contemplação
+  const geoTapeteAnel = new THREE.RingGeometry(2.7, 4.5, 64);
+  const matTapeteAnel = new THREE.MeshStandardMaterial({
+    color: 0x780016,
     roughness: 0.85,
-    metalness: 0.08
+    metalness: 0.08,
+    side: THREE.DoubleSide
   });
-  const tapete = new THREE.Mesh(geoTapete, matTapete);
-  tapete.rotation.x = -Math.PI / 2;
-  tapete.position.set(0, 0.008, comprimento / 2);
-  cena.add(tapete);
+  const tapeteAnel = new THREE.Mesh(geoTapeteAnel, matTapeteAnel);
+  tapeteAnel.rotation.x = -Math.PI / 2;
+  tapeteAnel.position.set(0, 0.008, 0);
+  cena.add(tapeteAnel);
 
-  // 3. Teto com Claraboia Estelar para o Modo Noite
-  const geoTeto = new THREE.PlaneGeometry(largura, comprimento);
+  // Filetes Dourados nos aros do tapete anelar
+  const bordaTapeteInt = new THREE.Mesh(new THREE.TorusGeometry(2.7, 0.02, 8, 64), matOuro);
+  bordaTapeteInt.rotation.x = Math.PI / 2;
+  bordaTapeteInt.position.y = 0.012;
+  cena.add(bordaTapeteInt);
+
+  const bordaTapeteExt = new THREE.Mesh(new THREE.TorusGeometry(4.5, 0.02, 8, 64), matOuro);
+  bordaTapeteExt.rotation.x = Math.PI / 2;
+  bordaTapeteExt.position.y = 0.012;
+  cena.add(bordaTapeteExt);
+
+  // Passadeira Vermelha da Entrada conectando a porta (-Z) ao anel central
+  const geoPassadeira = new THREE.PlaneGeometry(1.8, 3.0);
+  const passadeira = new THREE.Mesh(geoPassadeira, matTapeteAnel);
+  passadeira.rotation.x = -Math.PI / 2;
+  passadeira.position.set(0, 0.009, -5.9);
+  cena.add(passadeira);
+
+  // 1.3 Parede Cilíndrica Curva da Rotunda
+  const geoParede = new THREE.CylinderGeometry(raioRotunda, raioRotunda, altura, 64, 1, true);
+  const matParede = new THREE.MeshStandardMaterial({
+    map: criarTexturaParede(),
+    roughness: 0.82,
+    side: THREE.BackSide
+  });
+  const parede = new THREE.Mesh(geoParede, matParede);
+  parede.position.y = altura / 2;
+  cena.add(parede);
+
+  // Rodapé clássico contínuo na base circular
+  const rodape = new THREE.Mesh(new THREE.TorusGeometry(raioRotunda - 0.06, 0.11, 8, 64), matOuro);
+  rodape.rotation.x = Math.PI / 2;
+  rodape.position.y = 0.11;
+  cena.add(rodape);
+
+  // Sanca neoclássica superior
+  const sanca = new THREE.Mesh(new THREE.TorusGeometry(raioRotunda - 0.05, 0.07, 8, 64), matOuro);
+  sanca.rotation.x = Math.PI / 2;
+  sanca.position.y = altura - 0.07;
+  cena.add(sanca);
+
+  // 1.4 Teto Abobadado com Óculo Noturno e Claraboia de Estrelas
   const matTeto = new THREE.MeshStandardMaterial({
     color: 0x16181e,
     roughness: 0.9,
     transparent: true,
-    opacity: 1.0
+    opacity: 1.0,
+    side: THREE.DoubleSide
   });
-  const teto = new THREE.Mesh(geoTeto, matTeto);
+  const teto = new THREE.Mesh(new THREE.CircleGeometry(raioRotunda, 64), matTeto);
   teto.rotation.x = Math.PI / 2;
-  teto.position.set(0, altura, comprimento / 2);
+  teto.position.y = altura;
   cena.add(teto);
 
-  // 4. Paredes
-  const matParede = new THREE.MeshStandardMaterial({
-    map: criarTexturaParede(),
-    roughness: 0.82
-  });
+  // Óculo Noturno no Teto
+  const matOculo = new THREE.MeshBasicMaterial({ map: criarTexturaJanelaNoturna(), side: THREE.DoubleSide });
+  const oculo = new THREE.Mesh(new THREE.CircleGeometry(2.6, 32), matOculo);
+  oculo.rotation.x = Math.PI / 2;
+  oculo.position.y = altura - 0.02;
+  cena.add(oculo);
 
-  const geoParedeLat = new THREE.PlaneGeometry(comprimento, altura);
-  const paredeEsq = new THREE.Mesh(geoParedeLat, matParede);
-  paredeEsq.rotation.y = Math.PI / 2;
-  paredeEsq.position.set(-largura / 2, altura / 2, comprimento / 2);
-  cena.add(paredeEsq);
-
-  const paredeDir = new THREE.Mesh(geoParedeLat, matParede);
-  paredeDir.rotation.y = -Math.PI / 2;
-  paredeDir.position.set(largura / 2, altura / 2, comprimento / 2);
-  cena.add(paredeDir);
-
-  const geoParedeFrente = new THREE.PlaneGeometry(largura, altura);
-  const paredeEntrada = new THREE.Mesh(geoParedeFrente, matParede);
-  paredeEntrada.position.set(0, altura / 2, 0);
-  cena.add(paredeEntrada);
-
-  const paredeFundo = new THREE.Mesh(geoParedeFrente, matParede);
-  paredeFundo.rotation.y = Math.PI;
-  paredeFundo.position.set(0, altura / 2, comprimento);
-  cena.add(paredeFundo);
-
-  // Rodapés clássicos
-  const matRodape = new THREE.MeshStandardMaterial({ color: 0x241d18, roughness: 0.4 });
-  const geoRodapeLat = new THREE.BoxGeometry(0.12, 0.22, comprimento);
-  const rodapeEsq = new THREE.Mesh(geoRodapeLat, matRodape);
-  rodapeEsq.position.set(-largura / 2 + 0.06, 0.11, comprimento / 2);
-  cena.add(rodapeEsq);
-
-  const rodapeDir = new THREE.Mesh(geoRodapeLat, matRodape);
-  rodapeDir.position.set(largura / 2 - 0.06, 0.11, comprimento / 2);
-  cena.add(rodapeDir);
-
-  // Materiais Globais Reutilizáveis
-  const matOuro = new THREE.MeshStandardMaterial({ color: 0xffd166, roughness: 0.25, metalness: 0.85 });
-  const matMarmore = new THREE.MeshStandardMaterial({ color: 0xf8f9fa, roughness: 0.3, metalness: 0.2 });
-  const matFolha = new THREE.MeshStandardMaterial({ color: 0x2d6a4f, roughness: 0.6 });
-  const matVeludoVermelho = new THREE.MeshStandardMaterial({ color: 0x780016, roughness: 0.85 });
+  const aroOculo = new THREE.Mesh(new THREE.TorusGeometry(2.6, 0.08, 8, 48), matOuro);
+  aroOculo.rotation.x = Math.PI / 2;
+  aroOculo.position.y = altura - 0.02;
+  cena.add(aroOculo);
 
   // ============================================================
-  //  ZONA 1: HALL DE ENTRADA DE GALA (Z = 0 a 3.5m)
+  //  2. PORTAL DE ENTRADA DE GALA (Z = -7.4m)
   // ============================================================
 
-  // Cortinas Imperiais de Veludo na Entrada
-  const grupoCortinaEsq = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.55, 3.8, 12), matVeludoVermelho);
-  grupoCortinaEsq.position.set(-2.6, 2.0, 0.3);
-  grupoCortinaEsq.scale.set(0.6, 1.0, 0.3);
+  // Cortinas Imperiais de Veludo no Portal
+  const grupoCortinaEsq = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.52, 4.0, 12), matVeludoVermelho);
+  grupoCortinaEsq.position.set(-1.8, 2.0, -7.0);
+  grupoCortinaEsq.scale.set(0.6, 1.0, 0.35);
   cena.add(grupoCortinaEsq);
 
-  const grupoCortinaDir = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.55, 3.8, 12), matVeludoVermelho);
-  grupoCortinaDir.position.set(2.6, 2.0, 0.3);
-  grupoCortinaDir.scale.set(0.6, 1.0, 0.3);
+  const grupoCortinaDir = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.52, 4.0, 12), matVeludoVermelho);
+  grupoCortinaDir.position.set(1.8, 2.0, -7.0);
+  grupoCortinaDir.scale.set(0.6, 1.0, 0.35);
   cena.add(grupoCortinaDir);
 
-  // Braçadeiras douradas nas cortinas
-  const bracadeiraEsq = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.03, 8, 20), matOuro);
-  bracadeiraEsq.position.set(-2.6, 1.8, 0.35);
+  const bracadeiraEsq = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.03, 8, 20), matOuro);
+  bracadeiraEsq.position.set(-1.8, 1.8, -6.9);
   cena.add(bracadeiraEsq);
 
-  const bracadeiraDir = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.03, 8, 20), matOuro);
-  bracadeiraDir.position.set(2.6, 1.8, 0.35);
+  const bracadeiraDir = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.03, 8, 20), matOuro);
+  bracadeiraDir.position.set(1.8, 1.8, -6.9);
   cena.add(bracadeiraDir);
 
-  // Vaso Imperial de Lírios Rosas (Aparador à esquerda na entrada - Altura calibrada para contemplação direta)
+  // Aparador Rebaixado com Vaso de Lírios (ao lado da entrada, à esquerda)
   const grupoAparadorLirios = new THREE.Group();
-  grupoAparadorLirios.position.set(-2.8, 0, 1.8);
+  grupoAparadorLirios.position.set(-3.6, 0, -6.1);
+  grupoAparadorLirios.rotation.y = Math.PI * 0.2;
 
-  // Aparador de mármore mais baixo (topo em y = 0.58m para visão perfeita de cima)
   const aparador = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.58, 0.60), matMarmore);
   aparador.position.y = 0.29;
   grupoAparadorLirios.add(aparador);
 
-  // Filete dourado ornamental no tampo do aparador
   const fileteAparador = new THREE.Mesh(new THREE.BoxGeometry(0.87, 0.025, 0.62), matOuro);
   fileteAparador.position.y = 0.58;
   grupoAparadorLirios.add(fileteAparador);
 
-  // Vaso clássico de proporção rebaixada (altura 0.34m, bocal em y = 0.92m)
   const vasoLirios = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.15, 0.34, 20), matMarmore);
   vasoLirios.position.y = 0.75;
   grupoAparadorLirios.add(vasoLirios);
 
-  // Anel dourado no bocal do vaso
   const anelBocalVaso = new THREE.Mesh(new THREE.TorusGeometry(0.23, 0.015, 8, 24), matOuro);
   anelBocalVaso.rotation.x = Math.PI / 2;
   anelBocalVaso.position.y = 0.92;
   grupoAparadorLirios.add(anelBocalVaso);
 
-  // Base de folhagem verdejante interna
   const folhagemLirios = new THREE.Mesh(new THREE.SphereGeometry(0.28, 10, 8), matFolha);
   folhagemLirios.position.y = 0.96;
   folhagemLirios.scale.set(0.95, 0.5, 0.95);
   grupoAparadorLirios.add(folhagemLirios);
 
-  // 7 Lírios Rosas Stargazer rebaixados (y = 0.98 a 1.15m) com inclinação frontal
-  // voltada diretamente para o visitante (ângulo de visão descendente de 35-45 graus)
   const posLiriosEntrada = [
     [0.0, 1.15, 0.04, 0.35, 0.0],
     [0.15, 1.08, 0.10, 0.45, 0.25],
@@ -561,23 +546,20 @@ export function construirGaleria(cena, memorias, config) {
     grupoAparadorLirios.add(flor);
   });
 
-  // Foco de luz acolhedor iluminando diretamente as pétalas dos lírios
-  const luzAparador = new THREE.PointLight(0xfff1dc, 0.95, 3.2);
+  const luzAparador = new THREE.PointLight(0xfff1dc, 0.95, 3.5);
   luzAparador.position.set(0.1, 1.5, 0.25);
   grupoAparadorLirios.add(luzAparador);
-
   cena.add(grupoAparadorLirios);
 
-  // Espelho Veneziano Mágico ladeado por Floreira de Gérberas (À direita)
+  // Espelho Veneziano Mágico ladeado por Gérberas (à direita da entrada)
   const grupoEspelho = new THREE.Group();
-  grupoEspelho.position.set(largura / 2 - 0.08, 2.05, 2.2);
-  grupoEspelho.rotation.y = -Math.PI / 2;
+  grupoEspelho.position.set(3.6, 2.05, -6.1);
+  grupoEspelho.rotation.y = -Math.PI * 0.2;
 
   const meshMolduraEspelho = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.3, 0.08), matOuro);
   grupoEspelho.add(meshMolduraEspelho);
 
-  const texEspelho = criarTexturaEspelho();
-  const matVidroEspelho = new THREE.MeshBasicMaterial({ map: texEspelho });
+  const matVidroEspelho = new THREE.MeshBasicMaterial({ map: criarTexturaEspelho() });
   const meshVidroEspelho = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 2.1), matVidroEspelho);
   meshVidroEspelho.position.z = 0.05;
   meshVidroEspelho.userData = {
@@ -586,188 +568,120 @@ export function construirGaleria(cena, memorias, config) {
     memoria: {
       id: "espelho",
       titulo: "Espelho Mais Sincero ✨",
-      data: "Para a Mulher da Minha Vida 💛",
+      data: "Reflexo do Coração",
       foto: "",
-      texto: "Espelho, espelho meu...\n\nNão existe em todo o universo mulher mais deslumbrante, inteligente, carinhosa e perfeita do que você, Gessy! Você ilumina cada segundo da minha vida e eu tenho o maior orgulho do mundo de caminhar ao seu lado. Feliz Aniversário, meu amor!"
+      texto: "Se este espelho pudesse refletir o que eu vejo em você todos os dias, você saberia que é a mulher mais doce, radiante e encantadora do mundo. Te amo! 💛"
     }
   };
   grupoEspelho.add(meshVidroEspelho);
   quadrosInterativos.push(meshVidroEspelho);
+
+  // Floreira de Gérberas embaixo do espelho
+  const floreiraEspelho = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.32, 0.4), matMarmore);
+  floreiraEspelho.position.set(0, -1.35, 0.15);
+  grupoEspelho.add(floreiraEspelho);
+
+  const coresGerberas = [0xff758f, 0xff9f43, 0xfeca57, 0xff5252, 0xff9ff3];
+  for (let fg = -0.65; fg <= 0.65; fg += 0.28) {
+    const cor = coresGerberas[Math.floor(Math.random() * coresGerberas.length)];
+    const gFlor = criarGerberaRealista(cor, 0.38);
+    gFlor.position.set(fg, -1.18, 0.2);
+    gFlor.rotation.x = 0.2;
+    grupoEspelho.add(gFlor);
+  }
   cena.add(grupoEspelho);
 
-  // Floreira de Gérberas Coloridas aos pés do Espelho Mágico
-  const grupoFloreiraGerberas = new THREE.Group();
-  grupoFloreiraGerberas.position.set(largura / 2 - 0.65, 0, 2.2);
-
-  const baseFloreiraG = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.35, 1.8), matMarmore);
-  baseFloreiraG.position.y = 0.175;
-  grupoFloreiraGerberas.add(baseFloreiraG);
-
-  const folhaFloreiraG = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.2, 1.7), matFolha);
-  folhaFloreiraG.position.y = 0.4;
-  grupoFloreiraGerberas.add(folhaFloreiraG);
-
-  // 12 Gérberas alegres em tons de amarelo, laranja e coral
-  const coresGerberas = [0xff9f43, 0xfeca57, 0xff5252, 0xff758f, 0xffbe76];
-  for (let g = 0; g < 12; g++) {
-    const corG = coresGerberas[g % coresGerberas.length];
-    const florG = criarGerberaRealista(corG, 0.4);
-    const gz = (g / 11 - 0.5) * 1.5;
-    const gx = (Math.random() - 0.5) * 0.35;
-    florG.position.set(gx, 0.52, gz);
-    florG.rotation.x = (Math.random() - 0.5) * 0.3;
-    florG.rotation.z = (Math.random() - 0.5) * 0.3;
-    grupoFloreiraGerberas.add(florG);
-  }
-  cena.add(grupoFloreiraGerberas);
-
   // ============================================================
-  //  ZONA 2: SALÃO DAS MEMÓRIAS & JANELÕES DA LUA (Z = 3.5 a L-5m)
+  //  3. O CANTEIRO CENTRAL CERCADO COM AS FLORES (Centro 0, 0, 0)
   // ============================================================
-
-  // Janelões Franceses com Vista para Céu Noturno e Lua Cheia
-  const geoJanela = new THREE.PlaneGeometry(2.6, 2.6);
-  const matJanela = new THREE.MeshBasicMaterial({ map: criarTexturaJanelaNoturna() });
-  const matMolduraJanela = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3, metalness: 0.3 });
-
-  // Janela Esquerda
-  const grupoJanelaEsq = new THREE.Group();
-  grupoJanelaEsq.position.set(-largura / 2 + 0.03, 2.15, 3.6);
-  grupoJanelaEsq.rotation.y = Math.PI / 2;
-  const meshVidroEsq = new THREE.Mesh(geoJanela, matJanela);
-  const molduraJanelaEsq = new THREE.Mesh(new THREE.BoxGeometry(2.8, 2.8, 0.06), matMolduraJanela);
-  molduraJanelaEsq.position.z = -0.02;
-  grupoJanelaEsq.add(molduraJanelaEsq);
-  grupoJanelaEsq.add(meshVidroEsq);
-  cena.add(grupoJanelaEsq);
-
-  // Janela Direita
-  const grupoJanelaDir = new THREE.Group();
-  grupoJanelaDir.position.set(largura / 2 - 0.03, 2.15, comprimento - 4.5);
-  grupoJanelaDir.rotation.y = -Math.PI / 2;
-  const meshVidroDir = new THREE.Mesh(geoJanela, matJanela);
-  const molduraJanelaDir = new THREE.Mesh(new THREE.BoxGeometry(2.8, 2.8, 0.06), matMolduraJanela);
-  molduraJanelaDir.position.z = -0.02;
-  grupoJanelaDir.add(molduraJanelaDir);
-  grupoJanelaDir.add(meshVidroDir);
-  cena.add(grupoJanelaDir);
-
-  // Pufes / Bancos Aveludados de Museu nas Laterais
-  function criarBancoMuseu(bx, bz) {
-    const grupoBanco = new THREE.Group();
-    grupoBanco.position.set(bx, 0, bz);
-
-    const assento = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.22, 0.7), matVeludoVermelho);
-    assento.position.y = 0.45;
-    grupoBanco.add(assento);
-
-    // Pés dourados torneados
-    const posPes = [[-0.7, 0.2, -0.25], [0.7, 0.2, -0.25], [-0.7, 0.2, 0.25], [0.7, 0.2, 0.25]];
-    posPes.forEach(([px, py, pz]) => {
-      const pe = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.03, 0.42, 8), matOuro);
-      pe.position.set(px, py, pz);
-      grupoBanco.add(pe);
-    });
-
-    cena.add(grupoBanco);
-  }
-  criarBancoMuseu(-2.2, comprimento * 0.4);
-  criarBancoMuseu(2.2, comprimento * 0.65);
-
-  // Quadros de Memórias nas Paredes com Arandelas Douradas
-  const larguraMoldura = 2.4;
-  const alturaMoldura = 1.8;
-  const geoMoldura = new THREE.BoxGeometry(larguraMoldura, alturaMoldura, 0.08);
-  const matMoldura = new THREE.MeshStandardMaterial({
-    color: 0x2b1d0c,
-    roughness: 0.3,
-    metalness: 0.4
-  });
-
-  const geoFoto = new THREE.PlaneGeometry(larguraMoldura - 0.2, alturaMoldura - 0.2);
-  const geoPlaca = new THREE.PlaneGeometry(1.6, 0.4);
-
-  memorias.forEach((memoria, index) => {
-    const ehLadoEsquerdo = (index % 2 === 0);
-    const posZ = 4.8 + Math.floor(index / 2) * espacamentoZ;
-    const posX = ehLadoEsquerdo ? (-largura / 2 + 0.08) : (largura / 2 - 0.08);
-    const rotY = ehLadoEsquerdo ? (Math.PI / 2) : (-Math.PI / 2);
-
-    const grupoQuadro = new THREE.Group();
-    grupoQuadro.position.set(posX, 2.0, posZ);
-    grupoQuadro.rotation.y = rotY;
-
-    // Moldura de madeira nobre
-    const meshMoldura = new THREE.Mesh(geoMoldura, matMoldura);
-    grupoQuadro.add(meshMoldura);
-
-    // Foto da Memória
-    const texFoto = loader.load(memoria.foto);
-    const matFoto = new THREE.MeshStandardMaterial({
-      map: texFoto,
-      roughness: 0.5
-    });
-    const meshFoto = new THREE.Mesh(geoFoto, matFoto);
-    meshFoto.position.z = 0.05;
-    meshFoto.userData = { memoria: memoria, ehQuadro: true };
-    grupoQuadro.add(meshFoto);
-    quadrosInterativos.push(meshFoto);
-
-    // Plaquinha informativa embaixo do quadro
-    const texPlaca = criarTexturaPlaca(memoria.titulo, memoria.data);
-    const matPlaca = new THREE.MeshBasicMaterial({ map: texPlaca });
-    const meshPlaca = new THREE.Mesh(geoPlaca, matPlaca);
-    meshPlaca.position.set(0, -alturaMoldura / 2 - 0.3, 0.05);
-    grupoQuadro.add(meshPlaca);
-
-    // Arandela Dourada Neoclássica acima do quadro
-    const arandelaHaste = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.35), matOuro);
-    arandelaHaste.position.set(0, alturaMoldura / 2 + 0.25, 0.15);
-    arandelaHaste.rotation.x = Math.PI / 4;
-    grupoQuadro.add(arandelaHaste);
-
-    const arandelaCupula = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.14, 12, 1, true), matOuro);
-    arandelaCupula.position.set(0, alturaMoldura / 2 + 0.38, 0.28);
-    grupoQuadro.add(arandelaCupula);
-
-    const luzArandela = new THREE.PointLight(0xffeedb, 0.45, 4.5);
-    luzArandela.position.set(0, alturaMoldura / 2 + 0.35, 0.32);
-    grupoQuadro.add(luzArandela);
-
-    cena.add(grupoQuadro);
-  });
-
-  // ============================================================
-  //  ZONA 3: ALTAR BOTÂNICO DO PRESENTE (Lírios, Gérberas e Rosas)
-  // ============================================================
-  const posZPresente = Math.min(comprimento - 3.5, Math.max(7.0, comprimento / 2 + 1.2));
   const grupoPresente = new THREE.Group();
-  grupoPresente.position.set(0, 0, posZPresente);
-  // Vira o canteiro e o altar 180° para que a abertura, a placa e as flores recebam o visitante de frente
-  grupoPresente.rotation.y = Math.PI;
+  grupoPresente.position.set(0, 0, 0);
 
-  // Mureta Semicircular de Mármore para o Jardim do Altar
-  const geoMureta = new THREE.CylinderGeometry(2.2, 2.3, 0.4, 32, 1, true, Math.PI * 0.15, Math.PI * 1.7);
+  const raioCanteiro = 2.4;
+
+  // 3.1 Mureta de Mármore Branca Perfeita 360°
+  const geoMureta = new THREE.CylinderGeometry(raioCanteiro, raioCanteiro + 0.08, 0.40, 48);
   const muretaJardim = new THREE.Mesh(geoMureta, matMarmore);
-  muretaJardim.position.y = 0.2;
+  muretaJardim.position.y = 0.20;
   grupoPresente.add(muretaJardim);
 
-  // Canteiro semicircular com solo fértil rico e musgo aveludado
+  // Borda saliente superior de mármore
+  const anelMuretaTopo = new THREE.Mesh(new THREE.TorusGeometry(raioCanteiro + 0.04, 0.045, 8, 48), matMarmore);
+  anelMuretaTopo.rotation.x = Math.PI / 2;
+  anelMuretaTopo.position.y = 0.40;
+  grupoPresente.add(anelMuretaTopo);
+
+  // 3.2 Solo Orgânico e Rico em Húmus e Musgo
   const texTerraMusgo = criarTexturaTerraMusgo();
-  const matTerraMusgo = new THREE.MeshStandardMaterial({
-    map: texTerraMusgo,
-    roughness: 0.90,
-    metalness: 0.05
-  });
-  const geoCanteiro = new THREE.CylinderGeometry(2.1, 2.1, 0.35, 32);
-  const canteiroVerde = new THREE.Mesh(geoCanteiro, matTerraMusgo);
-  canteiroVerde.position.y = 0.18;
+  const matTerraMusgo = new THREE.MeshStandardMaterial({ map: texTerraMusgo, roughness: 0.90, metalness: 0.05 });
+  const canteiroVerde = new THREE.Mesh(new THREE.CylinderGeometry(raioCanteiro - 0.04, raioCanteiro - 0.04, 0.38, 48), matTerraMusgo);
+  canteiroVerde.position.y = 0.19;
   grupoPresente.add(canteiroVerde);
 
-  // ------------------------------------------------------------
-  // Grama Silvestre Baixa (InstancedMesh: 260 tufos em 1 único draw call)
-  // Calibrada entre 8cm e 13cm para não ultrapassar a floração
-  // ------------------------------------------------------------
+  // 3.3 CERQUINHA ORNAMENTAL EM VOLTA DO CANTEIRO COM FLORES E HERAS
+  const alturaCerca = 0.42;
+  const yTopoCerquinha = 0.40 + alturaCerca; // 0.82m
+
+  // Corrimão Superior em Ouro
+  const corrimaoSuperior = new THREE.Mesh(new THREE.TorusGeometry(raioCanteiro + 0.02, 0.025, 8, 48), matOuro);
+  corrimaoSuperior.rotation.x = Math.PI / 2;
+  corrimaoSuperior.position.y = yTopoCerquinha;
+  grupoPresente.add(corrimaoSuperior);
+
+  // Barra Intermediária Ornamental em Ouro
+  const barraIntermediaria = new THREE.Mesh(new THREE.TorusGeometry(raioCanteiro + 0.02, 0.016, 8, 48), matOuro);
+  barraIntermediaria.rotation.x = Math.PI / 2;
+  barraIntermediaria.position.y = 0.60;
+  grupoPresente.add(barraIntermediaria);
+
+  // Barra Inferior em Ouro
+  const barraInferior = new THREE.Mesh(new THREE.TorusGeometry(raioCanteiro + 0.02, 0.018, 8, 48), matOuro);
+  barraInferior.rotation.x = Math.PI / 2;
+  barraInferior.position.y = 0.42;
+  grupoPresente.add(barraInferior);
+
+  // 32 Balaústres Torneados em Ouro e Mármore
+  const qtdBalaustres = 32;
+  for (let b = 0; b < qtdBalaustres; b++) {
+    const angB = (b / qtdBalaustres) * Math.PI * 2;
+    // Pequeno vão frontal para acolher quem entra pelo portal (-Z)
+    if (Math.abs(angB - (-Math.PI / 2)) < 0.12) continue;
+
+    const bx = Math.cos(angB) * (raioCanteiro + 0.02);
+    const bz = Math.sin(angB) * (raioCanteiro + 0.02);
+
+    const balaustre = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.022, alturaCerca, 8), matOuro);
+    balaustre.position.set(bx, 0.40 + alturaCerca / 2, bz);
+    grupoPresente.add(balaustre);
+
+    // Esfera dourada no topo de cada balaústre
+    const esferaBalaustre = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), matOuro);
+    esferaBalaustre.position.set(bx, yTopoCerquinha + 0.025, bz);
+    grupoPresente.add(esferaBalaustre);
+
+    // Heras e folhinhas entrelaçadas nos balaústres
+    if (b % 2 === 0) {
+      const folhaCerca = new THREE.Mesh(new THREE.ConeGeometry(0.028, 0.05, 3), matFolha);
+      folhaCerca.position.set(bx * 0.98, 0.50 + (b % 3) * 0.08, bz * 0.98);
+      folhaCerca.rotation.set(Math.random() * 0.5, angB, Math.PI / 2);
+      grupoPresente.add(folhaCerca);
+    }
+  }
+
+  // 2 Postes Nobres do Portãozinho Frontal de Entrada (-Z)
+  const posPortoes = [-0.35, 0.35];
+  posPortoes.forEach(px => {
+    const pz = -(raioCanteiro + 0.02);
+    const posteNobre = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.045, alturaCerca + 0.08, 12), matOuro);
+    posteNobre.position.set(px, 0.40 + (alturaCerca + 0.08) / 2, pz);
+    grupoPresente.add(posteNobre);
+
+    const pinha = new THREE.Mesh(new THREE.SphereGeometry(0.065, 12, 12), matOuro);
+    pinha.position.set(px, yTopoCerquinha + 0.08, pz);
+    grupoPresente.add(pinha);
+  });
+
+  // 3.4 Grama Silvestre Baixa (InstancedMesh: 280 tufos em 1 único draw call GPU)
   const matGrama = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     roughness: 0.70,
@@ -775,24 +689,24 @@ export function construirGaleria(cena, memorias, config) {
     side: THREE.DoubleSide
   });
   const tuftGeo = criarGeometriaTufoGrama();
-  const qtdTufos = 260;
+  const qtdTufos = 280;
   const instancedGrama = new THREE.InstancedMesh(tuftGeo, matGrama, qtdTufos);
 
   const dummyGrama = new THREE.Object3D();
   const paletaGrama = [
-    new THREE.Color(0x2d6a4f), // Verde floresta profundo
-    new THREE.Color(0x40916c), // Verde prado fresco
-    new THREE.Color(0x52b788), // Verde esmeralda luminoso
-    new THREE.Color(0x606c38), // Verde oliva silvestre
-    new THREE.Color(0x283618)  // Verde musgo escuro
+    new THREE.Color(0x2d6a4f),
+    new THREE.Color(0x40916c),
+    new THREE.Color(0x52b788),
+    new THREE.Color(0x606c38),
+    new THREE.Color(0x283618)
   ];
 
   for (let tg = 0; tg < qtdTufos; tg++) {
-    const angTG = Math.PI * 0.15 + Math.random() * Math.PI * 1.7;
-    const raioTG = 0.82 + Math.random() * 1.22;
+    const angTG = Math.random() * Math.PI * 2;
+    const raioTG = 0.85 + Math.random() * 1.45;
     const tgX = Math.cos(angTG) * raioTG;
     const tgZ = Math.sin(angTG) * raioTG;
-    const tgY = 0.355; // Nível da superfície do canteiro
+    const tgY = 0.38;
 
     dummyGrama.position.set(tgX, tgY, tgZ);
     dummyGrama.rotation.y = Math.random() * Math.PI * 2;
@@ -810,130 +724,75 @@ export function construirGaleria(cena, memorias, config) {
   if (instancedGrama.instanceColor) instancedGrama.instanceColor.needsUpdate = true;
   grupoPresente.add(instancedGrama);
 
-  // ------------------------------------------------------------
-  // Galhos e Ramos Naturais Silvestres arqueados entre as flores
-  // ------------------------------------------------------------
-  const matRamo = new THREE.MeshStandardMaterial({
-    color: 0x3d271d,
-    roughness: 0.88,
-    metalness: 0.05
-  });
+  // 3.5 Ramos Lenhosos Naturais Arqueados
+  const matRamo = new THREE.MeshStandardMaterial({ color: 0x3d271d, roughness: 0.88, metalness: 0.05 });
+  const qtdRamos = 8;
+  for (let rm = 0; rm < qtdRamos; rm++) {
+    const a1 = (rm / qtdRamos) * Math.PI * 2;
+    const a2 = a1 + 0.35;
+    const a3 = a1 + 0.65;
+    const r1 = 1.1 + Math.random() * 0.3;
+    const r2 = 1.4 + Math.random() * 0.4;
+    const r3 = 1.8 + Math.random() * 0.3;
 
-  const ramosConfigs = [
-    { p1: [1.1, 0.36, 0.4], p2: [1.35, 0.48, 0.7], p3: [1.6, 0.37, 1.0], r: 0.022 },
-    { p1: [-1.0, 0.36, 0.5], p2: [-1.3, 0.49, 0.8], p3: [-1.55, 0.37, 1.1], r: 0.020 },
-    { p1: [0.6, 0.36, 1.3], p2: [0.95, 0.47, 1.5], p3: [1.3, 0.37, 1.6], r: 0.018 },
-    { p1: [-0.5, 0.36, 1.4], p2: [-0.85, 0.48, 1.6], p3: [-1.2, 0.37, 1.55], r: 0.022 },
-    { p1: [-0.3, 0.36, 1.7], p2: [0.1, 0.46, 1.85], p3: [0.45, 0.37, 1.75], r: 0.019 },
-    { p1: [1.4, 0.36, -0.2], p2: [1.65, 0.47, 0.1], p3: [1.8, 0.37, 0.4], r: 0.021 },
-    { p1: [-1.4, 0.36, -0.2], p2: [-1.65, 0.47, 0.1], p3: [-1.8, 0.37, 0.4], r: 0.021 }
-  ];
-
-  ramosConfigs.forEach((rc) => {
     const curva = new THREE.QuadraticBezierCurve3(
-      new THREE.Vector3(...rc.p1),
-      new THREE.Vector3(...rc.p2),
-      new THREE.Vector3(...rc.p3)
+      new THREE.Vector3(Math.cos(a1) * r1, 0.38, Math.sin(a1) * r1),
+      new THREE.Vector3(Math.cos(a2) * r2, 0.48, Math.sin(a2) * r2),
+      new THREE.Vector3(Math.cos(a3) * r3, 0.39, Math.sin(a3) * r3)
     );
-    const geoRamo = new THREE.TubeGeometry(curva, 10, rc.r, 6, false);
+    const geoRamo = new THREE.TubeGeometry(curva, 10, 0.02, 6, false);
     const meshRamo = new THREE.Mesh(geoRamo, matRamo);
     grupoPresente.add(meshRamo);
 
-    // Pequeno broto / folhinha no cume de cada galho
     const broto = new THREE.Mesh(new THREE.ConeGeometry(0.022, 0.05, 4), matFolha);
-    broto.position.set(rc.p2[0], rc.p2[1] + 0.02, rc.p2[2]);
+    broto.position.set(Math.cos(a2) * r2, 0.50, Math.sin(a2) * r2);
     broto.rotation.z = Math.PI / 4;
     grupoPresente.add(broto);
-  });
+  }
 
-  // ------------------------------------------------------------
-  // Hera Rasteira Cascata (ramagens pendentes na borda de mármore)
-  // ------------------------------------------------------------
-  const angulosHera = [
-    Math.PI * 0.30,
-    Math.PI * 0.55,
-    Math.PI * 0.85,
-    Math.PI * 1.15,
-    Math.PI * 1.45,
-    Math.PI * 1.70
-  ];
-  angulosHera.forEach((angH) => {
-    const raioM = 2.22;
-    const hx = Math.cos(angH) * raioM;
-    const hz = Math.sin(angH) * raioM;
-
-    const curvaHera = new THREE.CubicBezierCurve3(
-      new THREE.Vector3(hx * 0.98, 0.38, hz * 0.98),
-      new THREE.Vector3(hx * 1.02, 0.39, hz * 1.02),
-      new THREE.Vector3(hx * 1.03, 0.26, hz * 1.03),
-      new THREE.Vector3(hx * 1.01, 0.12 + Math.random() * 0.08, hz * 1.01)
-    );
-    const geoHera = new THREE.TubeGeometry(curvaHera, 8, 0.012, 5, false);
-    const meshHera = new THREE.Mesh(geoHera, matFolha);
-    grupoPresente.add(meshHera);
-
-    for (let f = 0; f < 5; f++) {
-      const t = 0.2 + f * 0.18;
-      const pt = curvaHera.getPoint(t);
-      const folha = new THREE.Mesh(new THREE.ConeGeometry(0.028, 0.05, 3), matFolha);
-      folha.position.copy(pt);
-      folha.rotation.set(Math.random() * 0.6, angH + (Math.random() - 0.5) * 1.0, Math.PI / 2 + 0.3);
-      grupoPresente.add(folha);
-    }
-  });
-
-  // Distribuição abundante das 3 Flores ao redor do Altar:
-  // 1. Rosas Vermelhas contornando a base interna (Espiral áurea de Fibonacci)
-  const qtdRosasAltar = 18;
+  // 3.6 Distribuição Botânica das 3 Flores em 360°
+  // A. 24 Rosas Vermelhas Aveludadas no anel interno
+  const qtdRosasAltar = 24;
   for (let r = 0; r < qtdRosasAltar; r++) {
-    const angR = (r / qtdRosasAltar) * Math.PI * 1.8 + Math.PI * 0.1;
+    const angR = (r / qtdRosasAltar) * Math.PI * 2 + (Math.random() - 0.5) * 0.15;
     const raioR = 1.35 + (Math.random() - 0.5) * 0.25;
-    const rosa = criarRosaRealista(0xbf0603, 0.45);
-    // Plantada no solo (y = 0.355)
-    rosa.position.set(Math.cos(angR) * raioR, 0.355, Math.sin(angR) * raioR);
+    const rosa = criarRosaRealista(0xbf0603, 0.46);
+    rosa.position.set(Math.cos(angR) * raioR, 0.38, Math.sin(angR) * raioR);
     rosa.rotation.y = Math.random() * Math.PI * 2;
-    // Postura ereta e vigorosa com leve inclinação natural
     rosa.rotation.x = (Math.random() - 0.5) * 0.08;
     rosa.rotation.z = (Math.random() - 0.5) * 0.08;
     grupoPresente.add(rosa);
   }
 
-  // 2. Gérberas Radiantes coloridas na borda intermediária (Capítulo e lígulas em camadas)
-  const qtdGerberasAltar = 16;
-  const coresGerberasAltar = [0xff9f43, 0xfeca57, 0xff5252, 0xff758f];
+  // B. 20 Gérberas Radiantes Multicoloridas no anel intermediário
+  const qtdGerberasAltar = 20;
+  const coresGerberasAltar = [0xff9f43, 0xfeca57, 0xff5252, 0xff758f, 0xff9ff3];
   for (let g = 0; g < qtdGerberasAltar; g++) {
-    const angG = (g / qtdGerberasAltar) * Math.PI * 1.7 + Math.PI * 0.15;
-    const raioG = 1.75 + (Math.random() - 0.5) * 0.2;
+    const angG = (g / qtdGerberasAltar) * Math.PI * 2 + (Math.random() - 0.5) * 0.18;
+    const raioG = 1.78 + (Math.random() - 0.5) * 0.22;
     const corG = coresGerberasAltar[g % coresGerberasAltar.length];
     const gerbera = criarGerberaRealista(corG, 0.52);
-    // Plantada no solo (y = 0.355)
-    gerbera.position.set(Math.cos(angG) * raioG, 0.355, Math.sin(angG) * raioG);
+    gerbera.position.set(Math.cos(angG) * raioG, 0.38, Math.sin(angG) * raioG);
     gerbera.rotation.y = Math.random() * Math.PI * 2;
     gerbera.rotation.x = (Math.random() - 0.5) * 0.08;
     gerbera.rotation.z = (Math.random() - 0.5) * 0.08;
     grupoPresente.add(gerbera);
   }
 
-  // 3. Lírios Rosas Majestosos nos pontos focais do Altar (Tépalas reflexas e papilas)
-  const qtdLiriosAltar = 8;
+  // C. 12 Lírios Rosas Majestosos no anel externo próximo à cerquinha
+  const qtdLiriosAltar = 12;
   for (let l = 0; l < qtdLiriosAltar; l++) {
-    const angL = (l / qtdLiriosAltar) * Math.PI * 1.6 + Math.PI * 0.2;
-    const raioL = 1.95;
-    const lirio = criarLirioRealista(0.55);
-    // Plantado no solo (y = 0.355)
-    lirio.position.set(Math.cos(angL) * raioL, 0.355, Math.sin(angL) * raioL);
-    // Leve abertura em leque
+    const angL = (l / qtdLiriosAltar) * Math.PI * 2;
+    const raioL = 2.05;
+    const lirio = criarLirioRealista(0.56);
+    lirio.position.set(Math.cos(angL) * raioL, 0.38, Math.sin(angL) * raioL);
     lirio.rotation.set(0.12, angL, 0);
     grupoPresente.add(lirio);
   }
 
-  // Pedestal Central de Mármore e Ouro
-  const geoPedestal = new THREE.CylinderGeometry(0.65, 0.75, 0.9, 24);
-  const matPedestal = new THREE.MeshStandardMaterial({
-    color: 0x1c1e24,
-    roughness: 0.3,
-    metalness: 0.6
-  });
+  // 3.7 Pedestal Central de Mármore e Ouro
+  const geoPedestal = new THREE.CylinderGeometry(0.65, 0.75, 0.9, 32);
+  const matPedestal = new THREE.MeshStandardMaterial({ color: 0x1c1e24, roughness: 0.3, metalness: 0.6 });
   const pedestal = new THREE.Mesh(geoPedestal, matPedestal);
   pedestal.position.y = 0.45;
   grupoPresente.add(pedestal);
@@ -943,7 +802,7 @@ export function construirGaleria(cena, memorias, config) {
   anelOuro.position.y = 0.88;
   grupoPresente.add(anelOuro);
 
-  // Placa no pedestal "🎁 CARTINHA ESPECIAL"
+  // Placa Especial Dourada voltada para quem entra (-Z)
   const canvasPlacaPresente = document.createElement("canvas");
   canvasPlacaPresente.width = 512;
   canvasPlacaPresente.height = 128;
@@ -965,19 +824,16 @@ export function construirGaleria(cena, memorias, config) {
     new THREE.PlaneGeometry(1.0, 0.25),
     new THREE.MeshBasicMaterial({ map: texPlacaPresente })
   );
-  meshPlacaPresente.position.set(0, 0.5, 0.76);
+  meshPlacaPresente.position.set(0, 0.52, -0.76);
+  meshPlacaPresente.rotation.y = Math.PI;
   grupoPresente.add(meshPlacaPresente);
 
-  // Caixa de Presente Flutuante
+  // Caixa de Presente Flutuante Iluminada
   const grupoCaixaFlutuante = new THREE.Group();
   grupoCaixaFlutuante.position.set(0, 1.45, 0);
 
   const geoCaixa = new THREE.BoxGeometry(0.65, 0.65, 0.65);
-  const matCaixa = new THREE.MeshStandardMaterial({
-    color: 0xc1121f,
-    roughness: 0.35,
-    metalness: 0.15
-  });
+  const matCaixa = new THREE.MeshStandardMaterial({ color: 0xc1121f, roughness: 0.35, metalness: 0.15 });
   const meshCaixa = new THREE.Mesh(geoCaixa, matCaixa);
   meshCaixa.userData = {
     ehPresente: true,
@@ -993,7 +849,6 @@ export function construirGaleria(cena, memorias, config) {
   grupoCaixaFlutuante.add(meshCaixa);
   quadrosInterativos.push(meshCaixa);
 
-  // Fitas cruzadas de ouro
   const geoFita1 = new THREE.BoxGeometry(0.67, 0.67, 0.12);
   const geoFita2 = new THREE.BoxGeometry(0.12, 0.67, 0.67);
   const meshFita1 = new THREE.Mesh(geoFita1, matOuro);
@@ -1001,18 +856,16 @@ export function construirGaleria(cena, memorias, config) {
   grupoCaixaFlutuante.add(meshFita1);
   grupoCaixaFlutuante.add(meshFita2);
 
-  const geoLacoEsfera = new THREE.SphereGeometry(0.1, 16, 16);
-  const meshLacoCentro = new THREE.Mesh(geoLacoEsfera, matOuro);
+  const meshLacoCentro = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 16), matOuro);
   meshLacoCentro.position.y = 0.38;
   grupoCaixaFlutuante.add(meshLacoCentro);
 
-  // Luz suave da caixa
-  const luzPresente = new THREE.PointLight(0xffd166, 1.25, 4.0);
+  const luzPresente = new THREE.PointLight(0xffd166, 1.35, 5.0);
   luzPresente.position.y = 0.3;
   grupoCaixaFlutuante.add(luzPresente);
 
-  // Partículas douradas orbitando o altar
-  const qtdSparks = 28;
+  // Partículas Douradas orbitando o altar
+  const qtdSparks = 32;
   const geoSparks = new THREE.BufferGeometry();
   const posSparks = new Float32Array(qtdSparks * 3);
   for (let s = 0; s < qtdSparks; s++) {
@@ -1023,12 +876,7 @@ export function construirGaleria(cena, memorias, config) {
     posSparks[s * 3 + 2] = Math.sin(ang) * raio;
   }
   geoSparks.setAttribute("position", new THREE.BufferAttribute(posSparks, 3));
-  const matSparks = new THREE.PointsMaterial({
-    color: 0xffd166,
-    size: 0.08,
-    transparent: true,
-    opacity: 0.85
-  });
+  const matSparks = new THREE.PointsMaterial({ color: 0xffd166, size: 0.08, transparent: true, opacity: 0.85 });
   const pointsSparks = new THREE.Points(geoSparks, matSparks);
   grupoCaixaFlutuante.add(pointsSparks);
 
@@ -1036,29 +884,127 @@ export function construirGaleria(cena, memorias, config) {
   cena.add(grupoPresente);
 
   // ============================================================
-  //  ZONA 4: LETREIRO FINAL EMOLDURADO COM COLUNAS
+  //  4. OS 9 QUADROS DE MEMÓRIAS EM ANEL CIRCULAR 360°
   // ============================================================
-  const geoLetreiro = new THREE.PlaneGeometry(6.0, 3.0);
+  const raioParedesQuadros = raioRotunda - 0.12; // 7.38m
+  const larguraMoldura = 2.2;
+  const alturaMoldura = 1.7;
+  const geoMoldura = new THREE.BoxGeometry(larguraMoldura, alturaMoldura, 0.08);
+  const matMoldura = new THREE.MeshStandardMaterial({ color: 0x2b1d0c, roughness: 0.3, metalness: 0.4 });
+  const geoFoto = new THREE.PlaneGeometry(larguraMoldura - 0.2, alturaMoldura - 0.2);
+  const geoPlaca = new THREE.PlaneGeometry(1.6, 0.38);
+
+  // Ângulos distribuídos harmoniosamente em 360°, deixando o portal em -Z aberto
+  const angulosQuadros = [
+    -0.30 * Math.PI, // Memória 1 (Lado direito-frente)
+    -0.10 * Math.PI, // Memória 2
+     0.10 * Math.PI, // Memória 3
+     0.30 * Math.PI, // Memória 4
+     0.70 * Math.PI, // Memória 5
+     0.90 * Math.PI, // Memória 6
+     1.10 * Math.PI, // Memória 7
+     1.30 * Math.PI, // Memória 8
+     1.45 * Math.PI  // Memória 9 (Lado esquerdo-frente)
+  ];
+
+  memorias.forEach((memoria, index) => {
+    const ang = angulosQuadros[index % angulosQuadros.length];
+    const qx = Math.cos(ang) * raioParedesQuadros;
+    const qz = Math.sin(ang) * raioParedesQuadros;
+    const rotY = -ang - Math.PI / 2; // Voltado exatamente para o centro (0, 0, 0)
+
+    const grupoQuadro = new THREE.Group();
+    grupoQuadro.position.set(qx, 2.05, qz);
+    grupoQuadro.rotation.y = rotY;
+
+    const meshMoldura = new THREE.Mesh(geoMoldura, matMoldura);
+    grupoQuadro.add(meshMoldura);
+
+    const texFoto = loader.load(memoria.foto);
+    const matFoto = new THREE.MeshStandardMaterial({ map: texFoto, roughness: 0.5 });
+    const meshFoto = new THREE.Mesh(geoFoto, matFoto);
+    meshFoto.position.z = 0.05;
+    meshFoto.userData = { memoria: memoria, ehQuadro: true };
+    grupoQuadro.add(meshFoto);
+    quadrosInterativos.push(meshFoto);
+
+    const texPlaca = criarTexturaPlaca(memoria.titulo, memoria.data);
+    const meshPlaca = new THREE.Mesh(geoPlaca, new THREE.MeshBasicMaterial({ map: texPlaca }));
+    meshPlaca.position.set(0, -alturaMoldura / 2 - 0.28, 0.05);
+    grupoQuadro.add(meshPlaca);
+
+    // Arandela Dourada Neoclássica
+    const arandelaHaste = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.35), matOuro);
+    arandelaHaste.position.set(0, alturaMoldura / 2 + 0.25, 0.15);
+    arandelaHaste.rotation.x = Math.PI / 4;
+    grupoQuadro.add(arandelaHaste);
+
+    const arandelaCupula = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.14, 12, 1, true), matOuro);
+    arandelaCupula.position.set(0, alturaMoldura / 2 + 0.38, 0.28);
+    grupoQuadro.add(arandelaCupula);
+
+    const luzArandela = new THREE.PointLight(0xffeedb, 0.45, 4.5);
+    luzArandela.position.set(0, alturaMoldura / 2 + 0.35, 0.32);
+    grupoQuadro.add(luzArandela);
+
+    cena.add(grupoQuadro);
+  });
+
+  // ============================================================
+  //  5. LETREIRO COMEMORATIVO NO ÁPICE DA ROTUNDA (+Z)
+  // ============================================================
+  const angLetreiro = 0.50 * Math.PI; // Ápice oposto à entrada (+Z)
+  const lx = Math.cos(angLetreiro) * raioParedesQuadros;
+  const lz = Math.sin(angLetreiro) * raioParedesQuadros;
+
+  const grupoLetreiro = new THREE.Group();
+  grupoLetreiro.position.set(lx, 2.1, lz);
+  grupoLetreiro.rotation.y = -angLetreiro - Math.PI / 2;
+
+  const geoLetreiro = new THREE.PlaneGeometry(4.8, 2.5);
   const matLetreiro = new THREE.MeshStandardMaterial({
     map: criarTexturaLetreiroFinal(config.nome_homenageada),
     roughness: 0.4
   });
   const letreiro = new THREE.Mesh(geoLetreiro, matLetreiro);
-  letreiro.rotation.y = Math.PI;
-  letreiro.position.set(0, 2.0, comprimento - 0.05);
-  cena.add(letreiro);
+  grupoLetreiro.add(letreiro);
 
-  // Colunas de mármore e cortinas emoldurando o letreiro
-  const colunaEsq = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.24, 3.8, 16), matMarmore);
-  colunaEsq.position.set(-3.2, 1.9, comprimento - 0.15);
-  cena.add(colunaEsq);
+  const colunaEsq = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.20, 3.8, 16), matMarmore);
+  colunaEsq.position.set(-2.6, 0, 0.1);
+  grupoLetreiro.add(colunaEsq);
 
-  const colunaDir = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.24, 3.8, 16), matMarmore);
-  colunaDir.position.set(3.2, 1.9, comprimento - 0.15);
-  cena.add(colunaDir);
+  const colunaDir = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.20, 3.8, 16), matMarmore);
+  colunaDir.position.set(2.6, 0, 0.1);
+  grupoLetreiro.add(colunaDir);
+
+  cena.add(grupoLetreiro);
+
+  // Bancos Aveludados de Museu nas Curvas
+  function criarBancoRotunda(angB) {
+    const bx = Math.cos(angB) * (raioRotunda - 0.7);
+    const bz = Math.sin(angB) * (raioRotunda - 0.7);
+    const grupoBanco = new THREE.Group();
+    grupoBanco.position.set(bx, 0, bz);
+    grupoBanco.rotation.y = -angB;
+
+    const assento = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.22, 0.65), matVeludoVermelho);
+    assento.position.y = 0.45;
+    grupoBanco.add(assento);
+
+    const posPes = [[-0.65, 0.2, -0.22], [0.65, 0.2, -0.22], [-0.65, 0.2, 0.22], [0.65, 0.2, 0.22]];
+    posPes.forEach(([px, py, pz]) => {
+      const pe = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.03, 0.42, 8), matOuro);
+      pe.position.set(px, py, pz);
+      grupoBanco.add(pe);
+    });
+
+    cena.add(grupoBanco);
+  }
+  criarBancoRotunda(-0.52 * Math.PI); // À esquerda da entrada
+  criarBancoRotunda(0.0);             // Na lateral direita
 
   // ============================================================
-  //  ILUMINAÇÃO GERAL E LUSTRES DE CRISTAL
+  //  6. ILUMINAÇÃO GERAL E LUSTRES DE CRISTAL
   // ============================================================
   const listaLustres = [];
   const luzesPontuais = [];
@@ -1070,40 +1016,41 @@ export function construirGaleria(cena, memorias, config) {
     opacity: 0.88
   });
 
-  function criarLustre(pz) {
+  // Grande Lustre Central Imperial sobre o Canteiro e o Presente
+  function criarLustre(px, py, pz, escalaL = 1.0) {
     const grupoLustre = new THREE.Group();
-    grupoLustre.position.set(0, altura, pz);
+    grupoLustre.position.set(px, py, pz);
 
-    const cabo = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.7, 8), matOuro);
-    cabo.position.y = -0.35;
+    const cabo = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.8 * escalaL, 8), matOuro);
+    cabo.position.y = -0.4 * escalaL;
     grupoLustre.add(cabo);
 
-    const aroMaior = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.03, 8, 24), matOuro);
+    const aroMaior = new THREE.Mesh(new THREE.TorusGeometry(0.65 * escalaL, 0.035, 8, 24), matOuro);
     aroMaior.rotation.x = Math.PI / 2;
-    aroMaior.position.y = -0.7;
+    aroMaior.position.y = -0.8 * escalaL;
     grupoLustre.add(aroMaior);
 
-    const aroMenor = new THREE.Mesh(new THREE.TorusGeometry(0.32, 0.025, 8, 20), matOuro);
+    const aroMenor = new THREE.Mesh(new THREE.TorusGeometry(0.38 * escalaL, 0.028, 8, 20), matOuro);
     aroMenor.rotation.x = Math.PI / 2;
-    aroMenor.position.y = -0.95;
+    aroMenor.position.y = -1.1 * escalaL;
     grupoLustre.add(aroMenor);
 
-    const qtdPingentes = 14;
+    const qtdPingentes = 16;
     for (let p = 0; p < qtdPingentes; p++) {
       const ang = (p / qtdPingentes) * Math.PI * 2;
-      const px = Math.cos(ang) * 0.55;
-      const pzCirc = Math.sin(ang) * 0.55;
-      const cristal = new THREE.Mesh(new THREE.OctahedronGeometry(0.065, 0), matCristal);
-      cristal.position.set(px, -0.78, pzCirc);
+      const cpx = Math.cos(ang) * (0.65 * escalaL);
+      const cpz = Math.sin(ang) * (0.65 * escalaL);
+      const cristal = new THREE.Mesh(new THREE.OctahedronGeometry(0.075 * escalaL, 0), matCristal);
+      cristal.position.set(cpx, -0.9 * escalaL, cpz);
       grupoLustre.add(cristal);
     }
 
-    const gotaCentral = new THREE.Mesh(new THREE.OctahedronGeometry(0.12, 0), matCristal);
-    gotaCentral.position.y = -1.1;
+    const gotaCentral = new THREE.Mesh(new THREE.OctahedronGeometry(0.14 * escalaL, 0), matCristal);
+    gotaCentral.position.y = -1.25 * escalaL;
     grupoLustre.add(gotaCentral);
 
-    const spot = new THREE.PointLight(0xffe29a, 0.9, 9.5);
-    spot.position.y = -0.85;
+    const spot = new THREE.PointLight(0xffe29a, 1.1 * escalaL, 12.0);
+    spot.position.y = -0.95 * escalaL;
     grupoLustre.add(spot);
     luzesPontuais.push(spot);
 
@@ -1111,27 +1058,34 @@ export function construirGaleria(cena, memorias, config) {
     listaLustres.push(grupoLustre);
   }
 
-  for (let zLustre = 3.5; zLustre < comprimento; zLustre += 5.5) {
-    criarLustre(zLustre);
-  }
+  // 1 Lustre Imperial no Centro (0, 0)
+  criarLustre(0, altura, 0, 1.25);
 
-  const luzAmbiente = new THREE.AmbientLight(0xfff3e6, 0.65);
+  // 4 Lustres Satélites a meia distância nos quadrantes
+  const angulosLustres = [Math.PI * 0.25, Math.PI * 0.75, Math.PI * 1.25, Math.PI * 1.75];
+  angulosLustres.forEach(al => {
+    criarLustre(Math.cos(al) * 4.6, altura, Math.sin(al) * 4.6, 0.85);
+  });
+
+  const luzAmbiente = new THREE.AmbientLight(0xfff3e6, 0.70);
   cena.add(luzAmbiente);
 
-  const luzPrincipal = new THREE.DirectionalLight(0xffedd8, 0.55);
-  luzPrincipal.position.set(0, 3.8, comprimento / 2);
+  const luzPrincipal = new THREE.DirectionalLight(0xffedd8, 0.60);
+  luzPrincipal.position.set(0, 4.0, 0);
   cena.add(luzPrincipal);
 
   // ============================================================
-  //  CÉU ESTRELADO & VAGA-LUMES (MODO NOITE)
+  //  7. CÉU ESTRELADO & VAGA-LUMES (MODO NOITE)
   // ============================================================
-  const qtdEstrelas = 300;
+  const qtdEstrelas = 320;
   const geoEstrelas = new THREE.BufferGeometry();
   const posEstrelas = new Float32Array(qtdEstrelas * 3);
   for (let e = 0; e < qtdEstrelas; e++) {
-    posEstrelas[e * 3] = (Math.random() - 0.5) * (largura * 1.5);
-    posEstrelas[e * 3 + 1] = altura + 0.3 + Math.random() * 8.0;
-    posEstrelas[e * 3 + 2] = Math.random() * (comprimento + 4.0) - 2.0;
+    const angE = Math.random() * Math.PI * 2;
+    const raioE = Math.random() * (raioRotunda * 1.2);
+    posEstrelas[e * 3] = Math.cos(angE) * raioE;
+    posEstrelas[e * 3 + 1] = altura + 0.3 + Math.random() * 6.0;
+    posEstrelas[e * 3 + 2] = Math.sin(angE) * raioE;
   }
   geoEstrelas.setAttribute("position", new THREE.BufferAttribute(posEstrelas, 3));
   const matEstrelas = new THREE.PointsMaterial({
@@ -1143,14 +1097,16 @@ export function construirGaleria(cena, memorias, config) {
   const pointsEstrelas = new THREE.Points(geoEstrelas, matEstrelas);
   cena.add(pointsEstrelas);
 
-  const qtdVagalumes = 22;
+  const qtdVagalumes = 26;
   const geoVagalumes = new THREE.BufferGeometry();
   const posVagalumes = new Float32Array(qtdVagalumes * 3);
   const dadosVagalumes = [];
   for (let v = 0; v < qtdVagalumes; v++) {
-    const vx = (Math.random() - 0.5) * (largura - 1.5);
-    const vy = 0.5 + Math.random() * (altura - 1.0);
-    const vz = 1.0 + Math.random() * (comprimento - 2.0);
+    const angV = Math.random() * Math.PI * 2;
+    const raioV = Math.random() * (raioRotunda - 1.2);
+    const vx = Math.cos(angV) * raioV;
+    const vy = 0.6 + Math.random() * (altura - 1.2);
+    const vz = Math.sin(angV) * raioV;
     posVagalumes[v * 3] = vx;
     posVagalumes[v * 3 + 1] = vy;
     posVagalumes[v * 3 + 2] = vz;
@@ -1172,7 +1128,7 @@ export function construirGaleria(cena, memorias, config) {
   cena.add(pointsVagalumes);
 
   // ============================================================
-  //  CORAÇÕES & CHUVA DE PÉTALAS FLUTUANTES
+  //  8. CORAÇÕES & CHUVA DE PÉTALAS FLUTUANTES
   // ============================================================
   const shapeCoracao = new THREE.Shape();
   const x0 = 0, y0 = 0;
@@ -1189,15 +1145,17 @@ export function construirGaleria(cena, memorias, config) {
   geoCoracao.scale(0.18, 0.18, 0.18);
   const matCoracao = new THREE.MeshBasicMaterial({ color: 0xff4d6d, side: THREE.DoubleSide, transparent: true, opacity: 0.65 });
 
-  const qtdCoracoes = 38;
+  const qtdCoracoes = 42;
   const instCoracoes = new THREE.InstancedMesh(geoCoracao, matCoracao, qtdCoracoes);
   const dadosCoracoes = [];
   const dummy = new THREE.Object3D();
 
   for (let i = 0; i < qtdCoracoes; i++) {
-    const px = (Math.random() - 0.5) * (largura - 2.0);
+    const angC = Math.random() * Math.PI * 2;
+    const raioC = Math.random() * (raioRotunda - 1.2);
+    const px = Math.cos(angC) * raioC;
     const py = Math.random() * (altura - 0.5) + 0.5;
-    const pz = Math.random() * (comprimento - 3.0) + 1.5;
+    const pz = Math.sin(angC) * raioC;
     const vel = 0.2 + Math.random() * 0.3;
     const rotVel = (Math.random() - 0.5) * 1.5;
 
@@ -1209,7 +1167,7 @@ export function construirGaleria(cena, memorias, config) {
   instCoracoes.instanceMatrix.needsUpdate = true;
   cena.add(instCoracoes);
 
-  // Chuva de Pétalas de Rosa e Lírio Flutuantes
+  // Chuva de Pétalas Flutuantes
   const shapePetala = new THREE.Shape();
   shapePetala.moveTo(0, 0);
   shapePetala.quadraticCurveTo(0.08, 0.12, 0.05, 0.22);
@@ -1226,15 +1184,17 @@ export function construirGaleria(cena, memorias, config) {
     opacity: 0.8
   });
 
-  const qtdPetalas = 45;
+  const qtdPetalas = 48;
   const instPetalas = new THREE.InstancedMesh(geoPetala, matPetala, qtdPetalas);
   const dadosPetalas = [];
   const dummyPetala = new THREE.Object3D();
 
   for (let p = 0; p < qtdPetalas; p++) {
-    const px = (Math.random() - 0.5) * (largura - 1.5);
+    const angP = Math.random() * Math.PI * 2;
+    const raioP = Math.random() * (raioRotunda - 1.0);
+    const px = Math.cos(angP) * raioP;
     const py = Math.random() * altura + 0.2;
-    const pz = Math.random() * (comprimento - 2.0) + 1.0;
+    const pz = Math.sin(angP) * raioP;
     const quedaVel = 0.35 + Math.random() * 0.35;
     const oscilacaoFase = Math.random() * Math.PI * 2;
     const rotXVel = (Math.random() - 0.5) * 2.0;
@@ -1255,12 +1215,13 @@ export function construirGaleria(cena, memorias, config) {
   instPetalas.instanceMatrix.needsUpdate = true;
   cena.add(instPetalas);
 
-  // Limites da Sala para colisão da câmera
+  // ============================================================
+  //  9. RETORNO DO AMBIENTE (Limites Circulares & Animações)
+  // ============================================================
   const limitesSala = {
-    minX: -largura / 2 + 0.8,
-    maxX: largura / 2 - 0.8,
-    minZ: 0.8,
-    maxZ: comprimento - 1.2
+    tipo: "circular",
+    raioMax: 7.1,
+    raioMinCentro: 2.65
   };
 
   let modoNoiteAtivo = false;
@@ -1269,32 +1230,32 @@ export function construirGaleria(cena, memorias, config) {
   return {
     quadros: quadrosInterativos,
     limites: limitesSala,
-    comprimentoSala: comprimento,
+    comprimentoSala: raioRotunda * 2,
     alternarModoNoite: (ativar) => {
       modoNoiteAtivo = (ativar !== undefined) ? ativar : !modoNoiteAtivo;
       if (modoNoiteAtivo) {
         luzAmbiente.color.setHex(0xff9f43);
-        luzAmbiente.intensity = 0.22;
+        luzAmbiente.intensity = 0.25;
         luzPrincipal.color.setHex(0xe67e22);
-        luzPrincipal.intensity = 0.2;
-        matTeto.opacity = 0.12;
+        luzPrincipal.intensity = 0.25;
+        matTeto.opacity = 0.15;
         matEstrelas.opacity = 0.95;
         matVagalumes.opacity = 0.88;
         luzesPontuais.forEach(l => {
           l.color.setHex(0xff793f);
-          l.intensity = 1.15;
+          l.intensity = 1.25;
         });
       } else {
         luzAmbiente.color.setHex(0xfff3e6);
-        luzAmbiente.intensity = 0.65;
+        luzAmbiente.intensity = 0.70;
         luzPrincipal.color.setHex(0xffedd8);
-        luzPrincipal.intensity = 0.55;
+        luzPrincipal.intensity = 0.60;
         matTeto.opacity = 1.0;
         matEstrelas.opacity = 0.0;
         matVagalumes.opacity = 0.0;
         luzesPontuais.forEach(l => {
           l.color.setHex(0xffe29a);
-          l.intensity = 0.9;
+          l.intensity = 1.0;
         });
       }
       return modoNoiteAtivo;
@@ -1302,13 +1263,13 @@ export function construirGaleria(cena, memorias, config) {
     animarCenario: (delta) => {
       tempoGeral += delta;
 
-      // 1. Balanço Suave dos Lustres de Cristal
+      // 1. Balanço dos Lustres
       listaLustres.forEach((lustre, idx) => {
         lustre.rotation.z = Math.sin(tempoGeral * 1.1 + idx) * 0.016;
         lustre.rotation.x = Math.cos(tempoGeral * 0.85 + idx) * 0.012;
       });
 
-      // 2. Animação da Caixinha de Presente no Altar
+      // 2. Animação da Caixinha de Presente no Centro
       grupoCaixaFlutuante.rotation.y += delta * 0.5;
       grupoCaixaFlutuante.position.y = 1.45 + Math.sin(tempoGeral * 2.0) * 0.06;
       pointsSparks.rotation.y -= delta * 1.2;
@@ -1320,7 +1281,10 @@ export function construirGaleria(cena, memorias, config) {
         d.rot += d.rotVel * delta;
         if (d.y > altura - 0.3) {
           d.y = 0.4;
-          d.x = (Math.random() - 0.5) * (largura - 2.0);
+          const ang = Math.random() * Math.PI * 2;
+          const r = Math.random() * (raioRotunda - 1.2);
+          d.x = Math.cos(ang) * r;
+          d.z = Math.sin(ang) * r;
         }
         dummy.position.set(d.x, d.y, d.z);
         dummy.rotation.y = d.rot;
@@ -1330,18 +1294,21 @@ export function construirGaleria(cena, memorias, config) {
       }
       instCoracoes.instanceMatrix.needsUpdate = true;
 
-      // 4. Animação da Chuva de Pétalas com Vento
+      // 4. Animação da Chuva de Pétalas com Vento Radial
       for (let p = 0; p < qtdPetalas; p++) {
         const d = dadosPetalas[p];
         d.y -= d.quedaVel * delta;
-        d.fase += delta * 2.2;
+        d.fase += delta * 2.0;
         d.rotX += d.rotXVel * delta;
         d.rotZ += d.rotZVel * delta;
 
-        const ventoX = Math.sin(d.fase) * 0.18;
+        const ventoX = Math.sin(d.fase) * 0.15;
         if (d.y < 0.05) {
           d.y = altura - 0.2;
-          d.x = (Math.random() - 0.5) * (largura - 1.5);
+          const ang = Math.random() * Math.PI * 2;
+          const r = Math.random() * (raioRotunda - 1.0);
+          d.x = Math.cos(ang) * r;
+          d.z = Math.sin(ang) * r;
         }
 
         dummyPetala.position.set(d.x + ventoX, d.y, d.z);
@@ -1351,7 +1318,7 @@ export function construirGaleria(cena, memorias, config) {
       }
       instPetalas.instanceMatrix.needsUpdate = true;
 
-      // 5. Animação dos Vaga-lumes no Modo Noite
+      // 5. Vaga-lumes no Modo Noite
       if (modoNoiteAtivo) {
         const posAttr = geoVagalumes.attributes.position;
         for (let v = 0; v < qtdVagalumes; v++) {
