@@ -828,6 +828,10 @@ export function construirGaleria(cena, memorias, config) {
     cena.add(grupoVaso);
   }
 
+  // Lista de luzes e lustres para controle do modo noite
+  const listaLustres = [];
+  const luzesPontuais = [];
+
   // Material da Fita Difusora Emissiva das Luminárias de Galeria
   const matDifusorLuz = new THREE.MeshBasicMaterial({ color: 0xfff2cc });
 
@@ -1053,8 +1057,6 @@ export function construirGaleria(cena, memorias, config) {
   // ============================================================
   //  7. ILUMINAÇÃO GERAL E LUSTRES DE CRISTAL
   // ============================================================
-  const listaLustres = [];
-  const luzesPontuais = [];
   const matCristal = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     roughness: 0.1,
