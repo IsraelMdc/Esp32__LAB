@@ -28,7 +28,7 @@ export class ControladorGaleria {
 
     // Rotação da câmera
     this.pitch = 0; // Olhar para cima / baixo (eixo X)
-    this.yaw = 0; // Olhar para frente (rumo ao centro da rotunda)
+    this.yaw = Math.PI; // Olhar para frente (rumo ao centro da rotunda)
 
     // Estado do teclado
     this.teclas = { w: false, a: false, s: false, d: false };

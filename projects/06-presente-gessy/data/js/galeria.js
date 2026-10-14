@@ -761,10 +761,10 @@ export function construirGaleria(cena, memorias, config) {
   // ============================================================
   //  4. PEDESTAIS COM VASOS FLORAIS AO LADO DE CADA QUADRO
   // ============================================================
-  function criarPedestalFloral(px, pz, rotY, tipoFlor) {
+  function criarPedestalFloral(px, pz, tipoFlor) {
     const grupoVaso = new THREE.Group();
     grupoVaso.position.set(px, 0, pz);
-    grupoVaso.rotation.y = rotY;
+    grupoVaso.lookAt(0, 0, 0); // Orientado diretamente para o centro do salão
 
     // Pedestal clássico de mármore
     const ped = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.22, 0.60, 16), matMarmore);
@@ -828,6 +828,9 @@ export function construirGaleria(cena, memorias, config) {
     cena.add(grupoVaso);
   }
 
+  // Material da Fita Difusora Emissiva das Luminárias de Galeria
+  const matDifusorLuz = new THREE.MeshBasicMaterial({ color: 0xfff2cc });
+
   // ============================================================
   //  5. SIMETRIA NEOCLÁSSICA PERFEITA: 12 ESTAÇÕES EQUIDISTANTES
   // ============================================================
@@ -843,29 +846,28 @@ export function construirGaleria(cena, memorias, config) {
   // Ângulos em coordenadas Three.js onde x = R * sin(t), z = R * cos(t)
   const estacoes = [
     // Lado Direito (+X)
-    { id: 0, tipo: "quadro", t: Math.PI * (5/6), flor: "lirio" },   // Quadro 1
-    { id: 1, tipo: "quadro", t: Math.PI * (4/6), flor: "rosa" },    // Quadro 2
-    { id: 2, tipo: "quadro", t: Math.PI * (3/6), flor: "gerbera" }, // Quadro 3
-    { id: 3, tipo: "quadro", t: Math.PI * (2/6), flor: "lirio" },   // Quadro 4
-    { id: -1, tipo: "espelho", t: Math.PI * (1/6) },                // Espelho Mágico
+    { id: 0, tipo: "quadro", t: Math.PI * (5/6), flor: "lirio" },   // Quadro 1 (150°)
+    { id: 1, tipo: "quadro", t: Math.PI * (4/6), flor: "rosa" },    // Quadro 2 (120°)
+    { id: 2, tipo: "quadro", t: Math.PI * (3/6), flor: "gerbera" }, // Quadro 3 (90°)
+    { id: 3, tipo: "quadro", t: Math.PI * (2/6), flor: "lirio" },   // Quadro 4 (60°)
+    { id: -1, tipo: "espelho", t: Math.PI * (1/6) },                // Espelho Mágico (30°)
     // Lado Esquerdo (-X)
-    { id: 4, tipo: "quadro", t: -Math.PI * (1/6), flor: "rosa" },   // Quadro 5
-    { id: 5, tipo: "quadro", t: -Math.PI * (2/6), flor: "gerbera" },// Quadro 6
-    { id: 6, tipo: "quadro", t: -Math.PI * (3/6), flor: "lirio" },  // Quadro 7
-    { id: 7, tipo: "quadro", t: -Math.PI * (4/6), flor: "rosa" },   // Quadro 8
-    { id: 8, tipo: "quadro", t: -Math.PI * (5/6), flor: "gerbera" } // Quadro 9
+    { id: 4, tipo: "quadro", t: -Math.PI * (1/6), flor: "rosa" },   // Quadro 5 (-30°)
+    { id: 5, tipo: "quadro", t: -Math.PI * (2/6), flor: "gerbera" },// Quadro 6 (-60°)
+    { id: 6, tipo: "quadro", t: -Math.PI * (3/6), flor: "lirio" },  // Quadro 7 (-90°)
+    { id: 7, tipo: "quadro", t: -Math.PI * (4/6), flor: "rosa" },   // Quadro 8 (-120°)
+    { id: 8, tipo: "quadro", t: -Math.PI * (5/6), flor: "gerbera" } // Quadro 9 (-150°)
   ];
 
   estacoes.forEach(est => {
     const qx = raioParedesQuadros * Math.sin(est.t);
     const qz = raioParedesQuadros * Math.cos(est.t);
-    const rotY = Math.PI - est.t; // Orientado de frente para o centro (0, 0, 0)
 
     if (est.tipo === "espelho") {
       // Estação do Espelho Veneziano Mágico
       const grupoEspelho = new THREE.Group();
       grupoEspelho.position.set(qx, 2.05, qz);
-      grupoEspelho.rotation.y = rotY;
+      grupoEspelho.lookAt(0, 2.05, 0); // Perfeitamente tangente e voltado para o centro
 
       const meshMolduraEspelho = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.3, 0.08), matOuro);
       grupoEspelho.add(meshMolduraEspelho);
@@ -901,6 +903,32 @@ export function construirGaleria(cena, memorias, config) {
         grupoEspelho.add(gFlor);
       }
 
+      // Luminária Linear de Galeria sobre o Espelho
+      const baseEspelho = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.06, 0.04), matOuro);
+      baseEspelho.position.set(0, 1.15 + 0.03, 0.02);
+      grupoEspelho.add(baseEspelho);
+
+      [-0.14, 0.14].forEach(ax => {
+        const haste = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.20, 8), matOuro);
+        haste.position.set(ax, 1.15 + 0.10, 0.10);
+        haste.rotation.x = Math.PI / 3;
+        grupoEspelho.add(haste);
+      });
+
+      const calhaEsp = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.75, 16), matOuro);
+      calhaEsp.rotation.z = Math.PI / 2;
+      calhaEsp.position.set(0, 1.15 + 0.16, 0.16);
+      grupoEspelho.add(calhaEsp);
+
+      const fitaEsp = new THREE.Mesh(new THREE.BoxGeometry(0.70, 0.012, 0.015), matDifusorLuz);
+      fitaEsp.position.set(0, 1.15 + 0.14, 0.16);
+      grupoEspelho.add(fitaEsp);
+
+      const luzEspelho = new THREE.PointLight(0xffeedb, 0.65, 3.8);
+      luzEspelho.position.set(0, 1.15 + 0.08, 0.22);
+      grupoEspelho.add(luzEspelho);
+      luzesPontuais.push(luzEspelho);
+
       cena.add(grupoEspelho);
     } else {
       // Estação de Quadro de Memória
@@ -909,7 +937,7 @@ export function construirGaleria(cena, memorias, config) {
 
       const grupoQuadro = new THREE.Group();
       grupoQuadro.position.set(qx, 2.05, qz);
-      grupoQuadro.rotation.y = rotY;
+      grupoQuadro.lookAt(0, 2.05, 0); // Perfeitamente tangente e voltado de frente para o centro
 
       const meshMoldura = new THREE.Mesh(geoMoldura, matMoldura);
       grupoQuadro.add(meshMoldura);
@@ -927,27 +955,45 @@ export function construirGaleria(cena, memorias, config) {
       meshPlaca.position.set(0, -alturaMoldura / 2 - 0.28, 0.05);
       grupoQuadro.add(meshPlaca);
 
-      // Arandela Dourada Neoclássica
-      const arandelaHaste = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.35), matOuro);
-      arandelaHaste.position.set(0, alturaMoldura / 2 + 0.25, 0.15);
-      arandelaHaste.rotation.x = Math.PI / 4;
-      grupoQuadro.add(arandelaHaste);
+      // Luminária Linear de Galeria Neoclássica (Picture Light)
+      // Base discreta na moldura
+      const baseArandela = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.06, 0.04), matOuro);
+      baseArandela.position.set(0, alturaMoldura / 2 + 0.03, 0.02);
+      grupoQuadro.add(baseArandela);
 
-      const arandelaCupula = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.14, 12, 1, true), matOuro);
-      arandelaCupula.position.set(0, alturaMoldura / 2 + 0.38, 0.28);
-      grupoQuadro.add(arandelaCupula);
+      // Duplo braço elegante projetado para frente
+      [-0.14, 0.14].forEach(ax => {
+        const haste = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.20, 8), matOuro);
+        haste.position.set(ax, alturaMoldura / 2 + 0.10, 0.10);
+        haste.rotation.x = Math.PI / 3;
+        grupoQuadro.add(haste);
+      });
 
-      const luzArandela = new THREE.PointLight(0xffeedb, 0.45, 4.5);
-      luzArandela.position.set(0, alturaMoldura / 2 + 0.35, 0.32);
+      // Calha refletora horizontal de ouro
+      const calhaLinear = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, 0.75, 16), matOuro);
+      calhaLinear.rotation.z = Math.PI / 2;
+      calhaLinear.position.set(0, alturaMoldura / 2 + 0.16, 0.16);
+      grupoQuadro.add(calhaLinear);
+
+      // Fita difusora emissiva voltada para baixo
+      const fitaDifusora = new THREE.Mesh(new THREE.BoxGeometry(0.70, 0.012, 0.015), matDifusorLuz);
+      fitaDifusora.position.set(0, alturaMoldura / 2 + 0.14, 0.16);
+      grupoQuadro.add(fitaDifusora);
+
+      // Luz pontual quente e suave na tela
+      const luzArandela = new THREE.PointLight(0xffeedb, 0.65, 3.8);
+      luzArandela.position.set(0, alturaMoldura / 2 + 0.08, 0.22);
       grupoQuadro.add(luzArandela);
+      luzesPontuais.push(luzArandela);
 
       cena.add(grupoQuadro);
 
-      // Pedestal com vaso floral ao lado do quadro (deslocado 1.35m na tangente)
-      const angTangente = rotY;
-      const vOffsetX = Math.cos(angTangente) * 1.35;
-      const vOffsetZ = -Math.sin(angTangente) * 1.35;
-      criarPedestalFloral(qx + vOffsetX, qz + vOffsetZ, rotY, est.flor);
+      // Pedestal com vaso floral ao lado do quadro (deslocado no arco da parede circular)
+      const offsetAng = est.t > 0 ? 0.18 : -0.18;
+      const thetaPed = est.t + offsetAng;
+      const px = (raioParedesQuadros - 0.15) * Math.sin(thetaPed);
+      const pz = (raioParedesQuadros - 0.15) * Math.cos(thetaPed);
+      criarPedestalFloral(px, pz, est.flor);
     }
   });
 
@@ -966,8 +1012,11 @@ export function construirGaleria(cena, memorias, config) {
     -spanLetreiro / 2,
     spanLetreiro
   );
+  const texLetreiro = criarTexturaLetreiroFinal(config.nome_homenageada);
+  texLetreiro.wrapS = THREE.RepeatWrapping;
+  texLetreiro.repeat.x = -1; // Inverte horizontalmente para leitura correta da perspectiva interna (BackSide)
   const matLetreiroCurvo = new THREE.MeshStandardMaterial({
-    map: criarTexturaLetreiroFinal(config.nome_homenageada),
+    map: texLetreiro,
     roughness: 0.4,
     side: THREE.BackSide
   });
@@ -1055,12 +1104,22 @@ export function construirGaleria(cena, memorias, config) {
     listaLustres.push(grupoLustre);
   }
 
-  // Lustre Central Imperial sobre o Canteiro e Presente
+  // 1. Lustre Central Imperial sobre o Canteiro e Presente (sob o óculo celestial)
   criarLustre(0, altura, 0, 1.25);
 
-  // 4 Lustres Satélites a meia distância
-  [Math.PI * 0.25, Math.PI * 0.75, Math.PI * 1.25, Math.PI * 1.75].forEach(al => {
-    criarLustre(Math.cos(al) * 4.6, altura, Math.sin(al) * 4.6, 0.85);
+  // 2. Anel Concêntrico de 6 Lustres Neoclássicos Satélites (simetria perfeita a cada 60°)
+  // Centralizados no raio 4.2m (sobre a faixa do tapete anelar vermelho)
+  const angulosLustres = [
+    0,                  // Alinhado ao Grande Painel (+Z)
+    Math.PI / 3,        // 60°
+    (2 * Math.PI) / 3,  // 120°
+    Math.PI,            // 180° Alinhado ao Portal de Entrada (-Z)
+    -(2 * Math.PI) / 3, // 240° (-120°)
+    -Math.PI / 3        // 300° (-60°)
+  ];
+
+  angulosLustres.forEach(al => {
+    criarLustre(4.2 * Math.sin(al), altura, 4.2 * Math.cos(al), 0.85);
   });
 
   const luzAmbiente = new THREE.AmbientLight(0xfff3e6, 0.70);
@@ -1206,7 +1265,7 @@ export function construirGaleria(cena, memorias, config) {
   // ============================================================
   const limitesSala = {
     tipo: "circular",
-    raioMax: 7.1,
+    raioMax: 6.45,
     raioMinCentro: 2.65
   };
 
