@@ -4,6 +4,8 @@
  * ============================================================
  */
 
+import { aoProgredirCarregamento, promessaFloresProntas } from "./flores_realistas.js";
+
 let audioPlayer = null;
 let musicaAtiva = true;
 let sintetizadorAtivo = false;
@@ -129,6 +131,41 @@ export function inicializarAbertura(config, aoEntrarCallback) {
   // Data do aniversário: 20 de Outubro
   const dataAlvo = new Date(config.aniversario || "2026-10-20T00:00:00-03:00").getTime();
 
+  const barraProgresso = document.getElementById("barra-progresso-flores");
+  const textoProgresso = document.getElementById("texto-progresso-flores");
+  let floresProntas = false;
+
+  aoProgredirCarregamento((pct) => {
+    if (barraProgresso) barraProgresso.style.width = pct + "%";
+    if (textoProgresso) {
+      if (pct < 100) {
+        textoProgresso.textContent = `Cultivando o jardim de flores... ${pct}%`;
+      } else {
+        textoProgresso.textContent = "✨ Jardim florescido com todo amor!";
+      }
+    }
+  });
+
+  function liberarBotaoEntrar() {
+    floresProntas = true;
+    if (barraProgresso) barraProgresso.style.width = "100%";
+    if (textoProgresso) textoProgresso.textContent = "✨ Jardim florescido com todo amor!";
+    if (btnEntrar) {
+      btnEntrar.disabled = false;
+      btnEntrar.textContent = "✨ Entrar na Galeria";
+      btnEntrar.style.cursor = "pointer";
+    }
+  }
+
+  promessaFloresProntas.then(() => {
+    liberarBotaoEntrar();
+  });
+
+  // Timeout de segurança (7 segundos) para nunca bloquear a entrada caso haja erro de rede
+  setTimeout(() => {
+    if (!floresProntas) liberarBotaoEntrar();
+  }, 7000);
+
   function atualizarContagem() {
     const agora = new Date().getTime();
     const diferenca = dataAlvo - agora;
@@ -139,7 +176,13 @@ export function inicializarAbertura(config, aoEntrarCallback) {
       if (sub) sub.textContent = "Preparei esta galeria 3D especial com as nossas melhores memórias. Toque abaixo para passear pelo nosso salão.";
       if (btnEntrar) {
         btnEntrar.style.display = "inline-block";
-        btnEntrar.textContent = "✨ Entrar na Galeria";
+        if (floresProntas) {
+          btnEntrar.disabled = false;
+          btnEntrar.textContent = "✨ Entrar na Galeria";
+        } else {
+          btnEntrar.disabled = true;
+          btnEntrar.textContent = "🌸 Preparando o jardim...";
+        }
       }
       return true;
     } else {
@@ -162,7 +205,13 @@ export function inicializarAbertura(config, aoEntrarCallback) {
       if (sub) sub.textContent = `Contando cada segundo para celebrar o seu dia, ${config.nome_homenageada || "Gessy"}.`;
       if (btnEntrar) {
         btnEntrar.style.display = "inline-block";
-        btnEntrar.textContent = "✨ Entrar na Galeria";
+        if (floresProntas) {
+          btnEntrar.disabled = false;
+          btnEntrar.textContent = "✨ Entrar na Galeria";
+        } else {
+          btnEntrar.disabled = true;
+          btnEntrar.textContent = "🌸 Preparando o jardim...";
+        }
       }
       return false;
     }

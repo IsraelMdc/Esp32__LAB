@@ -743,6 +743,8 @@ export function construirGaleria(cena, memorias, config) {
   const posZPresente = Math.min(comprimento - 3.5, Math.max(7.0, comprimento / 2 + 1.2));
   const grupoPresente = new THREE.Group();
   grupoPresente.position.set(0, 0, posZPresente);
+  // Vira o canteiro e o altar 180° para que a abertura, a placa e as flores recebam o visitante de frente
+  grupoPresente.rotation.y = Math.PI;
 
   // Mureta Semicircular de Mármore para o Jardim do Altar
   const geoMureta = new THREE.CylinderGeometry(2.2, 2.3, 0.4, 32, 1, true, Math.PI * 0.15, Math.PI * 1.7);
@@ -886,10 +888,13 @@ export function construirGaleria(cena, memorias, config) {
   for (let r = 0; r < qtdRosasAltar; r++) {
     const angR = (r / qtdRosasAltar) * Math.PI * 1.8 + Math.PI * 0.1;
     const raioR = 1.35 + (Math.random() - 0.5) * 0.25;
-    const rosa = criarRosaRealista(0xbf0603, 0.42);
-    rosa.position.set(Math.cos(angR) * raioR, 0.42, Math.sin(angR) * raioR);
+    const rosa = criarRosaRealista(0xbf0603, 0.45);
+    // Plantada no solo (y = 0.355)
+    rosa.position.set(Math.cos(angR) * raioR, 0.355, Math.sin(angR) * raioR);
     rosa.rotation.y = Math.random() * Math.PI * 2;
-    rosa.rotation.x = (Math.random() - 0.5) * 0.25;
+    // Postura ereta e vigorosa com leve inclinação natural
+    rosa.rotation.x = (Math.random() - 0.5) * 0.08;
+    rosa.rotation.z = (Math.random() - 0.5) * 0.08;
     grupoPresente.add(rosa);
   }
 
@@ -900,10 +905,12 @@ export function construirGaleria(cena, memorias, config) {
     const angG = (g / qtdGerberasAltar) * Math.PI * 1.7 + Math.PI * 0.15;
     const raioG = 1.75 + (Math.random() - 0.5) * 0.2;
     const corG = coresGerberasAltar[g % coresGerberasAltar.length];
-    const gerbera = criarGerberaRealista(corG, 0.45);
-    gerbera.position.set(Math.cos(angG) * raioG, 0.45, Math.sin(angG) * raioG);
+    const gerbera = criarGerberaRealista(corG, 0.52);
+    // Plantada no solo (y = 0.355)
+    gerbera.position.set(Math.cos(angG) * raioG, 0.355, Math.sin(angG) * raioG);
     gerbera.rotation.y = Math.random() * Math.PI * 2;
-    gerbera.rotation.x = (Math.random() - 0.5) * 0.25;
+    gerbera.rotation.x = (Math.random() - 0.5) * 0.08;
+    gerbera.rotation.z = (Math.random() - 0.5) * 0.08;
     grupoPresente.add(gerbera);
   }
 
@@ -913,8 +920,10 @@ export function construirGaleria(cena, memorias, config) {
     const angL = (l / qtdLiriosAltar) * Math.PI * 1.6 + Math.PI * 0.2;
     const raioL = 1.95;
     const lirio = criarLirioRealista(0.55);
-    lirio.position.set(Math.cos(angL) * raioL, 0.56, Math.sin(angL) * raioL);
-    lirio.rotation.set(0.25, angL, 0);
+    // Plantado no solo (y = 0.355)
+    lirio.position.set(Math.cos(angL) * raioL, 0.355, Math.sin(angL) * raioL);
+    // Leve abertura em leque
+    lirio.rotation.set(0.12, angL, 0);
     grupoPresente.add(lirio);
   }
 
