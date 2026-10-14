@@ -7,6 +7,7 @@
  */
 
 import * as THREE from "../vendor/three.module.min.js";
+import { criarLirioRealista, criarGerberaRealista, criarRosaRealista } from "./flores_realistas.js";
 
 // ------------------------------------------------------------
 //  Geradores Procedurais de Texturas (0 KB de Download)
@@ -289,119 +290,6 @@ function criarTexturaLetreiroFinal(nome) {
 }
 
 // ------------------------------------------------------------
-//  Geradores Procedurais das 3 Flores (Lírio, Gérbera e Rosa)
-// ------------------------------------------------------------
-
-// 1. Lírio Rosa (Pink Stargazer Lily)
-function criarFlorLirio(tamanho = 0.22) {
-  const grupoLirio = new THREE.Group();
-
-  const shapePetala = new THREE.Shape();
-  shapePetala.moveTo(0, 0);
-  shapePetala.quadraticCurveTo(0.045, 0.08, 0.035, 0.18);
-  shapePetala.quadraticCurveTo(0, 0.24, -0.035, 0.18);
-  shapePetala.quadraticCurveTo(-0.045, 0.08, 0, 0);
-
-  const geoPetala = new THREE.ShapeGeometry(shapePetala);
-  const matLirioRosa = new THREE.MeshStandardMaterial({
-    color: 0xff758f,
-    roughness: 0.45,
-    side: THREE.DoubleSide
-  });
-
-  // 6 Pétalas abertas em estrela a cada 60°
-  for (let i = 0; i < 6; i++) {
-    const ang = (i / 6) * Math.PI * 2;
-    const meshP = new THREE.Mesh(geoPetala, matLirioRosa);
-    meshP.scale.set(tamanho / 0.2, tamanho / 0.2, tamanho / 0.2);
-    meshP.rotation.z = ang;
-    meshP.rotation.x = 0.42;
-    grupoLirio.add(meshP);
-  }
-
-  // Miolo branco-creme
-  const geoCentro = new THREE.SphereGeometry(tamanho * 0.18, 8, 8);
-  const matCentro = new THREE.MeshStandardMaterial({ color: 0xfff0f3, roughness: 0.3 });
-  const meshCentro = new THREE.Mesh(geoCentro, matCentro);
-  grupoLirio.add(meshCentro);
-
-  // Pistilos dourados
-  const matPistilo = new THREE.MeshStandardMaterial({ color: 0xffd166, roughness: 0.2, metalness: 0.5 });
-  for (let p = 0; p < 5; p++) {
-    const angP = (p / 5) * Math.PI * 2;
-    const hasteP = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, tamanho * 0.38, 4), matPistilo);
-    hasteP.position.set(Math.cos(angP) * 0.02, tamanho * 0.16, Math.sin(angP) * 0.02);
-    hasteP.rotation.z = Math.cos(angP) * 0.18;
-    grupoLirio.add(hasteP);
-  }
-
-  return grupoLirio;
-}
-
-// 2. Gérbera Radiante (Gerbera Daisy)
-function criarFlorGerbera(cor = 0xff9f43, tamanho = 0.19) {
-  const grupoGerbera = new THREE.Group();
-
-  // Miolo aveludado escuro
-  const geoMiolo = new THREE.CylinderGeometry(tamanho * 0.28, tamanho * 0.22, 0.035, 16);
-  const matMiolo = new THREE.MeshStandardMaterial({ color: 0x4a2810, roughness: 0.8 });
-  const meshMiolo = new THREE.Mesh(geoMiolo, matMiolo);
-  meshMiolo.rotation.x = Math.PI / 2;
-  grupoGerbera.add(meshMiolo);
-
-  // Anel dourado
-  const anel = new THREE.Mesh(new THREE.TorusGeometry(tamanho * 0.29, 0.012, 6, 16), new THREE.MeshStandardMaterial({ color: 0xffd166 }));
-  grupoGerbera.add(anel);
-
-  // Coroa de 18 pétalas radiantes
-  const qtdPetalasG = 18;
-  const shapePG = new THREE.Shape();
-  shapePG.moveTo(0, 0);
-  shapePG.quadraticCurveTo(0.022, 0.07, 0.016, 0.16);
-  shapePG.quadraticCurveTo(0, 0.19, -0.016, 0.16);
-  shapePG.quadraticCurveTo(-0.022, 0.07, 0, 0);
-  const geoPG = new THREE.ShapeGeometry(shapePG);
-  const matPG = new THREE.MeshStandardMaterial({ color: cor, roughness: 0.5, side: THREE.DoubleSide });
-
-  for (let i = 0; i < qtdPetalasG; i++) {
-    const ang = (i / qtdPetalasG) * Math.PI * 2;
-    const meshP = new THREE.Mesh(geoPG, matPG);
-    meshP.scale.set(tamanho / 0.19, tamanho / 0.19, tamanho / 0.19);
-    meshP.rotation.z = ang;
-    meshP.position.z = -0.01;
-    grupoGerbera.add(meshP);
-  }
-
-  return grupoGerbera;
-}
-
-// 3. Rosa Vermelha Aveludada (Red Velvet Rose)
-function criarFlorRosa(cor = 0xbf0603, tamanho = 0.16) {
-  const grupoRosa = new THREE.Group();
-  const matRosa = new THREE.MeshStandardMaterial({ color: cor, roughness: 0.45 });
-
-  const botao = new THREE.Mesh(new THREE.SphereGeometry(tamanho * 0.38, 8, 8), matRosa);
-  grupoRosa.add(botao);
-
-  const camadas = [
-    { raio: tamanho * 0.55, qtd: 5, tam: 0.07 },
-    { raio: tamanho * 0.82, qtd: 7, tam: 0.055 }
-  ];
-
-  camadas.forEach(c => {
-    for (let i = 0; i < c.qtd; i++) {
-      const ang = (i / c.qtd) * Math.PI * 2 + (Math.random() * 0.2);
-      const petala = new THREE.Mesh(new THREE.DodecahedronGeometry(c.tam, 0), matRosa);
-      petala.position.set(Math.cos(ang) * c.raio, (Math.random() - 0.5) * 0.04, Math.sin(ang) * c.raio);
-      petala.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
-      grupoRosa.add(petala);
-    }
-  });
-
-  return grupoRosa;
-}
-
-// ------------------------------------------------------------
 //  Construção Completa da Galeria 3D (4 Zonas Temáticas)
 // ------------------------------------------------------------
 export function construirGaleria(cena, memorias, config) {
@@ -545,7 +433,7 @@ export function construirGaleria(cena, memorias, config) {
     [-0.26, 1.62, 0, 0, -0.4]
   ];
   posLiriosEntrada.forEach(([lx, ly, lz, rx, rz]) => {
-    const flor = criarFlorLirio(0.24);
+    const flor = criarLirioRealista(0.48);
     flor.position.set(lx, ly, lz);
     flor.rotation.set(rx, Math.random() * Math.PI, rz);
     grupoAparadorLirios.add(flor);
@@ -595,11 +483,11 @@ export function construirGaleria(cena, memorias, config) {
   const coresGerberas = [0xff9f43, 0xfeca57, 0xff5252, 0xff758f, 0xffbe76];
   for (let g = 0; g < 12; g++) {
     const corG = coresGerberas[g % coresGerberas.length];
-    const florG = criarFlorGerbera(corG, 0.2);
+    const florG = criarGerberaRealista(corG, 0.4);
     const gz = (g / 11 - 0.5) * 1.5;
     const gx = (Math.random() - 0.5) * 0.35;
     florG.position.set(gx, 0.52, gz);
-    florG.rotation.x = -Math.PI / 2 + (Math.random() - 0.5) * 0.3;
+    florG.rotation.x = (Math.random() - 0.5) * 0.3;
     florG.rotation.z = (Math.random() - 0.5) * 0.3;
     grupoFloreiraGerberas.add(florG);
   }
@@ -741,37 +629,40 @@ export function construirGaleria(cena, memorias, config) {
   grupoPresente.add(canteiroVerde);
 
   // Distribuição abundante das 3 Flores ao redor do Altar:
-  // 1. Rosas Vermelhas contornando a base interna
+  // 1. Rosas Vermelhas contornando a base interna (Espiral áurea de Fibonacci)
   const qtdRosasAltar = 18;
   for (let r = 0; r < qtdRosasAltar; r++) {
     const angR = (r / qtdRosasAltar) * Math.PI * 1.8 + Math.PI * 0.1;
     const raioR = 1.35 + (Math.random() - 0.5) * 0.25;
-    const rosa = criarFlorRosa(0xbf0603, 0.17);
+    const rosa = criarRosaRealista(0xbf0603, 0.42);
     rosa.position.set(Math.cos(angR) * raioR, 0.42, Math.sin(angR) * raioR);
+    rosa.rotation.y = Math.random() * Math.PI * 2;
+    rosa.rotation.x = (Math.random() - 0.5) * 0.25;
     grupoPresente.add(rosa);
   }
 
-  // 2. Gérberas Radiantes coloridas na borda intermediária
+  // 2. Gérberas Radiantes coloridas na borda intermediária (Capítulo e lígulas em camadas)
   const qtdGerberasAltar = 16;
   const coresGerberasAltar = [0xff9f43, 0xfeca57, 0xff5252, 0xff758f];
   for (let g = 0; g < qtdGerberasAltar; g++) {
     const angG = (g / qtdGerberasAltar) * Math.PI * 1.7 + Math.PI * 0.15;
     const raioG = 1.75 + (Math.random() - 0.5) * 0.2;
     const corG = coresGerberasAltar[g % coresGerberasAltar.length];
-    const gerbera = criarFlorGerbera(corG, 0.21);
+    const gerbera = criarGerberaRealista(corG, 0.45);
     gerbera.position.set(Math.cos(angG) * raioG, 0.45, Math.sin(angG) * raioG);
-    gerbera.rotation.x = -Math.PI / 2 + 0.3;
+    gerbera.rotation.y = Math.random() * Math.PI * 2;
+    gerbera.rotation.x = (Math.random() - 0.5) * 0.25;
     grupoPresente.add(gerbera);
   }
 
-  // 3. Lírios Rosas Majestosos nos pontos focais do Altar
+  // 3. Lírios Rosas Majestosos nos pontos focais do Altar (Tépalas reflexas e papilas)
   const qtdLiriosAltar = 8;
   for (let l = 0; l < qtdLiriosAltar; l++) {
     const angL = (l / qtdLiriosAltar) * Math.PI * 1.6 + Math.PI * 0.2;
     const raioL = 1.95;
-    const lirio = criarFlorLirio(0.26);
-    lirio.position.set(Math.cos(angL) * raioL, 0.58, Math.sin(angL) * raioL);
-    lirio.rotation.set(0.3, angL, 0);
+    const lirio = criarLirioRealista(0.55);
+    lirio.position.set(Math.cos(angL) * raioL, 0.56, Math.sin(angL) * raioL);
+    lirio.rotation.set(0.25, angL, 0);
     grupoPresente.add(lirio);
   }
 

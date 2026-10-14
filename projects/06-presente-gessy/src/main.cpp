@@ -65,12 +65,14 @@ String obterMimeType(const String& path) {
   if (path.endsWith(".svg")) return "image/svg+xml";
   if (path.endsWith(".ico")) return "image/x-icon";
   if (path.endsWith(".mp3")) return "audio/mpeg";
+  if (path.endsWith(".glb")) return "model/gltf-binary";
+  if (path.endsWith(".gltf")) return "model/gltf+json";
   return "text/plain";
 }
 
 const char* cacheParaTipo(const String& path) {
   // Arquivos estáticos pesados recebem cache longo de 1 dia no navegador
-  if (path.startsWith("/fotos/") || path.startsWith("/vendor/") || path.endsWith(".mp3") || path.endsWith(".png") || path.endsWith(".jpg")) {
+  if (path.startsWith("/fotos/") || path.startsWith("/vendor/") || path.startsWith("/modelos/") || path.endsWith(".mp3") || path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".glb")) {
     return "public, max-age=86400, immutable";
   }
   // Páginas HTML e JSON de memórias ficam sem cache para alterações refletirem na hora
@@ -89,8 +91,8 @@ bool servirArquivo(String caminho) {
   String mime = obterMimeType(caminho);
   String caminhoReal = caminho;
 
-  // Em arquivos dentro de /vendor/, a versão comprimida .gz é a padrão na flash
-  if (caminho.startsWith("/vendor/")) {
+  // Em arquivos dentro de /vendor/ e /modelos/, a versão comprimida .gz é a padrão na flash
+  if (caminho.startsWith("/vendor/") || caminho.startsWith("/modelos/")) {
     String versaoGz = caminhoReal + ".gz";
     if (LittleFS.exists(versaoGz)) {
       caminhoReal = versaoGz;
