@@ -289,6 +289,111 @@ function criarTexturaLetreiroFinal(nome) {
   return new THREE.CanvasTexture(canvas);
 }
 
+function criarTexturaTerraMusgo() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext("2d");
+
+  // Base de terra fértil escura e úmida
+  ctx.fillStyle = "#22150c";
+  ctx.fillRect(0, 0, 512, 512);
+
+  // Granulação orgânica e micro-textura de solo
+  for (let i = 0; i < 5000; i++) {
+    const x = Math.random() * 512;
+    const y = Math.random() * 512;
+    const r = Math.random() * 2.2 + 0.6;
+    ctx.fillStyle = Math.random() > 0.5 ? "#322013" : "#170e08";
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Manchas aveludadas de musgo silvestre verde-oliva e esmeralda
+  const coresMusgo = [
+    "rgba(34, 76, 32, 0.55)",
+    "rgba(45, 90, 39, 0.65)",
+    "rgba(64, 108, 53, 0.45)",
+    "rgba(82, 121, 64, 0.40)"
+  ];
+  for (let m = 0; m < 70; m++) {
+    const mx = Math.random() * 512;
+    const my = Math.random() * 512;
+    const mRad = 18 + Math.random() * 36;
+    const grad = ctx.createRadialGradient(mx, my, 2, mx, my, mRad);
+    const cor = coresMusgo[Math.floor(Math.random() * coresMusgo.length)];
+    grad.addColorStop(0, cor);
+    grad.addColorStop(1, "rgba(0, 0, 0, 0)");
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(mx, my, mRad, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.wrapS = THREE.RepeatWrapping;
+  tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(3, 3);
+  return tex;
+}
+
+function criarGeometriaTufoGrama() {
+  const positions = [];
+  const uvs = [];
+  const indices = [];
+
+  // 5 lâminas curvas entrelaçadas em leque natural, altura 8 a 12cm
+  const blades = [
+    { ang: 0.15, arc: 0.035, h: 0.095, w: 0.018 },
+    { ang: 1.35, arc: 0.045, h: 0.115, w: 0.016 },
+    { ang: 2.70, arc: 0.030, h: 0.085, w: 0.017 },
+    { ang: 4.10, arc: 0.050, h: 0.120, w: 0.015 },
+    { ang: 5.30, arc: 0.040, h: 0.100, w: 0.016 }
+  ];
+
+  let vertOffset = 0;
+  blades.forEach((b) => {
+    const cosA = Math.cos(b.ang);
+    const sinA = Math.sin(b.ang);
+
+    const nos = [
+      { y: 0, z: 0, w: b.w },
+      { y: b.h * 0.35, z: b.arc * 0.15, w: b.w * 0.85 },
+      { y: b.h * 0.70, z: b.arc * 0.55, w: b.w * 0.55 },
+      { y: b.h * 1.00, z: b.arc * 1.00, w: 0.002 }
+    ];
+
+    nos.forEach((no, idx) => {
+      const halfW = no.w / 2;
+      const xL = -halfW * cosA + no.z * sinA;
+      const zL = halfW * sinA + no.z * cosA;
+      const xR = halfW * cosA + no.z * sinA;
+      const zR = -halfW * sinA + no.z * cosA;
+
+      positions.push(xL, no.y, zL);
+      positions.push(xR, no.y, zR);
+
+      uvs.push(0, idx / (nos.length - 1));
+      uvs.push(1, idx / (nos.length - 1));
+    });
+
+    for (let s = 0; s < nos.length - 1; s++) {
+      const bIdx = vertOffset + s * 2;
+      indices.push(bIdx, bIdx + 1, bIdx + 2);
+      indices.push(bIdx + 1, bIdx + 3, bIdx + 2);
+    }
+    vertOffset += nos.length * 2;
+  });
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geo.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+  geo.setIndex(indices);
+  geo.computeVertexNormals();
+  return geo;
+}
+
 // ------------------------------------------------------------
 //  Construção Completa da Galeria 3D (4 Zonas Temáticas)
 // ------------------------------------------------------------
@@ -407,30 +512,47 @@ export function construirGaleria(cena, memorias, config) {
   bracadeiraDir.position.set(2.6, 1.8, 0.35);
   cena.add(bracadeiraDir);
 
-  // Vaso Imperial de Lírios Rosas (Aparador à esquerda na entrada)
+  // Vaso Imperial de Lírios Rosas (Aparador à esquerda na entrada - Altura calibrada para contemplação direta)
   const grupoAparadorLirios = new THREE.Group();
   grupoAparadorLirios.position.set(-2.8, 0, 1.8);
-  const aparador = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.85, 0.6), matMarmore);
-  aparador.position.y = 0.425;
+
+  // Aparador de mármore mais baixo (topo em y = 0.58m para visão perfeita de cima)
+  const aparador = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.58, 0.60), matMarmore);
+  aparador.position.y = 0.29;
   grupoAparadorLirios.add(aparador);
 
-  const vasoLirios = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.14, 0.65, 16), matMarmore);
-  vasoLirios.position.y = 1.15;
+  // Filete dourado ornamental no tampo do aparador
+  const fileteAparador = new THREE.Mesh(new THREE.BoxGeometry(0.87, 0.025, 0.62), matOuro);
+  fileteAparador.position.y = 0.58;
+  grupoAparadorLirios.add(fileteAparador);
+
+  // Vaso clássico de proporção rebaixada (altura 0.34m, bocal em y = 0.92m)
+  const vasoLirios = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.15, 0.34, 20), matMarmore);
+  vasoLirios.position.y = 0.75;
   grupoAparadorLirios.add(vasoLirios);
 
-  const folhagemLirios = new THREE.Mesh(new THREE.SphereGeometry(0.3, 10, 8), matFolha);
-  folhagemLirios.position.y = 1.5;
+  // Anel dourado no bocal do vaso
+  const anelBocalVaso = new THREE.Mesh(new THREE.TorusGeometry(0.23, 0.015, 8, 24), matOuro);
+  anelBocalVaso.rotation.x = Math.PI / 2;
+  anelBocalVaso.position.y = 0.92;
+  grupoAparadorLirios.add(anelBocalVaso);
+
+  // Base de folhagem verdejante interna
+  const folhagemLirios = new THREE.Mesh(new THREE.SphereGeometry(0.28, 10, 8), matFolha);
+  folhagemLirios.position.y = 0.96;
+  folhagemLirios.scale.set(0.95, 0.5, 0.95);
   grupoAparadorLirios.add(folhagemLirios);
 
-  // 7 Lírios Rosas esplêndidos em diferentes orientações
+  // 7 Lírios Rosas Stargazer rebaixados (y = 0.98 a 1.15m) com inclinação frontal
+  // voltada diretamente para o visitante (ângulo de visão descendente de 35-45 graus)
   const posLiriosEntrada = [
-    [0, 1.85, 0, 0, 0],
-    [0.18, 1.75, 0.12, 0.3, 0.2],
-    [-0.18, 1.75, 0.12, 0.3, -0.2],
-    [0.16, 1.75, -0.16, -0.3, 0.2],
-    [-0.16, 1.75, -0.16, -0.3, -0.2],
-    [0.26, 1.62, 0, 0, 0.4],
-    [-0.26, 1.62, 0, 0, -0.4]
+    [0.0, 1.15, 0.04, 0.35, 0.0],
+    [0.15, 1.08, 0.10, 0.45, 0.25],
+    [-0.15, 1.08, 0.10, 0.45, -0.25],
+    [0.18, 1.10, -0.06, 0.20, 0.38],
+    [-0.18, 1.10, -0.06, 0.20, -0.38],
+    [0.22, 1.00, 0.06, 0.42, 0.42],
+    [-0.22, 1.00, 0.06, 0.42, -0.42]
   ];
   posLiriosEntrada.forEach(([lx, ly, lz, rx, rz]) => {
     const flor = criarLirioRealista(0.48);
@@ -438,6 +560,12 @@ export function construirGaleria(cena, memorias, config) {
     flor.rotation.set(rx, Math.random() * Math.PI, rz);
     grupoAparadorLirios.add(flor);
   });
+
+  // Foco de luz acolhedor iluminando diretamente as pétalas dos lírios
+  const luzAparador = new THREE.PointLight(0xfff1dc, 0.95, 3.2);
+  luzAparador.position.set(0.1, 1.5, 0.25);
+  grupoAparadorLirios.add(luzAparador);
+
   cena.add(grupoAparadorLirios);
 
   // Espelho Veneziano Mágico ladeado por Floreira de Gérberas (À direita)
@@ -622,11 +750,135 @@ export function construirGaleria(cena, memorias, config) {
   muretaJardim.position.y = 0.2;
   grupoPresente.add(muretaJardim);
 
-  // Canteiro semicircular de terra e grama
+  // Canteiro semicircular com solo fértil rico e musgo aveludado
+  const texTerraMusgo = criarTexturaTerraMusgo();
+  const matTerraMusgo = new THREE.MeshStandardMaterial({
+    map: texTerraMusgo,
+    roughness: 0.90,
+    metalness: 0.05
+  });
   const geoCanteiro = new THREE.CylinderGeometry(2.1, 2.1, 0.35, 32);
-  const canteiroVerde = new THREE.Mesh(geoCanteiro, matFolha);
+  const canteiroVerde = new THREE.Mesh(geoCanteiro, matTerraMusgo);
   canteiroVerde.position.y = 0.18;
   grupoPresente.add(canteiroVerde);
+
+  // ------------------------------------------------------------
+  // Grama Silvestre Baixa (InstancedMesh: 260 tufos em 1 único draw call)
+  // Calibrada entre 8cm e 13cm para não ultrapassar a floração
+  // ------------------------------------------------------------
+  const matGrama = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    roughness: 0.70,
+    metalness: 0.04,
+    side: THREE.DoubleSide
+  });
+  const tuftGeo = criarGeometriaTufoGrama();
+  const qtdTufos = 260;
+  const instancedGrama = new THREE.InstancedMesh(tuftGeo, matGrama, qtdTufos);
+
+  const dummyGrama = new THREE.Object3D();
+  const paletaGrama = [
+    new THREE.Color(0x2d6a4f), // Verde floresta profundo
+    new THREE.Color(0x40916c), // Verde prado fresco
+    new THREE.Color(0x52b788), // Verde esmeralda luminoso
+    new THREE.Color(0x606c38), // Verde oliva silvestre
+    new THREE.Color(0x283618)  // Verde musgo escuro
+  ];
+
+  for (let tg = 0; tg < qtdTufos; tg++) {
+    const angTG = Math.PI * 0.15 + Math.random() * Math.PI * 1.7;
+    const raioTG = 0.82 + Math.random() * 1.22;
+    const tgX = Math.cos(angTG) * raioTG;
+    const tgZ = Math.sin(angTG) * raioTG;
+    const tgY = 0.355; // Nível da superfície do canteiro
+
+    dummyGrama.position.set(tgX, tgY, tgZ);
+    dummyGrama.rotation.y = Math.random() * Math.PI * 2;
+    dummyGrama.rotation.x = (Math.random() - 0.5) * 0.12;
+    dummyGrama.rotation.z = (Math.random() - 0.5) * 0.12;
+
+    const escTG = 0.75 + Math.random() * 0.45;
+    dummyGrama.scale.set(escTG * (0.9 + Math.random() * 0.2), escTG, escTG * (0.9 + Math.random() * 0.2));
+    dummyGrama.updateMatrix();
+
+    instancedGrama.setMatrixAt(tg, dummyGrama.matrix);
+    instancedGrama.setColorAt(tg, paletaGrama[Math.floor(Math.random() * paletaGrama.length)]);
+  }
+  instancedGrama.instanceMatrix.needsUpdate = true;
+  if (instancedGrama.instanceColor) instancedGrama.instanceColor.needsUpdate = true;
+  grupoPresente.add(instancedGrama);
+
+  // ------------------------------------------------------------
+  // Galhos e Ramos Naturais Silvestres arqueados entre as flores
+  // ------------------------------------------------------------
+  const matRamo = new THREE.MeshStandardMaterial({
+    color: 0x3d271d,
+    roughness: 0.88,
+    metalness: 0.05
+  });
+
+  const ramosConfigs = [
+    { p1: [1.1, 0.36, 0.4], p2: [1.35, 0.48, 0.7], p3: [1.6, 0.37, 1.0], r: 0.022 },
+    { p1: [-1.0, 0.36, 0.5], p2: [-1.3, 0.49, 0.8], p3: [-1.55, 0.37, 1.1], r: 0.020 },
+    { p1: [0.6, 0.36, 1.3], p2: [0.95, 0.47, 1.5], p3: [1.3, 0.37, 1.6], r: 0.018 },
+    { p1: [-0.5, 0.36, 1.4], p2: [-0.85, 0.48, 1.6], p3: [-1.2, 0.37, 1.55], r: 0.022 },
+    { p1: [-0.3, 0.36, 1.7], p2: [0.1, 0.46, 1.85], p3: [0.45, 0.37, 1.75], r: 0.019 },
+    { p1: [1.4, 0.36, -0.2], p2: [1.65, 0.47, 0.1], p3: [1.8, 0.37, 0.4], r: 0.021 },
+    { p1: [-1.4, 0.36, -0.2], p2: [-1.65, 0.47, 0.1], p3: [-1.8, 0.37, 0.4], r: 0.021 }
+  ];
+
+  ramosConfigs.forEach((rc) => {
+    const curva = new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(...rc.p1),
+      new THREE.Vector3(...rc.p2),
+      new THREE.Vector3(...rc.p3)
+    );
+    const geoRamo = new THREE.TubeGeometry(curva, 10, rc.r, 6, false);
+    const meshRamo = new THREE.Mesh(geoRamo, matRamo);
+    grupoPresente.add(meshRamo);
+
+    // Pequeno broto / folhinha no cume de cada galho
+    const broto = new THREE.Mesh(new THREE.ConeGeometry(0.022, 0.05, 4), matFolha);
+    broto.position.set(rc.p2[0], rc.p2[1] + 0.02, rc.p2[2]);
+    broto.rotation.z = Math.PI / 4;
+    grupoPresente.add(broto);
+  });
+
+  // ------------------------------------------------------------
+  // Hera Rasteira Cascata (ramagens pendentes na borda de mármore)
+  // ------------------------------------------------------------
+  const angulosHera = [
+    Math.PI * 0.30,
+    Math.PI * 0.55,
+    Math.PI * 0.85,
+    Math.PI * 1.15,
+    Math.PI * 1.45,
+    Math.PI * 1.70
+  ];
+  angulosHera.forEach((angH) => {
+    const raioM = 2.22;
+    const hx = Math.cos(angH) * raioM;
+    const hz = Math.sin(angH) * raioM;
+
+    const curvaHera = new THREE.CubicBezierCurve3(
+      new THREE.Vector3(hx * 0.98, 0.38, hz * 0.98),
+      new THREE.Vector3(hx * 1.02, 0.39, hz * 1.02),
+      new THREE.Vector3(hx * 1.03, 0.26, hz * 1.03),
+      new THREE.Vector3(hx * 1.01, 0.12 + Math.random() * 0.08, hz * 1.01)
+    );
+    const geoHera = new THREE.TubeGeometry(curvaHera, 8, 0.012, 5, false);
+    const meshHera = new THREE.Mesh(geoHera, matFolha);
+    grupoPresente.add(meshHera);
+
+    for (let f = 0; f < 5; f++) {
+      const t = 0.2 + f * 0.18;
+      const pt = curvaHera.getPoint(t);
+      const folha = new THREE.Mesh(new THREE.ConeGeometry(0.028, 0.05, 3), matFolha);
+      folha.position.copy(pt);
+      folha.rotation.set(Math.random() * 0.6, angH + (Math.random() - 0.5) * 1.0, Math.PI / 2 + 0.3);
+      grupoPresente.add(folha);
+    }
+  });
 
   // Distribuição abundante das 3 Flores ao redor do Altar:
   // 1. Rosas Vermelhas contornando a base interna (Espiral áurea de Fibonacci)
