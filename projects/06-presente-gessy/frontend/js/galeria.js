@@ -341,6 +341,9 @@ function criarGeometriaTufoGrama() {
 export function construirGaleria(cena, memorias, config) {
   const loader = new THREE.TextureLoader();
   const quadrosInterativos = [];
+  let alavancaInterruptor = null;
+  let meshInterruptorHit = null;
+  let estadoInterruptorLigado = true;
 
   const raioRotunda = 7.5;
   const altura = 4.2;
@@ -350,6 +353,8 @@ export function construirGaleria(cena, memorias, config) {
   const matMarmore = new THREE.MeshStandardMaterial({ color: 0xfbfbfb, roughness: 0.25, metalness: 0.15 });
   const matFolha = new THREE.MeshStandardMaterial({ color: 0x2d6a4f, roughness: 0.65 });
   const matVeludoVermelho = new THREE.MeshStandardMaterial({ color: 0x780016, roughness: 0.85 });
+  const matVela = new THREE.MeshStandardMaterial({ color: 0xfffff5, roughness: 0.35, metalness: 0.05 });
+  const matChamaLustre = new THREE.MeshBasicMaterial({ color: 0xfff3cc });
 
   // ============================================================
   //  1. ESTRUTURA ARQUITETÔNICA DA ROTUNDA (Círculo 360°)
@@ -1067,6 +1072,204 @@ export function construirGaleria(cena, memorias, config) {
     grupoAniversario.add(grupoColAniv);
   });
 
+  // ------------------------------------------------------------
+  //  5.2.1 APARADOR NEOCLÁSSICO DE MÁRMORE & CASTIÇAIS (SOB O PAINEL)
+  // ------------------------------------------------------------
+  const grupoAparador = new THREE.Group();
+  grupoAparador.position.set(0, -2.25, 0.26); // No piso da parede de entrada
+
+  const largAparador = 2.8;
+  const profAparador = 0.44;
+  const altAparador = 0.78;
+
+  // Tampo de mármore branco esculpido com borda chanfrada
+  const tampoMarmore = new THREE.Mesh(new THREE.BoxGeometry(largAparador, 0.05, profAparador), matMarmore);
+  tampoMarmore.position.y = altAparador - 0.025;
+  grupoAparador.add(tampoMarmore);
+
+  // Moldura dourada sob o tampo
+  const fileteTampo = new THREE.Mesh(new THREE.BoxGeometry(largAparador + 0.02, 0.025, profAparador + 0.02), matOuro);
+  fileteTampo.position.y = altAparador - 0.055;
+  grupoAparador.add(fileteTampo);
+
+  // Prateleira inferior de mármore
+  const prateleiraInf = new THREE.Mesh(new THREE.BoxGeometry(largAparador - 0.16, 0.03, profAparador - 0.10), matMarmore);
+  prateleiraInf.position.y = 0.16;
+  grupoAparador.add(prateleiraInf);
+
+  // 4 Pernas caneladas neoclássicas em ouro maciço
+  [
+    [-largAparador / 2 + 0.14, -profAparador / 2 + 0.10],
+    [largAparador / 2 - 0.14, -profAparador / 2 + 0.10],
+    [-largAparador / 2 + 0.14, profAparador / 2 - 0.10],
+    [largAparador / 2 - 0.14, profAparador / 2 - 0.10]
+  ].forEach(([px, pz]) => {
+    const perna = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.036, altAparador - 0.06, 12), matOuro);
+    perna.position.set(px, (altAparador - 0.06) / 2, pz);
+    grupoAparador.add(perna);
+
+    const basePerna = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.03, 12), matOuro);
+    basePerna.position.set(px, 0.015, pz);
+    grupoAparador.add(basePerna);
+  });
+
+  // 2 Candelabros / Castiçais Nobres de Ouro com 3 Velas Acesas
+  [-0.92, 0.92].forEach(cx => {
+    const grupoCast = new THREE.Group();
+    grupoCast.position.set(cx, altAparador, 0);
+
+    const baseCast = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.09, 0.03, 16), matOuro);
+    baseCast.position.y = 0.015;
+    grupoCast.add(baseCast);
+
+    const hasteCast = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.022, 0.20, 12), matOuro);
+    hasteCast.position.y = 0.12;
+    grupoCast.add(hasteCast);
+
+    [-0.08, 0, 0.08].forEach((bx, bIdx) => {
+      const altVelaBase = bIdx === 1 ? 0.22 : 0.18;
+      const vela = new THREE.Mesh(new THREE.CylinderGeometry(0.013, 0.013, 0.12, 8), matVela);
+      vela.position.set(bx, altVelaBase + 0.06, 0);
+      grupoCast.add(vela);
+
+      const chama = new THREE.Mesh(new THREE.ConeGeometry(0.012, 0.035, 8), matChamaLustre);
+      chama.position.set(bx, altVelaBase + 0.135, 0);
+      grupoCast.add(chama);
+    });
+
+    const luzCast = new THREE.PointLight(0xffa737, 0.45, 3.0);
+    luzCast.position.set(0, 0.32, 0.05);
+    grupoCast.add(luzCast);
+    luzesPontuais.push(luzCast);
+
+    grupoAparador.add(grupoCast);
+  });
+
+  // Vaso floral com rosas vermelhas sobre o aparador
+  const grupoVaso = new THREE.Group();
+  grupoVaso.position.set(0, altAparador, 0);
+  const vasoCorpo = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.06, 0.22, 16), matMarmore);
+  vasoCorpo.position.y = 0.11;
+  grupoVaso.add(vasoCorpo);
+  const frisoVaso = new THREE.Mesh(new THREE.TorusGeometry(0.092, 0.012, 8, 20), matOuro);
+  frisoVaso.rotation.x = Math.PI / 2;
+  frisoVaso.position.y = 0.16;
+  grupoVaso.add(frisoVaso);
+
+  for (let r = 0; r < 5; r++) {
+    const angR = (r / 5) * Math.PI * 2;
+    const rosa = criarRosaRealista(0xd90429, 0.28);
+    rosa.position.set(Math.cos(angR) * 0.05, 0.22, Math.sin(angR) * 0.05);
+    rosa.rotation.y = angR;
+    rosa.rotation.x = 0.12;
+    grupoVaso.add(rosa);
+  }
+  grupoAparador.add(grupoVaso);
+
+  // Pétalas caídas sobre o mármore
+  for (let p = 0; p < 8; p++) {
+    const petala = new THREE.Mesh(new THREE.CircleGeometry(0.022, 6), new THREE.MeshStandardMaterial({
+      color: 0x9e0012,
+      roughness: 0.8,
+      side: THREE.DoubleSide
+    }));
+    petala.rotation.x = -Math.PI / 2;
+    petala.position.set((Math.random() - 0.5) * 0.7, altAparador + 0.002, (Math.random() - 0.5) * 0.25);
+    petala.rotation.z = Math.random() * Math.PI * 2;
+    grupoAparador.add(petala);
+  }
+
+  grupoAniversario.add(grupoAparador);
+
+  // ------------------------------------------------------------
+  //  5.2.2 INTERRUPTOR 3D CLÁSSICO DE PAREDE (VINTAGE TUMBLER SWITCH)
+  //  Localizado na parede em y = 0.99m (entre o aparador e o painel)
+  // ------------------------------------------------------------
+  const grupoInterruptor = new THREE.Group();
+  grupoInterruptor.position.set(0, -1.26, 0.04);
+
+  const placaInterruptor = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.26, 0.022), matOuro);
+  grupoInterruptor.add(placaInterruptor);
+
+  const molduraPlaca = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.28, 0.012), matOuro);
+  molduraPlaca.position.z = -0.005;
+  grupoInterruptor.add(molduraPlaca);
+
+  [
+    [-0.065, -0.10], [0.065, -0.10],
+    [-0.065, 0.10],  [0.065, 0.10]
+  ].forEach(([sx, sy]) => {
+    const parafuso = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.006, 8), matOuro);
+    parafuso.rotation.x = Math.PI / 2;
+    parafuso.position.set(sx, sy, 0.012);
+    grupoInterruptor.add(parafuso);
+  });
+
+  const soqueteInterruptor = new THREE.Mesh(new THREE.SphereGeometry(0.038, 16, 12), matOuro);
+  soqueteInterruptor.scale.set(1, 1, 0.5);
+  soqueteInterruptor.position.set(0, 0.02, 0.012);
+  grupoInterruptor.add(soqueteInterruptor);
+
+  // Alavanca móvel basculante (articula para cima/baixo)
+  const grupoAlavanca = new THREE.Group();
+  grupoAlavanca.position.set(0, 0.02, 0.025);
+
+  const hasteAlavanca = new THREE.Mesh(new THREE.CylinderGeometry(0.007, 0.011, 0.065, 10), matOuro);
+  hasteAlavanca.position.y = 0.028;
+  grupoAlavanca.add(hasteAlavanca);
+
+  const pontaAlavanca = new THREE.Mesh(new THREE.SphereGeometry(0.014, 12, 12), matOuro);
+  pontaAlavanca.position.y = 0.062;
+  grupoAlavanca.add(pontaAlavanca);
+
+  // Posição inicial: Ligado (inclinado para cima)
+  grupoAlavanca.rotation.x = -0.45;
+  grupoInterruptor.add(grupoAlavanca);
+  alavancaInterruptor = grupoAlavanca;
+
+  // Mini-plaqueta gravada abaixo da alavanca com indicador
+  const canvasPlaqueta = document.createElement("canvas");
+  canvasPlaqueta.width = 128;
+  canvasPlaqueta.height = 64;
+  const ctxPlaqueta = canvasPlaqueta.getContext("2d");
+  ctxPlaqueta.fillStyle = "#1b140a";
+  ctxPlaqueta.fillRect(0, 0, 128, 64);
+  ctxPlaqueta.strokeStyle = "#ffd166";
+  ctxPlaqueta.lineWidth = 3;
+  ctxPlaqueta.strokeRect(4, 4, 120, 56);
+  ctxPlaqueta.fillStyle = "#ffe29a";
+  ctxPlaqueta.font = "bold 20px Georgia, serif";
+  ctxPlaqueta.textAlign = "center";
+  ctxPlaqueta.fillText("LUZES", 64, 28);
+  ctxPlaqueta.font = "14px Arial, sans-serif";
+  ctxPlaqueta.fillStyle = "#ffd166";
+  ctxPlaqueta.fillText("💡 ON / OFF", 64, 48);
+
+  const texPlaqueta = new THREE.CanvasTexture(canvasPlaqueta);
+  const plaquetaMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.12, 0.06), new THREE.MeshStandardMaterial({
+    map: texPlaqueta,
+    roughness: 0.4,
+    metalness: 0.1
+  }));
+  plaquetaMesh.position.set(0, -0.065, 0.013);
+  grupoInterruptor.add(plaquetaMesh);
+
+  // Caixa de colisão invisível ampla para facilitar o clique no mouse ou toque no mobile
+  const geoHit = new THREE.BoxGeometry(0.36, 0.42, 0.14);
+  const matHit = new THREE.MeshBasicMaterial({ visible: false });
+  const meshHitInterruptor = new THREE.Mesh(geoHit, matHit);
+  meshHitInterruptor.position.set(0, 0, 0.05);
+  meshHitInterruptor.userData = {
+    ehInterruptor: true,
+    titulo: "Interruptor da Galeria",
+    ligado: true
+  };
+  grupoInterruptor.add(meshHitInterruptor);
+  quadrosInterativos.push(meshHitInterruptor);
+  meshInterruptorHit = meshHitInterruptor;
+
+  grupoAniversario.add(grupoInterruptor);
+
   cena.add(grupoAniversario);
 
   // ------------------------------------------------------------
@@ -1161,12 +1364,6 @@ export function construirGaleria(cena, memorias, config) {
     transparent: true,
     opacity: 0.88
   });
-  const matVela = new THREE.MeshStandardMaterial({
-    color: 0xfffff5,
-    roughness: 0.35,
-    metalness: 0.05
-  });
-  const matChamaLustre = new THREE.MeshBasicMaterial({ color: 0xfff3cc });
 
   // 7.1 Grande Lustre Central Imperial Neoclássico (3 Níveis de Ouro, Cascata de Cristais & 20 Velas Acesas)
   function criarLustreCentralImperial(px, py, pz) {
@@ -1519,16 +1716,16 @@ export function construirGaleria(cena, memorias, config) {
     alternarModoNoite: (ativar) => {
       modoNoiteAtivo = (ativar !== undefined) ? ativar : !modoNoiteAtivo;
       if (modoNoiteAtivo) {
-        luzAmbiente.color.setHex(0xff9f43);
-        luzAmbiente.intensity = 0.25;
-        luzPrincipal.color.setHex(0xe67e22);
-        luzPrincipal.intensity = 0.25;
+        luzAmbiente.color.setHex(0x1a120b);
+        luzAmbiente.intensity = 0.15;
+        luzPrincipal.color.setHex(0xffaa44);
+        luzPrincipal.intensity = 0.10;
         matTeto.opacity = 0.15;
         matEstrelas.opacity = 0.95;
         matVagalumes.opacity = 0.88;
         luzesPontuais.forEach(l => {
           l.color.setHex(0xff793f);
-          l.intensity = 1.25;
+          l.intensity = 1.35;
         });
       } else {
         luzAmbiente.color.setHex(0xfff3e6);
@@ -1543,7 +1740,23 @@ export function construirGaleria(cena, memorias, config) {
           l.intensity = 1.0;
         });
       }
+      if (alavancaInterruptor) {
+        alavancaInterruptor.rotation.x = modoNoiteAtivo ? 0.45 : -0.45;
+      }
+      if (meshInterruptorHit && meshInterruptorHit.userData) {
+        meshInterruptorHit.userData.ligado = !modoNoiteAtivo;
+      }
       return modoNoiteAtivo;
+    },
+    alternarInterruptor3D: (ligado) => {
+      estadoInterruptorLigado = (ligado !== undefined) ? ligado : !estadoInterruptorLigado;
+      if (alavancaInterruptor) {
+        alavancaInterruptor.rotation.x = estadoInterruptorLigado ? -0.45 : 0.45;
+      }
+      if (meshInterruptorHit && meshInterruptorHit.userData) {
+        meshInterruptorHit.userData.ligado = estadoInterruptorLigado;
+      }
+      return estadoInterruptorLigado;
     },
     animarCenario: (delta) => {
       tempoGeral += delta;

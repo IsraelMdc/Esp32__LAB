@@ -82,6 +82,22 @@ export async function iniciarAplicacao() {
   // 6. Configura interações de raycast, modal de histórias e cartinha
   const interacao = new GerenciadorInteracao(camera, mundo.quadros, controlador, dadosConfig.memorias || [], dadosConfig);
 
+  // Conecta o interruptor 3D da parede ao sistema de iluminação da galeria
+  interacao.aoAlternarInterruptor = () => {
+    if (mundo.alternarModoNoite) {
+      const ativo = mundo.alternarModoNoite();
+      if (btnNoite) {
+        btnNoite.textContent = ativo ? "☀️" : "🕯️";
+        btnNoite.title = ativo ? "Voltar ao Modo Clássico" : "Modo Luz de Velas & Céu Estrelado";
+      }
+      if (interacao.quadroAtivo && interacao.quadroAtivo.userData && interacao.quadroAtivo.userData.ehInterruptor) {
+        const objAtivo = interacao.quadroAtivo;
+        interacao.quadroAtivo = null;
+        interacao.destacarQuadro(objAtivo);
+      }
+    }
+  };
+
   // Botão de Modo Noite / Luz de Velas & Céu Estrelado
   const btnNoite = document.getElementById("btn-noite");
   if (btnNoite && mundo.alternarModoNoite) {
@@ -90,6 +106,11 @@ export async function iniciarAplicacao() {
       ativo = mundo.alternarModoNoite();
       btnNoite.textContent = ativo ? "☀️" : "🕯️";
       btnNoite.title = ativo ? "Voltar ao Modo Clássico" : "Modo Luz de Velas & Céu Estrelado";
+      if (interacao.quadroAtivo && interacao.quadroAtivo.userData && interacao.quadroAtivo.userData.ehInterruptor) {
+        const objAtivo = interacao.quadroAtivo;
+        interacao.quadroAtivo = null;
+        interacao.destacarQuadro(objAtivo);
+      }
     });
   }
 

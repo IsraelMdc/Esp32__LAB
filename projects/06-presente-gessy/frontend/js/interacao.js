@@ -6,6 +6,43 @@
 
 import * as THREE from "../vendor/three.module.min.js";
 
+// Efeito sonoro procedural de estalo mecânico clássico (Web Audio API)
+function tocarSomCliqueInterruptor() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    if (ctx.state === "suspended") ctx.resume();
+
+    const agora = ctx.currentTime;
+    // Micro-pulso 1 (impacto metálico de alavanca)
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = "triangle";
+    osc1.frequency.setValueAtTime(360, agora);
+    osc1.frequency.exponentialRampToValueAtTime(70, agora + 0.035);
+    gain1.gain.setValueAtTime(0.24, agora);
+    gain1.gain.exponentialRampToValueAtTime(0.001, agora + 0.035);
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start(agora);
+    osc1.stop(agora + 0.04);
+
+    // Micro-pulso 2 (reverberação sutil do contato)
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = "sine";
+    osc2.frequency.setValueAtTime(920, agora + 0.012);
+    osc2.frequency.exponentialRampToValueAtTime(420, agora + 0.045);
+    gain2.gain.setValueAtTime(0.09, agora + 0.012);
+    gain2.gain.exponentialRampToValueAtTime(0.001, agora + 0.05);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(agora + 0.012);
+    osc2.stop(agora + 0.055);
+  } catch (e) {}
+}
+
 export class GerenciadorInteracao {
   constructor(camera, listaQuadros, controlador, listaMemorias = [], config = {}) {
     this.camera = camera;
@@ -22,6 +59,7 @@ export class GerenciadorInteracao {
     this.modalAberto = false;
     this.modalCartaAberto = false;
     this.memoriaAtualId = 1;
+    this.aoAlternarInterruptor = null; // callback para acionar o interruptor 3D
 
     // Elementos do DOM - Card HUD inferior
     this.elMira = document.getElementById("mira-central");
@@ -91,6 +129,11 @@ export class GerenciadorInteracao {
     if (!objeto || !objeto.userData) return;
     if (objeto.userData.ehPresente) {
       this.abrirCartaSecreta();
+    } else if (objeto.userData.ehInterruptor) {
+      tocarSomCliqueInterruptor();
+      if (this.aoAlternarInterruptor) {
+        this.aoAlternarInterruptor(objeto);
+      }
     } else if (objeto.userData.memoria) {
       this.abrirHistoria(objeto.userData.memoria);
     }
@@ -215,6 +258,21 @@ export class GerenciadorInteracao {
       }
       if (this.btnAcaoMobile) {
         this.btnAcaoMobile.innerHTML = "<span>💌</span><span>Abrir Carta</span>";
+      }
+    } else if (objetoQuadro.userData.ehInterruptor) {
+      const ligado = objetoQuadro.userData.ligado !== false;
+      if (this.elTag) this.elTag.textContent = "CLIMA & ILUMINAÇÃO 💡";
+      if (this.elTitulo) this.elTitulo.textContent = "Interruptor do Salão";
+      if (this.elData) this.elData.textContent = ligado ? "Clique para apagar as luzes e ver as estrelas ✨" : "Clique para acender a luz da galeria ☀️";
+      if (this.btnHistoria) {
+        this.btnHistoria.innerHTML = ligado
+          ? "<span>🕯️</span><span>Apagar Luzes</span><span>→</span>"
+          : "<span>☀️</span><span>Acender Luzes</span><span>→</span>";
+      }
+      if (this.btnAcaoMobile) {
+        this.btnAcaoMobile.innerHTML = ligado
+          ? "<span>🕯️</span><span>Apagar</span>"
+          : "<span>☀️</span><span>Acender</span>";
       }
     } else if (objetoQuadro.userData.ehEspelho) {
       if (this.elTag) this.elTag.textContent = "ELOGIO ESPECIAL ✨";
