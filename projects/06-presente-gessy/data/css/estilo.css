@@ -1,0 +1,1043 @@
+/*
+ * ============================================================
+ *  ESTILOS DA GALERIA 3D & MEMÓRIAS DA GESSY — PROJETO 06
+ * ============================================================
+ */
+
+:root {
+  --cor-fundo: #0d1117;
+  --cor-primaria: #ff4d6d;
+  --cor-secundaria: #ff758f;
+  --cor-dourado: #ffd166;
+  --cor-creme: #fff8f0;
+  --cor-card-bg: rgba(20, 24, 33, 0.88);
+  --cor-card-borda: rgba(255, 209, 102, 0.35);
+  --cor-texto: #f8f9fa;
+  --cor-texto-suave: #c9d1d9;
+  --fonte-titulo: "Georgia", serif;
+  --fonte-corpo: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  height: 100dvh; /* altura real no celular, descontando a barra do navegador */
+  overflow: hidden;
+  overscroll-behavior: none; /* sem "puxar para recarregar" nem efeito elástico */
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: var(--fonte-corpo);
+}
+
+button {
+  touch-action: manipulation; /* sem atraso nem zoom de duplo toque em botões */
+}
+
+/* ============================================================
+   CANVAS 3D E HUD SUPERIOR
+   ============================================================ */
+#canvas-3d {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  display: block;
+}
+
+#mira-central {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 8px rgba(255, 209, 102, 0.8);
+  pointer-events: none;
+  z-index: 10;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#mira-central.ativo {
+  transform: translate(-50%, -50%) scale(2.2);
+  background: var(--cor-primaria);
+  box-shadow: 0 0 16px var(--cor-primaria);
+}
+
+/* Barra de Topo */
+#barra-topo {
+  position: fixed;
+  top: 14px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.badge-topo {
+  pointer-events: auto;
+  background: var(--cor-card-bg);
+  border: 1px solid var(--cor-card-borda);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cor-dourado);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.botoes-topo {
+  display: flex;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.btn-icone {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--cor-card-bg);
+  border: 1px solid var(--cor-card-borda);
+  color: var(--cor-creme);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.btn-icone:active {
+  transform: scale(0.92);
+}
+
+/* ============================================================
+   CARD DE INTERAÇÃO "NOSSA HISTÓRIA"
+   ============================================================ */
+#card-interacao {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(120px);
+  opacity: 0;
+  z-index: 30;
+  width: 90%;
+  max-width: 380px;
+  background: var(--cor-card-bg);
+  border: 1px solid var(--cor-dourado);
+  border-radius: 16px;
+  padding: 16px 20px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 209, 102, 0.2);
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.35s ease;
+  pointer-events: none;
+}
+
+#card-interacao.visivel {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#card-tag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--cor-dourado);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+#card-titulo {
+  font-family: var(--fonte-titulo);
+  font-size: 18px;
+  color: var(--cor-creme);
+  margin-bottom: 4px;
+}
+
+#card-data {
+  font-size: 12px;
+  color: var(--cor-texto-suave);
+  margin-bottom: 12px;
+}
+
+.btn-historia {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background: linear-gradient(135deg, var(--cor-primaria), #c9184a);
+  color: #fff;
+  border: none;
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255, 77, 109, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-historia:active {
+  transform: scale(0.97);
+}
+
+/* ============================================================
+   CONTROLES MOBILE (JOYSTICK + TOUCH ROTATE)
+   ============================================================ */
+#mobile-controles {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+}
+
+#joystick-area {
+  position: absolute;
+  bottom: calc(30px + env(safe-area-inset-bottom, 0px));
+  left: calc(24px + env(safe-area-inset-left, 0px));
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  pointer-events: auto;
+  touch-action: none;
+  backdrop-filter: blur(4px);
+  z-index: 2; /* fica por cima da área de olhar */
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+#joystick-area.ativo {
+  background: rgba(255, 209, 102, 0.12);
+  border-color: rgba(255, 209, 102, 0.6);
+  box-shadow: 0 0 24px rgba(255, 209, 102, 0.25);
+}
+
+#joystick-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  margin: -25px 0 0 -25px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--cor-dourado) 30%, rgba(255, 209, 102, 0.4) 100%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+/* A tela inteira serve para olhar (arrastar) e tocar nos quadros (tap) */
+#toque-olhar-area {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+/* Instruções Desktop */
+#instrucoes-desktop {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 20;
+  background: var(--cor-card-bg);
+  border: 1px solid var(--cor-card-borda);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--cor-texto-suave);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#instrucoes-desktop kbd {
+  background: #21262d;
+  border: 1px solid #30363d;
+  padding: 1px 5px;
+  border-radius: 4px;
+  color: var(--cor-dourado);
+  font-weight: 700;
+}
+
+/* ============================================================
+   MODAL DE ABERTURA / CONTAGEM REGRESSIVA
+   ============================================================ */
+#modal-abertura {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #1e1e2f 0%, #0a0c10 100%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#modal-abertura.oculto {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.abertura-conteudo {
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  background: rgba(20, 24, 33, 0.7);
+  border: 1px solid var(--cor-card-borda);
+  border-radius: 24px;
+  padding: 32px 24px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7);
+}
+
+.abertura-icone {
+  font-size: 42px;
+  margin-bottom: 12px;
+  animation: pulsar 2s infinite ease-in-out;
+}
+
+@keyframes pulsar {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.abertura-titulo {
+  font-family: var(--fonte-titulo);
+  font-size: 26px;
+  color: var(--cor-creme);
+  margin-bottom: 8px;
+}
+
+.abertura-sub {
+  font-size: 14px;
+  color: var(--cor-texto-suave);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+/* Grade de Contagem Regressiva */
+.grid-contagem {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.bloco-tempo {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 209, 102, 0.2);
+  border-radius: 12px;
+  padding: 10px 4px;
+}
+
+.valor-tempo {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--cor-dourado);
+  display: block;
+}
+
+.rotulo-tempo {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--cor-texto-suave);
+  letter-spacing: 1px;
+}
+
+.btn-entrar {
+  background: linear-gradient(135deg, var(--cor-primaria), #c9184a);
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(255, 77, 109, 0.5);
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+
+.btn-entrar:active {
+  transform: scale(0.96);
+}
+
+/* ============================================================
+   CHUVA DE CORAÇÕES (SURPRESA DO BOTÃO BOOT)
+   ============================================================ */
+#chuva-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.coracao-caindo {
+  position: absolute;
+  font-size: 24px;
+  top: -40px;
+  animation: cairCoracao linear forwards;
+}
+
+@keyframes cairCoracao {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(105vh) rotate(360deg) scale(1.3);
+    opacity: 0;
+  }
+}
+
+#alerta-surpresa {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-30px);
+  background: linear-gradient(135deg, rgba(255, 77, 109, 0.95), rgba(201, 24, 74, 0.95));
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  box-shadow: 0 4px 20px rgba(255, 77, 109, 0.6);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+  z-index: 10000;
+  pointer-events: none;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+#alerta-surpresa.visivel {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ============================================================
+   ESTILOS DA PÁGINA "NOSSA HISTÓRIA" (historia.html)
+   ============================================================ */
+body.pagina-historia {
+  overflow-y: auto;
+  background: radial-gradient(circle at 50% 10%, #1a162b 0%, #0d1117 80%);
+  padding-bottom: 60px;
+}
+
+.historia-container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+
+.historia-nav-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--cor-card-bg);
+  border: 1px solid var(--cor-card-borda);
+  color: var(--cor-creme);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s;
+}
+
+.btn-voltar:active {
+  transform: scale(0.95);
+}
+
+.historia-card {
+  background: rgba(20, 24, 33, 0.85);
+  border: 1px solid rgba(255, 209, 102, 0.3);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+}
+
+.historia-moldura-foto {
+  position: relative;
+  width: 100%;
+  max-height: 480px;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.historia-foto {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.historia-conteudo {
+  padding: 28px 24px;
+}
+
+.historia-tag {
+  color: var(--cor-dourado);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.historia-titulo {
+  font-family: var(--fonte-titulo);
+  font-size: 26px;
+  color: var(--cor-creme);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.historia-data {
+  font-size: 13px;
+  color: var(--cor-texto-suave);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.historia-texto {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #e6edf3;
+  user-select: text;
+  white-space: pre-line;
+}
+
+/* Navegação entre memórias (Anterior / Próxima) */
+.historia-botoes-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  gap: 12px;
+}
+
+.btn-paginacao {
+  flex: 1;
+  background: var(--cor-card-bg);
+  border: 1px solid var(--cor-card-borda);
+  color: var(--cor-creme);
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.btn-paginacao:active {
+  transform: scale(0.97);
+}
+
+.btn-paginacao.desabilitado {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ============================================================
+   ELEMENTOS DE INTERFACE MOBILE (BOTÃO FLUTUANTE & DICA)
+   ============================================================ */
+/* Botão Flutuante do Celular (Polegar Direito) */
+.btn-acao-mobile {
+  position: fixed;
+  bottom: calc(36px + env(safe-area-inset-bottom, 0px));
+  right: calc(20px + env(safe-area-inset-right, 0px));
+  z-index: 25;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--cor-primaria), #c9184a);
+  color: #fff;
+  border: 1px solid var(--cor-dourado);
+  padding: 14px 22px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(255, 77, 109, 0.5), 0 0 16px rgba(255, 209, 102, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.85);
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.btn-acao-mobile.visivel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+  animation: pulsoAcaoMobile 2s infinite ease-in-out;
+}
+
+.btn-acao-mobile:active {
+  transform: scale(0.92);
+}
+
+@keyframes pulsoAcaoMobile {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(255, 77, 109, 0.5), 0 0 12px rgba(255, 209, 102, 0.3);
+  }
+  50% {
+    box-shadow: 0 8px 26px rgba(255, 77, 109, 0.7), 0 0 22px rgba(255, 209, 102, 0.6);
+  }
+}
+
+/* Dica de Controles Mobile */
+.dica-mobile {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-15px);
+  z-index: 35;
+  background: rgba(13, 17, 23, 0.88);
+  border: 1px solid rgba(255, 209, 102, 0.35);
+  border-radius: 16px;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--cor-creme);
+  line-height: 1.45;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  white-space: nowrap;
+}
+
+.dica-mobile.visivel {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================================
+   RESPONSIVIDADE: DESKTOP vs MOBILE
+   ============================================================ */
+/* Em telas de computador (largura > 768px e mouse disponível) */
+@media (min-width: 769px) {
+  #mobile-controles,
+  .btn-acao-mobile,
+  .dica-mobile {
+    display: none !important;
+  }
+}
+
+/* Em smartphones e tablets */
+@media (max-width: 768px) {
+  #instrucoes-desktop {
+    display: none !important;
+  }
+
+  /* Card de interação vai para o topo no celular para NÃO cobrir o joystick */
+  #card-interacao {
+    top: 66px;
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    width: 92%;
+    max-width: 360px;
+    padding: 10px 14px;
+    border-radius: 14px;
+  }
+
+  #card-interacao.visivel {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  #card-interacao .btn-historia {
+    display: none; /* No celular, usa o botão flutuante ergonômico no polegar direito */
+  }
+
+  #card-titulo {
+    font-size: 16px;
+    margin-bottom: 2px;
+  }
+
+  #card-data {
+    margin-bottom: 0;
+    font-size: 11px;
+  }
+
+  /* Ajustes finos no Modal de Memória para telas pequenas */
+  .modal-memoria {
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 12px calc(32px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .historia-card {
+    border-radius: 16px;
+  }
+
+  .historia-moldura-foto {
+    max-height: 270px;
+  }
+
+  .historia-conteudo {
+    padding: 18px 16px;
+  }
+
+  .historia-titulo {
+    font-size: 21px;
+  }
+
+  .historia-texto {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .btn-voltar,
+  .btn-icone {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .historia-botoes-nav {
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .btn-paginacao {
+    min-height: 44px;
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+
+  .abertura-conteudo {
+    padding: 24px 16px;
+    border-radius: 20px;
+  }
+
+  .abertura-icone {
+    font-size: 36px;
+    margin-bottom: 8px;
+  }
+
+  .abertura-titulo {
+    font-size: 22px;
+  }
+}
+
+/* ============================================================
+   MODAL DE DETALHE DA MEMÓRIA (OVERLAY NA GALERIA 3D)
+   ============================================================ */
+.modal-memoria {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 24px 16px 40px;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+.modal-memoria.oculto {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.modal-memoria-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 13, 20, 0.86);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: -1;
+  cursor: pointer;
+}
+
+.modal-memoria-conteudo {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  margin: auto 0;
+  animation: surgimentoModal 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes surgimentoModal {
+  from {
+    transform: translateY(24px) scale(0.97);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   CARTINHA SECRETA EM PERGAMINHO & MURAL DE RECADOS
+   ============================================================ */
+.modal-carta-conteudo {
+  max-width: 600px;
+}
+
+.carta-pergaminho {
+  position: relative;
+  background: #fdfaf3;
+  color: #2b2319;
+  border-radius: 18px;
+  padding: 38px 28px 30px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(220, 195, 155, 0.35);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  font-family: var(--fonte-titulo);
+}
+
+/* Selo de cera com coração */
+.carta-selo {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle at 35% 35%, #e63946, #9b111e);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  border: 2px solid #780016;
+  font-size: 22px;
+}
+
+.carta-cabecalho {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 22px;
+}
+
+.carta-titulo {
+  font-size: 26px;
+  color: #7b1113;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.carta-sub {
+  font-size: 14px;
+  color: #8c7863;
+  font-style: italic;
+  font-family: var(--fonte-corpo);
+}
+
+.carta-corpo {
+  font-size: 16.5px;
+  line-height: 1.8;
+  color: #3d3124;
+}
+
+.carta-corpo p {
+  margin-bottom: 16px;
+  text-indent: 1.8em;
+  text-align: justify;
+}
+
+.carta-assinatura {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 26px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #5c4530;
+  font-style: italic;
+}
+
+.carta-assinatura strong {
+  font-size: 20px;
+  color: #9b111e;
+  margin-top: 4px;
+}
+
+/* Divisor decorativo */
+.divisor-romantico {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 28px 0 24px;
+  color: #d4af37;
+  font-size: 18px;
+}
+
+.divisor-romantico::before,
+.divisor-romantico::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d4af37, transparent);
+}
+
+/* Seção do Mural de Recados */
+.secao-recado {
+  background: #f7f1e5;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 14px;
+  padding: 20px 18px;
+  font-family: var(--fonte-corpo);
+}
+
+.recado-titulo {
+  font-size: 18px;
+  color: #7b1113;
+  font-family: var(--fonte-titulo);
+  margin-bottom: 6px;
+}
+
+.recado-sub {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #635342;
+  margin-bottom: 14px;
+}
+
+.form-recado {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-recado {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #d8cbba;
+  background: #ffffff;
+  color: #2b2319;
+  font-family: var(--fonte-corpo);
+  font-size: 14.5px;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-recado:focus {
+  border-color: #e63946;
+  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.18);
+}
+
+.btn-enviar-recado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #e63946, #c1121f);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14.5px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(193, 18, 31, 0.3);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.btn-enviar-recado:hover {
+  filter: brightness(1.08);
+}
+
+.btn-enviar-recado:active {
+  transform: scale(0.98);
+}
+
+.btn-enviar-recado:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.recado-feedback {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.recado-feedback.sucesso {
+  background: #fff0f3;
+  color: #9b111e;
+  border: 1px solid #ffccd5;
+}
+
+.recado-feedback.oculto {
+  display: none;
+}
+
+/* Elogio do Espelho Mágico */
+.texto-elogio-espelho {
+  font-size: 1.15em;
+  line-height: 1.85;
+  text-align: center;
+  color: var(--cor-creme);
+}
+
+.moldura-oculta {
+  display: none !important;
+}
+
+
+
+

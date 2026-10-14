@@ -1,0 +1,76 @@
+{
+  "aniversario": "2026-10-20T00:00:00-03:00",
+  "nome_homenageada": "Gessy",
+  "musica": "",
+  "carta_secreta": {
+    "titulo": "Para o Amor da Minha Vida 💛",
+    "subtitulo": "Feliz Aniversário, Gessy!",
+    "texto": "Se você chegou até aqui e abriu este presente, saiba que cada quadro desta galeria representa apenas uma pequena fração do quanto você é especial para mim.\n\nDesde que você entrou na minha vida, cada dia se tornou mais alegre, mais leve e cheio de sentido. Construí este cantinho com todo o carinho para eternizar a nossa história e para que você sempre se lembre do quanto é amada, admirada e importante para mim.\n\nQue este novo ciclo traga realizações, sorrisos sinceros e incontáveis momentos felizes — sempre comigo ao seu lado segurando a sua mão.\n\nEu te amo com todo o meu coração! ✨🎂",
+    "assinatura": "Com todo o meu amor, Israel ❤️"
+  },
+  "memorias": [
+    {
+      "id": 1,
+      "foto": "fotos/01.jpg",
+      "titulo": "Nosso Primeiro Encontro",
+      "data": "14 de Fevereiro de 2024",
+      "texto": "Lembra do frio na barriga quando a gente se viu pela primeira vez? Parecia que o tempo tinha parado só para nós dois. Cada conversa ali já mostrava o quanto a nossa conexão seria especial e verdadeira."
+    },
+    {
+      "id": 2,
+      "foto": "fotos/02.jpg",
+      "titulo": "Aquele Pôr do Sol Especial",
+      "data": "28 de Março de 2024",
+      "texto": "O céu estava em tons dourados e rosa, mas a vista mais bonita daquele fim de tarde era ver você sorrindo ao meu lado. Um momento simples que guardo com todo carinho no peito."
+    },
+    {
+      "id": 3,
+      "foto": "fotos/03.jpg",
+      "titulo": "Risadas que Não Acabavam",
+      "data": "15 de Maio de 2024",
+      "texto": "Uma daquelas tardes em que a gente riu até a barriga doer por qualquer bobeira. Ter você por perto transforma qualquer dia comum em uma memória inesquecível."
+    },
+    {
+      "id": 4,
+      "foto": "fotos/04.jpg",
+      "titulo": "Nossa Primeira Viagem",
+      "data": "22 de Junho de 2024",
+      "texto": "Pegamos a estrada juntos e descobrimos novos lugares. Cada quilômetro com você como copiloto foi pura alegria, cheia de músicas cantadas desafinadas e muita cumplicidade."
+    },
+    {
+      "id": 5,
+      "foto": "fotos/05.jpg",
+      "titulo": "Um Café num Dia Chuvoso",
+      "data": "10 de Julho de 2024",
+      "texto": "Chovia lá fora, mas dentro do nosso cantinho estava o lugar mais acolhedor do mundo. Duas xícaras quentes, conversas sobre o futuro e a certeza de estarmos no lugar certo."
+    },
+    {
+      "id": 6,
+      "foto": "fotos/06.jpg",
+      "titulo": "O Abraço que Acalma Tudo",
+      "data": "18 de Agosto de 2024",
+      "texto": "Não importa o quão cansativo ou corrido tenha sido o dia: o seu abraço é o meu porto seguro, onde tudo encontra paz e sentido."
+    },
+    {
+      "id": 7,
+      "foto": "fotos/07.jpg",
+      "titulo": "Celebrando Cada Conquista",
+      "data": "05 de Setembro de 2024",
+      "texto": "Comemorar as suas vitórias me dá um orgulho imenso de quem você é. Ver você brilhar e lutar pelos seus sonhos é uma das coisas mais inspiradoras da minha vida."
+    },
+    {
+      "id": 8,
+      "foto": "fotos/08.jpg",
+      "titulo": "Passeio Favorito a Dois",
+      "data": "25 de Setembro de 2024",
+      "texto": "Caminhar de mãos dadas sem pressa, jogando conversa fora e fazendo planos. Os melhores passeios são sempre os mais simples, porque o que importa é a sua companhia."
+    },
+    {
+      "id": 9,
+      "foto": "fotos/09.jpg",
+      "titulo": "Para Sempre com Você",
+      "data": "Hoje e Sempre",
+      "texto": "Feliz aniversário, meu amor! Que este novo ciclo seja tão lindo, generoso e cheio de luz quanto você. Obrigado por ser essa pessoa incrível na minha vida. Eu te amo muito!"
+    }
+  ]
+}

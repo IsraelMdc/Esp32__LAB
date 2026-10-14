@@ -1,0 +1,18 @@
+# ============================================================
+# TABELA DE PARTIÇÕES CUSTOMIZADA — PROJETO 06 PRESENTE GESSY
+# ============================================================
+# Memória Flash Total: 4 MB (0x400000 bytes)
+#
+# Objetivo: Maximizar o espaço do LittleFS para caber o Three.js
+# comprimido em gzip, de 9 a 15 fotos e a trilha sonora MP3.
+#
+#   - App0 (Firmware): 1.25 MB (0x140000) -> Firmware consome ~870 KB
+#   - LittleFS (spiffs): 2.625 MB (0x2A0000) -> Espaço expandido
+# ============================================================
+# Name,   Type, SubType, Offset,   Size,     Flags
+nvs,      data, nvs,     0x9000,   0x5000,
+otadata,  data, ota,     0xe000,   0x2000,
+app0,     app,  factory, 0x10000,  0x140000,
+spiffs,   data, spiffs,  0x150000, 0x2A0000,
+coredump, data, coredump,0x3F0000, 0x10000,
+

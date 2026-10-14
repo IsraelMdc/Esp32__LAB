@@ -1,0 +1,24 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+// ============================================================
+//  CONFIGURAÇÕES DE REDE & HARDWARE — PROJETO 06 (GESSY)
+// ============================================================
+//  Copie este arquivo para src/config.h e preencha suas senhas.
+//  O arquivo src/config.h é ignorado pelo Git (segurança).
+// ============================================================
+
+// --- Rede Wi-Fi Residencial (2.4 GHz) ---
+#define WIFI_SSID     "SEU_WIFI_2.4G"
+#define WIFI_PASS     "SUA_SENHA"
+
+// --- Nome mDNS na rede local ---
+// Permite abrir no navegador: http://gessy.local
+#define MDNS_HOST     "gessy"
+
+// --- Pinos de Hardware (DevKit v1 — sem componentes externos) ---
+#define PINO_LED      2       // LED embutido da placa (pulsação / confirmação)
+#define PINO_BOOT     0       // Botão BOOT embutido (dispara chuva de corações)
+
+#endif // CONFIG_H
+

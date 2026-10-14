@@ -16,9 +16,9 @@
     { "name": "01 · blink", "path": "projects/01-blink" },
     { "name": "02 · serial", "path": "projects/02-serial" },
     { "name": "03 · botao", "path": "projects/03-botao" },
-    { "name": "04 · wifi-scan", "path": "projects/04-wifi-scan" }
     { "name": "04 · wifi-scan", "path": "projects/04-wifi-scan" },
-    { "name": "05 · web-server", "path": "projects/05-web-server" }
+    { "name": "05 · web-server", "path": "projects/05-web-server" },
+    { "name": "06 · presente-gessy", "path": "projects/06-presente-gessy" }
   ],
 
   "settings": {

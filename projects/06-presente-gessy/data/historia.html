@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Nossa História · Galeria da Gessy 💛</title>
+  <link rel="stylesheet" href="css/estilo.css" />
+</head>
+<body class="pagina-historia">
+  <main class="historia-container">
+    <!-- Navegação Superior -->
+    <nav class="historia-nav-topo">
+      <a href="index.html" class="btn-voltar">
+        <span>←</span>
+        <span>Voltar à galeria 3D</span>
+      </a>
+      <button id="btn-som" class="btn-icone" title="Ligar/Desligar Música" aria-label="Som">🔊</button>
+    </nav>
+
+    <!-- Card Principal da Memória -->
+    <article class="historia-card">
+      <div class="historia-moldura-foto">
+        <img id="historia-foto" class="historia-foto" src="" alt="Foto da memória" />
+      </div>
+
+      <div class="historia-conteudo">
+        <div id="historia-tag" class="historia-tag">MEMÓRIA #1</div>
+        <h1 id="historia-titulo" class="historia-titulo">Título da Memória</h1>
+        <div id="historia-data" class="historia-data">📅 Data</div>
+        <p id="historia-texto" class="historia-texto">História detalhada...</p>
+      </div>
+    </article>
+
+    <!-- Navegação Anterior / Próxima -->
+    <footer class="historia-botoes-nav">
+      <a id="btn-anterior" class="btn-paginacao" href="#">← Memória Anterior</a>
+      <a id="btn-proxima" class="btn-paginacao" href="#">Próxima Memória →</a>
+    </footer>
+  </main>
+
+  <!-- Chuva de Corações (Botão BOOT) -->
+  <div id="chuva-container"></div>
+  <div id="alerta-surpresa">💖 Israel apertou o botão na placa física pensando em você!</div>
+
+  <script type="module" src="js/historia.js"></script>
+</body>
+</html>
+

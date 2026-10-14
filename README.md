@@ -116,6 +116,7 @@ Faça na ordem. Cada README explica a teoria por trás do código.
 | 03 | [botao](projects/03-botao/README.md) | Entrada digital, `INPUT_PULLUP`, debounce, borda | botão BOOT |
 | 04 | [wifi-scan](projects/04-wifi-scan/README.md) | Wi-Fi, RSSI, canais, segurança, MAC | rádio Wi-Fi |
 | 05 | [web-server](projects/05-web-server/README.md) | LittleFS, servidor HTTP, API REST, Cloudflare Tunnel | Wi-Fi + Flash + LED |
+| 06 | [presente-gessy](projects/06-presente-gessy/README.md) | Galeria 3D (Three.js), partição custom (2.62MB), gzip, surpresa no BOOT | Wi-Fi + Flash + BOOT + LED |
 
 O conceito mais importante de todos é o **`millis()`**, no projeto 02. É o que
 separa um programa que trava de um que faz várias coisas ao mesmo tempo.
@@ -139,19 +140,19 @@ Esp32__LAB/
 │   └── troubleshooting.md       ← quando der errado, comece por aqui
 │
 ├── tools/
-│   └── gerar_intellisense.cmd   ← conserta o sublinhado vermelho do editor
+│   ├── gerar_intellisense.cmd   ← conserta o sublinhado vermelho do editor
+│   ├── preparar_presente.ps1    ← redimensiona e comprime fotos para a Flash
+│   ├── preview_presente.py      ← simulador local da galeria 3D no navegador
+│   └── iniciar_presente.ps1     ← publica o túnel Cloudflare sem suspender o PC
 │
 ├── projects/                    ← UM PROJETO POR PASTA
 │   ├── _template/               ← copie esta pasta para criar um novo
 │   ├── 01-blink/
-│   │   ├── platformio.ini       ← config só deste projeto
-│   │   ├── README.md            ← a teoria deste projeto
-│   │   └── src/main.cpp         ← o código
 │   ├── 02-serial/
 │   ├── 03-botao/
-│   └── 04-wifi-scan/
 │   ├── 04-wifi-scan/
-│   └── 05-web-server/
+│   ├── 05-web-server/
+│   └── 06-presente-gessy/       ← galeria 3D e memórias de aniversário
 │
 ├── .venv/                       ← PlatformIO Core  (não versionado)
 └── .pio-core/                   ← compilador e bibliotecas  (não versionado)

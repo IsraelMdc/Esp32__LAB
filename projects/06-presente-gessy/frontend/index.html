@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d1117" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Galeria da Gessy 🎂✨</title>
+  <link rel="stylesheet" href="css/estilo.css" />
+</head>
+<body>
+  <!-- Canvas WebGL Three.js -->
+  <canvas id="canvas-3d"></canvas>
+
+  <!-- Mira no centro da tela -->
+  <div id="mira-central"></div>
+
+  <!-- HUD da Barra Superior -->
+  <header id="barra-topo">
+    <div class="badge-topo">
+      <span>✨</span>
+      <span>Galeria da Gessy</span>
+    </div>
+    <div class="botoes-topo">
+      <button id="btn-noite" class="btn-icone" title="Modo Luz de Velas & Céu Estrelado" aria-label="Modo Noite">🕯️</button>
+      <button id="btn-abrir-carta" class="btn-icone" title="Abrir Cartinha Secreta" aria-label="Cartinha">💌</button>
+      <button id="btn-som" class="btn-icone" title="Ligar/Desligar Música" aria-label="Som">🔊</button>
+    </div>
+  </header>
+
+  <!-- Card de Interação com Quadro -->
+  <aside id="card-interacao">
+    <div id="card-tag">MEMÓRIA</div>
+    <h2 id="card-titulo">Título da Memória</h2>
+    <div id="card-data">Data</div>
+    <button id="btn-historia" class="btn-historia">
+      <span>💛</span>
+      <span>Nossa história</span>
+      <span>→</span>
+    </button>
+  </aside>
+
+  <!-- Controles Mobile (Touch) -->
+  <div id="mobile-controles">
+    <div id="toque-olhar-area"></div>
+    <div id="joystick-area">
+      <div id="joystick-knob"></div>
+    </div>
+  </div>
+
+  <!-- Botão flutuante do celular (aparece ao mirar um quadro) -->
+  <button id="btn-acao-mobile" class="btn-acao-mobile" type="button" aria-label="Ver história">
+    <span>💛</span>
+    <span>Ver história</span>
+  </button>
+
+  <!-- Dica de controles no celular (some no primeiro toque) -->
+  <div id="dica-mobile" class="dica-mobile">
+    <div>🕹️ Analógico à esquerda para andar</div>
+    <div>👆 Arraste a tela para olhar</div>
+    <div>🖼️ Toque num quadro para ver a história</div>
+  </div>
+
+  <!-- Instruções no Desktop -->
+  <div id="instrucoes-desktop">
+    <div><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> ou Setas para andar</div>
+    <div>Clique na tela para olhar com o mouse</div>
+    <div>Olhe para um quadro e aperte <kbd>E</kbd> para ver a história</div>
+  </div>
+
+  <!-- Modal de Abertura e Contagem Regressiva -->
+  <div id="modal-abertura">
+    <div class="abertura-conteudo">
+      <div class="abertura-icone">🎂</div>
+      <h1 id="abertura-titulo" class="abertura-titulo">Galeria da Gessy</h1>
+      <p id="abertura-sub" class="abertura-sub">Carregando surpresa...</p>
+
+      <div id="grid-contagem" class="grid-contagem">
+        <div class="bloco-tempo">
+          <span id="tempo-dias" class="valor-tempo">00</span>
+          <span class="rotulo-tempo">Dias</span>
+        </div>
+        <div class="bloco-tempo">
+          <span id="tempo-horas" class="valor-tempo">00</span>
+          <span class="rotulo-tempo">Horas</span>
+        </div>
+        <div class="bloco-tempo">
+          <span id="tempo-min" class="valor-tempo">00</span>
+          <span class="rotulo-tempo">Min</span>
+        </div>
+        <div class="bloco-tempo">
+          <span id="tempo-seg" class="valor-tempo">00</span>
+          <span class="rotulo-tempo">Seg</span>
+        </div>
+      </div>
+
+      <button id="btn-entrar" class="btn-entrar">✨ Entrar na Galeria</button>
+    </div>
+  </div>
+
+  <!-- Modal de Detalhe da Memória (Overlay sem sair da galeria) -->
+  <div id="modal-memoria" class="modal-memoria oculto" role="dialog" aria-modal="true">
+    <div class="modal-memoria-backdrop" id="modal-memoria-backdrop"></div>
+    <div class="modal-memoria-conteudo">
+      <nav class="historia-nav-topo">
+        <button id="btn-fechar-memoria" class="btn-voltar" type="button">
+          <span>←</span>
+          <span>Voltar à galeria 3D</span>
+        </button>
+        <button id="btn-fechar-x" class="btn-icone" title="Fechar (Esc)" aria-label="Fechar">✕</button>
+      </nav>
+
+      <article class="historia-card">
+        <div class="historia-moldura-foto">
+          <img id="modal-foto" class="historia-foto" src="" alt="Foto da memória" />
+        </div>
+
+        <div class="historia-conteudo">
+          <div id="modal-tag" class="historia-tag">MEMÓRIA #1</div>
+          <h1 id="modal-titulo" class="historia-titulo">Título da Memória</h1>
+          <div id="modal-data" class="historia-data">📅 Data</div>
+          <p id="modal-texto" class="historia-texto">História detalhada...</p>
+        </div>
+      </article>
+
+      <footer class="historia-botoes-nav">
+        <button id="modal-btn-ant" class="btn-paginacao" type="button">← Memória Anterior</button>
+        <button id="modal-btn-prox" class="btn-paginacao" type="button">Próxima Memória →</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modal da Cartinha Secreta & Mural de Recados para o ESP32 -->
+  <div id="modal-carta" class="modal-memoria oculto" role="dialog" aria-modal="true">
+    <div class="modal-memoria-backdrop" id="modal-carta-backdrop"></div>
+    <div class="modal-memoria-conteudo modal-carta-conteudo">
+      <nav class="historia-nav-topo">
+        <button id="btn-fechar-carta" class="btn-voltar" type="button">
+          <span>←</span>
+          <span>Voltar ao Salão</span>
+        </button>
+        <button id="btn-fechar-carta-x" class="btn-icone" title="Fechar (Esc)" aria-label="Fechar">✕</button>
+      </nav>
+
+      <article class="carta-pergaminho">
+        <div class="carta-selo">
+          <span>❤️</span>
+        </div>
+        <div class="carta-cabecalho">
+          <h1 id="carta-titulo" class="carta-titulo">Uma Carta Para Você</h1>
+          <p id="carta-sub" class="carta-sub">Com todo o meu amor, no seu dia especial ✨</p>
+        </div>
+        <div id="carta-corpo" class="carta-corpo">
+          <p>Carregando mensagem especial...</p>
+        </div>
+        <div class="carta-assinatura">
+          <span>Com todo meu amor,</span>
+          <strong>Israel 💛</strong>
+        </div>
+
+        <!-- Divisor com corações -->
+        <div class="divisor-romantico">
+          <span>❦</span>
+          <span>❤️</span>
+          <span>❦</span>
+        </div>
+
+        <!-- Seção do Mural de Recados da Gessy para Israel -->
+        <section class="secao-recado">
+          <h2 class="recado-titulo">💌 Deixe um Recado Para Mim</h2>
+          <p class="recado-sub">Deixa um recadinho especial. Ela será gravada diretamente na memória da plaquinha da minha bancada e eu lerei com muito carinho!</p>
+
+          <form id="form-recado" class="form-recado">
+            <textarea id="input-recado" class="input-recado" rows="3" maxlength="280" placeholder="Escreva o que você está sentindo agora, meu amor..." required></textarea>
+            <button id="btn-enviar-recado" class="btn-enviar-recado" type="submit">
+              <span>💖</span>
+              <span>Registrar o recadinho</span>
+            </button>
+          </form>
+          <div id="recado-feedback" class="recado-feedback oculto"></div>
+        </section>
+      </article>
+    </div>
+  </div>
+
+  <!-- Contêiner de Chuva de Corações (Botão BOOT) -->
+  <div id="chuva-container"></div>
+  <div id="alerta-surpresa">💖 Israel apertou o botão na plaquinha pensando em você!</div>
+
+  <!-- Script Principal Desacoplado da Aplicação -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
+

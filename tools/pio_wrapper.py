@@ -21,7 +21,7 @@ if marker in cwd.lower() and not cwd.lower().startswith(junction_root.lower()):
     if os.path.exists(target_dir):
         os.chdir(target_dir)
 
-pio_exe = os.path.join(junction_root, ".venv", "Scripts", "pio.exe")
-res = subprocess.run([pio_exe] + sys.argv[1:])
+cmd = [sys.executable, "-m", "platformio"] + sys.argv[1:]
+res = subprocess.run(cmd)
 sys.exit(res.returncode)
 
