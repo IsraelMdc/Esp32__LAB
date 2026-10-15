@@ -1145,39 +1145,60 @@ export function construirGaleria(cena, memorias, config) {
     grupoAparador.add(grupoCast);
   });
 
-  // Vaso floral com rosas vermelhas sobre o aparador
+  // Vaso floral com rosas vermelhas sobre o aparador (deslocado para a lateral x = +0.50 para desobstruir o interruptor)
   const grupoVaso = new THREE.Group();
-  grupoVaso.position.set(0, altAparador, 0);
-  const vasoCorpo = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.06, 0.22, 16), matMarmore);
-  vasoCorpo.position.y = 0.11;
+  grupoVaso.position.set(0.50, altAparador, 0);
+  const vasoCorpo = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.055, 0.20, 16), matMarmore);
+  vasoCorpo.position.y = 0.10;
   grupoVaso.add(vasoCorpo);
-  const frisoVaso = new THREE.Mesh(new THREE.TorusGeometry(0.092, 0.012, 8, 20), matOuro);
+  const frisoVaso = new THREE.Mesh(new THREE.TorusGeometry(0.088, 0.012, 8, 20), matOuro);
   frisoVaso.rotation.x = Math.PI / 2;
-  frisoVaso.position.y = 0.16;
+  frisoVaso.position.y = 0.15;
   grupoVaso.add(frisoVaso);
 
   for (let r = 0; r < 5; r++) {
     const angR = (r / 5) * Math.PI * 2;
     const rosa = criarRosaRealista(0xd90429, 0.28);
-    rosa.position.set(Math.cos(angR) * 0.05, 0.22, Math.sin(angR) * 0.05);
+    rosa.position.set(Math.cos(angR) * 0.05, 0.20, Math.sin(angR) * 0.05);
     rosa.rotation.y = angR;
     rosa.rotation.x = 0.12;
     grupoVaso.add(rosa);
   }
   grupoAparador.add(grupoVaso);
 
-  // Pétalas caídas sobre o mármore
-  for (let p = 0; p < 8; p++) {
-    const petala = new THREE.Mesh(new THREE.CircleGeometry(0.022, 6), new THREE.MeshStandardMaterial({
-      color: 0x9e0012,
-      roughness: 0.8,
-      side: THREE.DoubleSide
-    }));
+  // Pratinho dourado ornamental com pétalas aveludadas na lateral oposta (x = -0.50)
+  const grupoBandeja = new THREE.Group();
+  grupoBandeja.position.set(-0.50, altAparador, 0);
+  const bandeja = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.08, 0.015, 16), matOuro);
+  bandeja.position.y = 0.008;
+  grupoBandeja.add(bandeja);
+
+  const matPetala = new THREE.MeshStandardMaterial({
+    color: 0x9e0012,
+    roughness: 0.8,
+    side: THREE.DoubleSide
+  });
+
+  for (let p = 0; p < 6; p++) {
+    const petalaB = new THREE.Mesh(new THREE.CircleGeometry(0.024, 6), matPetala);
+    petalaB.rotation.x = -Math.PI / 2 + (Math.random() - 0.5) * 0.2;
+    petalaB.position.set((Math.random() - 0.5) * 0.12, 0.018, (Math.random() - 0.5) * 0.12);
+    petalaB.rotation.z = Math.random() * Math.PI * 2;
+    grupoBandeja.add(petalaB);
+  }
+  grupoAparador.add(grupoBandeja);
+
+  // Pétalas caídas sobre o mármore próximo ao vaso e à bandeja (centro desobstruído)
+  [
+    [0.35, 0.08], [0.42, -0.06], [0.62, 0.05], [0.58, -0.08],
+    [-0.38, 0.06], [-0.62, -0.05], [-0.44, -0.07]
+  ].forEach(([px, pz]) => {
+    const petala = new THREE.Mesh(new THREE.CircleGeometry(0.022, 6), matPetala);
     petala.rotation.x = -Math.PI / 2;
-    petala.position.set((Math.random() - 0.5) * 0.7, altAparador + 0.002, (Math.random() - 0.5) * 0.25);
+    petala.position.set(px, altAparador + 0.002, pz);
     petala.rotation.z = Math.random() * Math.PI * 2;
     grupoAparador.add(petala);
-  }
+  });
 
   grupoAniversario.add(grupoAparador);
 
