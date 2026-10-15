@@ -280,6 +280,129 @@ function criarTexturaTerraMusgo() {
   return tex;
 }
 
+function criarTexturaMandalaPresente() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext("2d");
+  const cx = 256, cy = 256;
+
+  // Fundo com mármore escuro profundo e brilho central
+  const bgGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, 256);
+  bgGrad.addColorStop(0, "#2c1c0e");
+  bgGrad.addColorStop(0.4, "#160e07");
+  bgGrad.addColorStop(0.85, "#0b0704");
+  bgGrad.addColorStop(1, "#050302");
+  ctx.fillStyle = bgGrad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 256, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Halo central de luz radiante âmbar
+  const haloGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 190);
+  haloGrad.addColorStop(0, "rgba(255, 248, 220, 0.95)");
+  haloGrad.addColorStop(0.25, "rgba(255, 215, 100, 0.65)");
+  haloGrad.addColorStop(0.6, "rgba(230, 140, 30, 0.28)");
+  haloGrad.addColorStop(1, "rgba(180, 80, 10, 0)");
+  ctx.fillStyle = haloGrad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 190, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Anéis dourados concêntricos com filigrana
+  ctx.strokeStyle = "#ffd166";
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 235, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(255, 235, 160, 0.85)";
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 218, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 160, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 95, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // 12 Pontos de lótus / raios solares no anel intermediário
+  ctx.strokeStyle = "#ffe29a";
+  ctx.fillStyle = "#ffd166";
+  for (let i = 0; i < 12; i++) {
+    const ang = (i / 12) * Math.PI * 2;
+    const r1 = 95, r2 = 160;
+    const x1 = cx + Math.cos(ang) * r1;
+    const y1 = cy + Math.sin(ang) * r1;
+    const x2 = cx + Math.cos(ang) * r2;
+    const y2 = cy + Math.sin(ang) * r2;
+
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(x2, y2, 4.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // 12 Corações dourados delicados no anel externo
+  ctx.fillStyle = "#ff6b8b";
+  ctx.strokeStyle = "#ffd166";
+  for (let i = 0; i < 12; i++) {
+    const ang = ((i + 0.5) / 12) * Math.PI * 2;
+    const hx = cx + Math.cos(ang) * 190;
+    const hy = cy + Math.sin(ang) * 190;
+
+    ctx.save();
+    ctx.translate(hx, hy);
+    ctx.rotate(ang + Math.PI / 2);
+    ctx.beginPath();
+    ctx.moveTo(0, -6);
+    ctx.bezierCurveTo(-6, -12, -12, -4, 0, 8);
+    ctx.bezierCurveTo(12, -4, 6, -12, 0, -6);
+    ctx.fill();
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Estrela dourada central de 8 pontas
+  ctx.fillStyle = "#fff8e7";
+  ctx.beginPath();
+  for (let i = 0; i < 16; i++) {
+    const r = i % 2 === 0 ? 50 : 22;
+    const a = (i / 16) * Math.PI * 2;
+    const px = cx + Math.cos(a) * r;
+    const py = cy + Math.sin(a) * r;
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.fill();
+
+  // Borda externa dentada com pérolas de ouro
+  ctx.fillStyle = "#ffd166";
+  for (let d = 0; d < 36; d++) {
+    const angD = (d / 36) * Math.PI * 2;
+    const dx = cx + Math.cos(angD) * 242;
+    const dy = cy + Math.sin(angD) * 242;
+    ctx.beginPath();
+    ctx.arc(dx, dy, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  return new THREE.CanvasTexture(canvas);
+}
+
 function criarGeometriaTufoGrama() {
   const positions = [];
   const uvs = [];
@@ -344,6 +467,8 @@ export function construirGaleria(cena, memorias, config) {
   let alavancaInterruptor = null;
   let meshInterruptorHit = null;
   let estadoInterruptorLigado = true;
+  let discoMandala = null;
+  let luzUplightPresente = null;
 
   const raioRotunda = 7.5;
   const altura = 4.2;
@@ -683,6 +808,84 @@ export function construirGaleria(cena, memorias, config) {
   meshPlacaPresente.position.set(0, 0.54, -0.76);
   meshPlacaPresente.rotation.y = Math.PI;
   grupoPresente.add(meshPlacaPresente);
+
+  // ------------------------------------------------------------
+  //  2.7 ALTAR NEOCLÁSSICO COM MANDALA DOURADA RADIANTE & UPLIGHT
+  //  Posicionado diretamente sob a caixa de presente no centro do canteiro (0, 0, 0)
+  // ------------------------------------------------------------
+  const grupoAltarPresente = new THREE.Group();
+  grupoAltarPresente.position.set(0, 0, 0);
+
+  // Nível 1: Base de Mármore Carrara no Solo (y = 0.41m a y = 0.46m)
+  const baseAltarMarmore = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.78, 0.83, 0.05, 48),
+    matMarmore
+  );
+  baseAltarMarmore.position.y = 0.435;
+  grupoAltarPresente.add(baseAltarMarmore);
+
+  // Moldura Toroidal em Ouro na Base do Altar
+  const molduraBaseAltar = new THREE.Mesh(
+    new THREE.TorusGeometry(0.81, 0.02, 8, 48),
+    matOuro
+  );
+  molduraBaseAltar.rotation.x = Math.PI / 2;
+  molduraBaseAltar.position.y = 0.42;
+  grupoAltarPresente.add(molduraBaseAltar);
+
+  // Nível 2: Plataforma Escalonada em Mármore Nobre (y = 0.46m a y = 0.51m)
+  const topoAltarMarmore = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.68, 0.73, 0.05, 48),
+    matMarmore
+  );
+  topoAltarMarmore.position.y = 0.485;
+  grupoAltarPresente.add(topoAltarMarmore);
+
+  // Aro Superior em Ouro esculpido
+  const anelTopoAltar = new THREE.Mesh(
+    new THREE.TorusGeometry(0.70, 0.022, 8, 48),
+    matOuro
+  );
+  anelTopoAltar.rotation.x = Math.PI / 2;
+  anelTopoAltar.position.y = 0.51;
+  grupoAltarPresente.add(anelTopoAltar);
+
+  // Disco da Mandala Dourada Radiante (Selo Mágico)
+  const texMandala = criarTexturaMandalaPresente();
+  const matMandala = new THREE.MeshStandardMaterial({
+    map: texMandala,
+    roughness: 0.28,
+    metalness: 0.18,
+    emissive: 0x331c06,
+    emissiveIntensity: 0.55
+  });
+  const meshMandala = new THREE.Mesh(new THREE.CircleGeometry(0.67, 48), matMandala);
+  meshMandala.rotation.x = -Math.PI / 2;
+  meshMandala.position.y = 0.512;
+  grupoAltarPresente.add(meshMandala);
+  discoMandala = meshMandala;
+
+  // Fonte de Luz Ascendente (Uplight âmbar/dourado sob o presente)
+  luzUplightPresente = new THREE.PointLight(0xffdd88, 1.45, 3.2);
+  luzUplightPresente.position.set(0, 0.62, 0);
+  grupoAltarPresente.add(luzUplightPresente);
+  luzesPontuais.push(luzUplightPresente);
+
+  // Feixe suave de luz volumétrica (cone de brilho místico ascendente)
+  const geoFeixe = new THREE.CylinderGeometry(0.38, 0.64, 0.72, 24, 1, true);
+  const matFeixe = new THREE.MeshBasicMaterial({
+    color: 0xffd166,
+    transparent: true,
+    opacity: 0.10,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending
+  });
+  const meshFeixe = new THREE.Mesh(geoFeixe, matFeixe);
+  meshFeixe.position.y = 0.51 + 0.36;
+  grupoAltarPresente.add(meshFeixe);
+
+  grupoPresente.add(grupoAltarPresente);
 
   // Caixa de Presente Flutuante Iluminada com Laço Dourado 3D de Luxo
   const grupoCaixaFlutuante = new THREE.Group();
@@ -1792,6 +1995,14 @@ export function construirGaleria(cena, memorias, config) {
       grupoCaixaFlutuante.rotation.y += delta * 0.5;
       grupoCaixaFlutuante.position.y = 1.48 + Math.sin(tempoGeral * 2.0) * 0.06;
       posSparks && (grupoCaixaFlutuante.children[grupoCaixaFlutuante.children.length - 1].rotation.y -= delta * 1.2);
+
+      // 2.1 Animação da Mandala e Luz Ascendente sob o Presente
+      if (discoMandala) {
+        discoMandala.rotation.z -= delta * 0.12;
+      }
+      if (luzUplightPresente) {
+        luzUplightPresente.intensity = 1.45 + Math.sin(tempoGeral * 2.0) * 0.20;
+      }
 
       // 3. Animação dos Corações
       for (let i = 0; i < qtdCoracoes; i++) {
