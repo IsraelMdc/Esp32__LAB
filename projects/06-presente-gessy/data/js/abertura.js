@@ -146,46 +146,40 @@ export function inicializarAbertura(config, aoEntrarCallback) {
     }
   });
 
-  function liberarBotaoEntrar() {
-    floresProntas = true;
-    if (barraProgresso) barraProgresso.style.width = "100%";
-    if (textoProgresso) textoProgresso.textContent = "✨ Jardim florescido com todo amor!";
-    if (btnEntrar) {
-      btnEntrar.disabled = false;
-      btnEntrar.textContent = "✨ Entrar na Galeria";
-      btnEntrar.style.cursor = "pointer";
-    }
-  }
-
-  promessaFloresProntas.then(() => {
-    liberarBotaoEntrar();
-  });
-
-  // Timeout de segurança (7 segundos) para nunca bloquear a entrada caso haja erro de rede
-  setTimeout(() => {
-    if (!floresProntas) liberarBotaoEntrar();
-  }, 7000);
+  let contagemZerada = false;
 
   function atualizarContagem() {
     const agora = new Date().getTime();
     const diferenca = dataAlvo - agora;
 
     if (diferenca <= 0 || modoPreview) {
+      contagemZerada = true;
       if (gridContagem) gridContagem.style.display = "none";
       if (titulo) titulo.textContent = `Feliz Aniversário, ${config.nome_homenageada || "Gessy"}! 🎂`;
       if (sub) sub.textContent = "Preparei esta galeria 3D especial com as nossas melhores memórias. Toque abaixo para passear pelo nosso salão.";
+      
       if (btnEntrar) {
-        btnEntrar.style.display = "inline-block";
+        btnEntrar.style.display = "inline-flex";
         if (floresProntas) {
           btnEntrar.disabled = false;
-          btnEntrar.textContent = "✨ Entrar na Galeria";
+          btnEntrar.innerHTML = `
+            <span class="btn-icone-galeria">🖼</span>
+            <span class="btn-texto-galeria">Descobrir nossa galeria</span>
+            <span class="btn-seta-galeria">→</span>
+          `;
+          btnEntrar.style.cursor = "pointer";
         } else {
           btnEntrar.disabled = true;
-          btnEntrar.textContent = "🌸 Preparando o jardim...";
+          btnEntrar.innerHTML = `
+            <span class="btn-icone-galeria">🌸</span>
+            <span class="btn-texto-galeria">Cultivando o jardim...</span>
+          `;
+          btnEntrar.style.cursor = "wait";
         }
       }
       return true;
     } else {
+      contagemZerada = false;
       const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
       const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
@@ -201,21 +195,48 @@ export function inicializarAbertura(config, aoEntrarCallback) {
       if (elMin) elMin.textContent = String(minutos).padStart(2, "0");
       if (elSeg) elSeg.textContent = String(segundos).padStart(2, "0");
 
-      if (titulo) titulo.textContent = `Algo muito especial está chegando... 💛`;
-      if (sub) sub.textContent = `Contando cada segundo para celebrar o seu dia, ${config.nome_homenageada || "Gessy"}.`;
+      if (titulo) titulo.textContent = `${config.nome_homenageada || "Gessy"}, prepare seu coração...`;
+      if (sub) sub.textContent = `Estamos contando cada segundo para celebrar você.`;
+      
+      // TRAVA ATIVA: Botão desabilitado com cadeado enquanto o cronômetro não zerar
       if (btnEntrar) {
-        btnEntrar.style.display = "inline-block";
-        if (floresProntas) {
-          btnEntrar.disabled = false;
-          btnEntrar.textContent = "✨ Entrar na Galeria";
-        } else {
-          btnEntrar.disabled = true;
-          btnEntrar.textContent = "🌸 Preparando o jardim...";
-        }
+        btnEntrar.style.display = "inline-flex";
+        btnEntrar.disabled = true;
+        btnEntrar.style.cursor = "not-allowed";
+        btnEntrar.innerHTML = `
+          <span class="btn-icone-galeria">🔒</span>
+          <span class="btn-texto-galeria">Aguardando a data especial...</span>
+        `;
       }
       return false;
     }
   }
+
+  function liberarBotaoEntrar() {
+    floresProntas = true;
+    if (barraProgresso) barraProgresso.style.width = "100%";
+    if (textoProgresso) textoProgresso.textContent = "Cada segundo nos aproxima de um momento especial ♡";
+    if (contagemZerada) {
+      if (btnEntrar) {
+        btnEntrar.disabled = false;
+        btnEntrar.innerHTML = `
+          <span class="btn-icone-galeria">🖼</span>
+          <span class="btn-texto-galeria">Descobrir nossa galeria</span>
+          <span class="btn-seta-galeria">→</span>
+        `;
+        btnEntrar.style.cursor = "pointer";
+      }
+    }
+  }
+
+  promessaFloresProntas.then(() => {
+    liberarBotaoEntrar();
+  });
+
+  // Timeout de segurança (7 segundos) para o carregamento 3D
+  setTimeout(() => {
+    if (!floresProntas) liberarBotaoEntrar();
+  }, 7000);
 
   const liberado = atualizarContagem();
   const timer = setInterval(() => {
@@ -223,6 +244,12 @@ export function inicializarAbertura(config, aoEntrarCallback) {
   }, 1000);
 
   function entrarNaGaleria() {
+    // Trava de segurança: impede entrada se a contagem não tiver zerado (a menos que seja preview)
+    if (!contagemZerada && !modoPreview) {
+      console.warn("Acesso bloqueado: o cronômetro ainda está em andamento.");
+      return;
+    }
+
     sessionStorage.setItem("gessy_entrou_sessao", "1");
     if (modal) modal.classList.add("oculto");
 
@@ -245,9 +272,14 @@ export function inicializarAbertura(config, aoEntrarCallback) {
     if (aoEntrarCallback) aoEntrarCallback();
   }
 
-  if (jaEntrou) {
+  // Só pula direto para a galeria se já entrou NESTA sessão E se o cronômetro estiver zerado
+  if (jaEntrou && (contagemZerada || modoPreview)) {
     entrarNaGaleria();
   } else if (btnEntrar) {
-    btnEntrar.addEventListener("click", entrarNaGaleria);
+    btnEntrar.addEventListener("click", () => {
+      if (contagemZerada || modoPreview) {
+        entrarNaGaleria();
+      }
+    });
   }
 }

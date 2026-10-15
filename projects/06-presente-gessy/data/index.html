@@ -7,6 +7,9 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Galeria da Gessy 🎂✨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/estilo.css" />
   <script type="importmap">
   {
@@ -79,40 +82,67 @@
 
   <!-- Modal de Abertura e Contagem Regressiva -->
   <div id="modal-abertura">
-    <div class="abertura-conteudo">
-      <div class="abertura-icone">🎂</div>
-      <h1 id="abertura-titulo" class="abertura-titulo">Galeria da Gessy</h1>
-      <p id="abertura-sub" class="abertura-sub">Carregando surpresa...</p>
+    <div class="abertura-overlay-gradiente"></div>
 
-      <div id="grid-contagem" class="grid-contagem">
-        <div class="bloco-tempo">
-          <span id="tempo-dias" class="valor-tempo">00</span>
-          <span class="rotulo-tempo">Dias</span>
-        </div>
-        <div class="bloco-tempo">
-          <span id="tempo-horas" class="valor-tempo">00</span>
-          <span class="rotulo-tempo">Horas</span>
-        </div>
-        <div class="bloco-tempo">
-          <span id="tempo-min" class="valor-tempo">00</span>
-          <span class="rotulo-tempo">Min</span>
-        </div>
-        <div class="bloco-tempo">
-          <span id="tempo-seg" class="valor-tempo">00</span>
-          <span class="rotulo-tempo">Seg</span>
-        </div>
-      </div>
+    <main class="abertura-container">
+      <!-- Coluna Esquerda: Citação Romântica & Nome -->
+      <section class="abertura-lado-esquerdo">
+        <h1 class="abertura-nome-homenageada">Gessy, <span class="abertura-coracao-inline">♡</span></h1>
+        <p class="abertura-frase-romantica">
+          cada segundo nos aproxima de um dia inesquecível... <span class="abertura-coracao-inline">♡</span>
+        </p>
+        <span class="abertura-aviso-suave">Algo muito especial está chegando.</span>
+      </section>
 
-      <!-- Barra de Carregamento Floral Elegante -->
-      <div id="area-progresso-flores" class="area-progresso-flores">
-        <div class="trilho-progresso">
-          <div id="barra-progresso-flores" class="barra-progresso"></div>
-        </div>
-        <p id="texto-progresso-flores" class="texto-progresso">Cultivando o jardim de flores... 0%</p>
-      </div>
+      <!-- Coluna Direita: Glassmorphism Card com Contagem & CTA -->
+      <aside class="abertura-card-direito">
+        <div class="card-coracao-topo">♡</div>
+        <div class="card-eyebrow">UMA SURPRESA ESTÁ CHEGANDO</div>
+        
+        <h2 id="abertura-titulo" class="card-titulo-principal">Gessy, prepare seu coração...</h2>
+        <p id="abertura-sub" class="card-subtitulo">Estamos contando cada segundo para celebrar você.</p>
 
-      <button id="btn-entrar" class="btn-entrar" disabled>🌸 Preparando o jardim...</button>
-    </div>
+        <!-- Grade de Contagem Regressiva -->
+        <div id="grid-contagem" class="grid-contagem">
+          <div class="bloco-tempo">
+            <span id="tempo-dias" class="valor-tempo">00</span>
+            <span class="rotulo-tempo">Dias</span>
+          </div>
+          <div class="bloco-tempo">
+            <span id="tempo-horas" class="valor-tempo">00</span>
+            <span class="rotulo-tempo">Horas</span>
+          </div>
+          <div class="bloco-tempo">
+            <span id="tempo-min" class="valor-tempo">00</span>
+            <span class="rotulo-tempo">Min</span>
+          </div>
+          <div class="bloco-tempo">
+            <span id="tempo-seg" class="valor-tempo">00</span>
+            <span class="rotulo-tempo">Seg</span>
+          </div>
+        </div>
+
+        <!-- Barra de Carregamento Floral Elegante -->
+        <div id="area-progresso-flores" class="area-progresso-flores">
+          <div class="trilho-progresso">
+            <div id="barra-progresso-flores" class="barra-progresso"></div>
+          </div>
+          <p id="texto-progresso-flores" class="texto-progresso">Cada segundo nos aproxima de um momento especial ♡</p>
+        </div>
+
+        <!-- Botão CTA Vibrante -->
+        <button id="btn-entrar" class="btn-entrar" disabled>
+          <span class="btn-icone-galeria">🖼</span>
+          <span class="btn-texto-galeria">Descobrir nossa galeria</span>
+          <span class="btn-seta-galeria">→</span>
+        </button>
+
+        <!-- Mensagem de Rodapé -->
+        <footer class="card-rodape-frase">
+          Porque as melhores memórias, são ainda mais especiais quando são compartilhadas.
+        </footer>
+      </aside>
+    </main>
   </div>
 
   <!-- Modal de Detalhe da Memória (Overlay sem sair da galeria) -->

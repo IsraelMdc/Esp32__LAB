@@ -286,17 +286,19 @@ button {
 }
 
 /* ============================================================
-   MODAL DE ABERTURA / CONTAGEM REGRESSIVA
+   MODAL DE ABERTURA / CONTAGEM REGRESSIVA (DESIGN ROMÂNTICO COZY)
    ============================================================ */
 #modal-abertura {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at center, #1e1e2f 0%, #0a0c10 100%);
+  background: #120e0e url('../fotos/fundo_abertura.jpg') no-repeat center center / cover;
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 30px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   transition: opacity 0.8s ease, visibility 0.8s ease;
 }
 
@@ -306,126 +308,325 @@ button {
   pointer-events: none;
 }
 
-.abertura-conteudo {
-  max-width: 440px;
+/* Camada suave para dar aconchego e contraste legível */
+.abertura-overlay-gradiente {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 75% 50%, rgba(10, 8, 8, 0.45) 0%, rgba(10, 8, 8, 0.78) 100%),
+              linear-gradient(to right, rgba(12, 10, 10, 0.82) 0%, rgba(12, 10, 10, 0.25) 50%, rgba(12, 10, 10, 0.6) 100%);
+  pointer-events: none;
+}
+
+/* Layout em duas colunas responsivo */
+.abertura-container {
+  position: relative;
+  z-index: 2;
   width: 100%;
+  max-width: 1200px;
+  min-height: calc(100vh - 80px);
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 48px;
+  padding: 20px 0;
+}
+
+/* Coluna Esquerda: Citação Romântica & Polaroid visível ao fundo */
+.abertura-lado-esquerdo {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 24px;
+  background: radial-gradient(ellipse at center, rgba(10, 8, 8, 0.5) 0%, rgba(10, 8, 8, 0) 75%);
+  border-radius: 20px;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+.abertura-nome-homenageada {
+  font-family: 'Great Vibes', cursive, 'Playfair Display', Georgia, serif;
+  font-size: clamp(3.4rem, 6vw, 5.5rem);
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.1;
+  margin-bottom: 14px;
+  letter-spacing: 0.5px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95), 0 0 25px rgba(255, 101, 132, 0.35);
+}
+
+.abertura-coracao-inline {
+  color: #ff6584;
+  font-family: var(--fonte-corpo);
+  font-size: 0.85em;
+  display: inline-block;
+  vertical-align: middle;
+  filter: drop-shadow(0 0 12px rgba(255, 101, 132, 0.8));
+}
+
+.abertura-frase-romantica {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.45;
+  margin-bottom: 24px;
+  max-width: 500px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95);
+}
+
+.abertura-aviso-suave {
+  display: inline-block;
+  align-self: flex-start;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #ffd166;
+  background: rgba(255, 209, 102, 0.12);
+  border: 1px solid rgba(255, 209, 102, 0.28);
+  padding: 8px 16px;
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+}
+
+/* Coluna Direita: Card Glassmorphism Escuro e Nobre */
+.abertura-card-direito {
+  background: rgba(18, 14, 15, 0.78);
+  border: 1px solid rgba(255, 214, 153, 0.22);
+  border-radius: 28px;
+  padding: 38px 32px 32px;
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(255, 180, 162, 0.08);
   text-align: center;
-  background: rgba(20, 24, 33, 0.7);
-  border: 1px solid var(--cor-card-borda);
-  border-radius: 24px;
-  padding: 32px 24px;
-  backdrop-filter: blur(16px);
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.abertura-icone {
-  font-size: 42px;
-  margin-bottom: 12px;
-  animation: pulsar 2s infinite ease-in-out;
-}
-
-@keyframes pulsar {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-}
-
-.abertura-titulo {
-  font-family: var(--fonte-titulo);
+.card-coracao-topo {
   font-size: 26px;
-  color: var(--cor-creme);
-  margin-bottom: 8px;
+  color: #ffd166;
+  line-height: 1;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 8px rgba(255, 209, 102, 0.5));
+  animation: pulsar 2.5s infinite ease-in-out;
 }
 
-.abertura-sub {
-  font-size: 14px;
-  color: var(--cor-texto-suave);
+.card-eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #ffd166;
+  margin-bottom: 10px;
+}
+
+.card-titulo-principal {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.8rem, 2.5vw, 2.3rem);
+  font-weight: 600;
+  color: #fff9f2;
+  margin-bottom: 8px;
+  line-height: 1.25;
+}
+
+.card-subtitulo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13.5px;
+  font-weight: 400;
+  color: #e0d5cb;
   margin-bottom: 24px;
   line-height: 1.5;
+  max-width: 380px;
 }
 
-/* Grade de Contagem Regressiva */
+/* Grade de Contagem Regressiva (Pills Escuras Elegantes) */
 .grid-contagem {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-bottom: 24px;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 22px;
 }
 
 .bloco-tempo {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 209, 102, 0.2);
-  border-radius: 12px;
-  padding: 10px 4px;
+  background: rgba(8, 6, 8, 0.65);
+  border: 1px solid rgba(255, 209, 102, 0.25);
+  border-radius: 14px;
+  padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.bloco-tempo:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 209, 102, 0.5);
 }
 
 .valor-tempo {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--cor-dourado);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff9f2;
   display: block;
+  line-height: 1.1;
+  text-shadow: 0 0 12px rgba(255, 209, 102, 0.3);
 }
 
 .rotulo-tempo {
+  font-family: 'Montserrat', sans-serif;
   font-size: 10px;
+  font-weight: 600;
   text-transform: uppercase;
-  color: var(--cor-texto-suave);
-  letter-spacing: 1px;
+  color: #baa89b;
+  letter-spacing: 1.2px;
+  margin-top: 4px;
 }
 
+/* Linha de Progresso & Frase de Proximidade */
 .area-progresso-flores {
   width: 100%;
-  margin: 18px 0 14px;
+  margin: 4px 0 20px;
 }
 
 .trilho-progresso {
   width: 100%;
-  height: 8px;
+  height: 6px;
   background: rgba(255, 255, 255, 0.12);
   border-radius: 6px;
   overflow: hidden;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .barra-progresso {
   width: 0%;
   height: 100%;
-  background: linear-gradient(90deg, #ff758f, #ff4d6d, #ffd166);
+  background: linear-gradient(90deg, #ff4d6d, #e63946, #ffd166);
   border-radius: 6px;
+  box-shadow: 0 0 12px rgba(255, 77, 109, 0.7);
   transition: width 0.3s ease;
 }
 
 .texto-progresso {
-  font-size: 13px;
-  color: var(--cor-texto-suave);
-  margin-top: 6px;
-  font-style: italic;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12.5px;
+  color: #d8c8bc;
+  margin-top: 8px;
   text-align: center;
 }
 
+/* Botão Vibrante de Ação (CTA) */
 .btn-entrar {
-  background: linear-gradient(135deg, var(--cor-primaria), #c9184a);
-  color: #fff;
-  border: none;
-  padding: 14px 28px;
-  border-radius: 30px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 4px 20px rgba(255, 77, 109, 0.5);
-  transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
   width: 100%;
+  background: linear-gradient(135deg, #e63946 0%, #d81b60 50%, #b5179e 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 16px 24px;
+  border-radius: 50px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(230, 57, 70, 0.45), 0 0 20px rgba(216, 27, 96, 0.3);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease, filter 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-.btn-entrar:disabled {
-  opacity: 0.55;
-  cursor: wait;
-  background: #3a2230;
-  box-shadow: none;
-  transform: none;
+.btn-entrar:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(230, 57, 70, 0.6), 0 0 26px rgba(255, 209, 102, 0.4);
+  filter: brightness(1.08);
 }
 
 .btn-entrar:active:not(:disabled) {
-  transform: scale(0.96);
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-entrar:disabled {
+  opacity: 0.85;
+  cursor: not-allowed;
+  background: linear-gradient(135deg, rgba(60, 40, 48, 0.9), rgba(35, 26, 32, 0.9));
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 209, 102, 0.25);
+  color: #dfd0c5;
+  transform: none;
+}
+
+.btn-icone-galeria {
+  font-size: 17px;
+}
+
+.btn-seta-galeria {
+  font-size: 17px;
+  transition: transform 0.2s ease;
+}
+
+.btn-entrar:hover:not(:disabled) .btn-seta-galeria {
+  transform: translateX(4px);
+}
+
+/* Frase Nobre de Rodapé (Aumentada e com Excelente Legibilidade) */
+.card-rodape-frase {
+  margin-top: 20px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 16.5px;
+  font-weight: 500;
+  color: #f1e4db;
+  line-height: 1.5;
+  text-align: center;
+  max-width: 380px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  padding: 0 8px;
+}
+
+/* Responsividade Mobile e Telas Menores */
+@media (max-width: 900px) {
+  #modal-abertura {
+    padding: 16px;
+    align-items: flex-start;
+  }
+
+  .abertura-container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    min-height: auto;
+    padding: 20px 0 30px;
+  }
+
+  .abertura-lado-esquerdo {
+    padding-left: 0;
+    padding-bottom: 0;
+    text-align: center;
+    align-items: center;
+  }
+
+  .abertura-frase-romantica {
+    max-width: 100%;
+  }
+
+  .abertura-aviso-suave {
+    align-self: center;
+  }
+
+  .abertura-card-direito {
+    padding: 26px 20px 22px;
+    width: 100%;
+  }
+
+  .valor-tempo {
+    font-size: 22px;
+  }
 }
 
 /* ============================================================
