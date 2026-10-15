@@ -464,6 +464,8 @@ function criarGeometriaTufoGrama() {
 export function construirGaleria(cena, memorias, config) {
   const loader = new THREE.TextureLoader();
   const quadrosInterativos = [];
+  const listaLustres = [];
+  const luzesPontuais = [];
   let alavancaInterruptor = null;
   let meshInterruptorHit = null;
   let estadoInterruptorLigado = true;
@@ -1071,10 +1073,6 @@ export function construirGaleria(cena, memorias, config) {
 
     cena.add(grupoVaso);
   }
-
-  // Lista de luzes e lustres para controle do modo noite
-  const listaLustres = [];
-  const luzesPontuais = [];
 
   // Material da Fita Difusora Emissiva das Luminárias de Galeria
   const matDifusorLuz = new THREE.MeshBasicMaterial({ color: 0xfff2cc });
