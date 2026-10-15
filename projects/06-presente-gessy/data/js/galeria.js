@@ -1376,14 +1376,14 @@ export function construirGaleria(cena, memorias, config) {
   bandeja.position.y = 0.008;
   grupoBandeja.add(bandeja);
 
-  const matPetala = new THREE.MeshStandardMaterial({
+  const matPetalaAparador = new THREE.MeshStandardMaterial({
     color: 0x9e0012,
     roughness: 0.8,
     side: THREE.DoubleSide
   });
 
   for (let p = 0; p < 6; p++) {
-    const petalaB = new THREE.Mesh(new THREE.CircleGeometry(0.024, 6), matPetala);
+    const petalaB = new THREE.Mesh(new THREE.CircleGeometry(0.024, 6), matPetalaAparador);
     petalaB.rotation.x = -Math.PI / 2 + (Math.random() - 0.5) * 0.2;
     petalaB.position.set((Math.random() - 0.5) * 0.12, 0.018, (Math.random() - 0.5) * 0.12);
     petalaB.rotation.z = Math.random() * Math.PI * 2;
@@ -1396,7 +1396,7 @@ export function construirGaleria(cena, memorias, config) {
     [0.35, 0.08], [0.42, -0.06], [0.62, 0.05], [0.58, -0.08],
     [-0.38, 0.06], [-0.62, -0.05], [-0.44, -0.07]
   ].forEach(([px, pz]) => {
-    const petala = new THREE.Mesh(new THREE.CircleGeometry(0.022, 6), matPetala);
+    const petala = new THREE.Mesh(new THREE.CircleGeometry(0.022, 6), matPetalaAparador);
     petala.rotation.x = -Math.PI / 2;
     petala.position.set(px, altAparador + 0.002, pz);
     petala.rotation.z = Math.random() * Math.PI * 2;
